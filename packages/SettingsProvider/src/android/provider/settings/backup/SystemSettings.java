@@ -110,5 +110,12 @@ public class SystemSettings {
         Settings.System.GAMING_MODE_MEDIA_ENABLED,
         Settings.System.GAMING_MODE_MEDIA,
         Settings.System.NOTIFICATION_HEADERS,
+        Settings.System.STATUS_BAR_CLOCK,
+        Settings.System.STATUSBAR_CLOCK_STYLE,
+        Settings.System.STATUS_BAR_CLOCK_SECONDS,
+        Settings.System.STATUSBAR_CLOCK_AM_PM_STYLE,
+        Settings.System.STATUSBAR_CLOCK_DATE_DISPLAY,
+        Settings.System.STATUSBAR_CLOCK_DATE_STYLE,
+        Settings.System.STATUSBAR_CLOCK_DATE_FORMAT,
     };
 }

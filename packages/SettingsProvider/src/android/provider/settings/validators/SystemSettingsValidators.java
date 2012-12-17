@@ -244,5 +244,12 @@ public class SystemSettingsValidators {
         VALIDATORS.put(System.GAMING_MODE_MEDIA_ENABLED, BOOLEAN_VALIDATOR);
         VALIDATORS.put(System.GAMING_MODE_MEDIA, new InclusiveIntegerRangeValidator(0, 100));
         VALIDATORS.put(System.NOTIFICATION_HEADERS, BOOLEAN_VALIDATOR);
+        VALIDATORS.put(System.STATUS_BAR_CLOCK, BOOLEAN_VALIDATOR);
+        VALIDATORS.put(System.STATUSBAR_CLOCK_STYLE, new InclusiveIntegerRangeValidator(0, 2));
+        VALIDATORS.put(System.STATUS_BAR_CLOCK_SECONDS, BOOLEAN_VALIDATOR);
+        VALIDATORS.put(System.STATUSBAR_CLOCK_AM_PM_STYLE, new InclusiveIntegerRangeValidator(0, 2));
+        VALIDATORS.put(System.STATUSBAR_CLOCK_DATE_DISPLAY, new InclusiveIntegerRangeValidator(0, 2));
+        VALIDATORS.put(System.STATUSBAR_CLOCK_DATE_STYLE, new InclusiveIntegerRangeValidator(0, 2));
+        VALIDATORS.put(System.STATUSBAR_CLOCK_DATE_FORMAT, ANY_STRING_VALIDATOR);
     }
 }
