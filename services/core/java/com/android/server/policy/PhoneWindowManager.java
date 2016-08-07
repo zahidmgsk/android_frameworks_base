@@ -387,6 +387,8 @@ public class PhoneWindowManager implements WindowManagerPolicy {
     private boolean mHasFeatureLeanback;
     private boolean mHasFeatureHdmiCec;
 
+    private boolean mHwKeysEnabled = true;
+
     boolean mVolumeRockerWake;
 
     // Assigned on main thread, accessed on UI thread
@@ -829,6 +831,9 @@ public class PhoneWindowManager implements WindowManagerPolicy {
                     UserHandle.USER_ALL);
             resolver.registerContentObserver(Settings.System.getUriFor(
                     Settings.System.FORCE_SHOW_NAVBAR), false, this,
+                    UserHandle.USER_ALL);
+            resolver.registerContentObserver(Settings.Secure.getUriFor(
+                    Settings.Secure.HARDWARE_KEYS_ENABLE), false, this,
                     UserHandle.USER_ALL);
             updateSettings();
         }
@@ -2045,6 +2050,18 @@ public class PhoneWindowManager implements WindowManagerPolicy {
                 });
     }
 
+    public boolean isHwKeysDisabled() {
+        return !mHwKeysEnabled;
+    }
+
+    private boolean filterDisabledKey(int keyCode) {
+        return !mHwKeysEnabled && (keyCode == KeyEvent.KEYCODE_HOME
+                || keyCode == KeyEvent.KEYCODE_MENU
+                || keyCode == KeyEvent.KEYCODE_APP_SWITCH
+                || keyCode == KeyEvent.KEYCODE_ASSIST
+                || keyCode == KeyEvent.KEYCODE_BACK);
+    }
+
     /**
      * Read values from config.xml that may be overridden depending on
      * the configuration of the device.
@@ -2193,6 +2210,9 @@ public class PhoneWindowManager implements WindowManagerPolicy {
             // volume rocker wake
             mVolumeRockerWake = Settings.System.getIntForUser(resolver,
                     Settings.System.VOLUME_ROCKER_WAKE, 0, UserHandle.USER_CURRENT) != 0;
+
+            mHwKeysEnabled = Settings.Secure.getIntForUser(resolver,
+                    Settings.Secure.HARDWARE_KEYS_ENABLE, 1, UserHandle.USER_CURRENT) != 0;
 
             // Configure wake gesture.
             boolean wakeGestureEnabledSetting = Settings.Secure.getIntForUser(resolver,
@@ -2758,6 +2778,12 @@ public class PhoneWindowManager implements WindowManagerPolicy {
                     + ", virtualKey = "+ virtualKey + ", virtualHardKey = " + virtualHardKey
                     + ", navBarKey = " + navBarKey + ", fromSystem = " + fromSystem
                     + ", longPress = " + longPress);
+        }
+
+        if (!keyguardOn && !virtualKey) {
+            if (filterDisabledKey(keyCode)) {
+                return -1;
+            }
         }
 
         // If we think we might have a volume down & power key chord on the way
@@ -4052,7 +4078,8 @@ public class PhoneWindowManager implements WindowManagerPolicy {
                 && hapticFeedbackRequested
                 && event.getRepeatCount() == 0
                 // Trigger haptic feedback only for "real" events.
-                && source != InputDevice.SOURCE_CUSTOM;
+                && source != InputDevice.SOURCE_CUSTOM
+                && !isHwKeysDisabled();
 
         // Handle special keys.
         switch (keyCode) {

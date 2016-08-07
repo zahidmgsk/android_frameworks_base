@@ -9371,6 +9371,12 @@ public final class Settings {
         public static final String VOLUME_LINK_NOTIFICATION = "volume_link_notification";
 
         /**
+         * Enable hw buttons - actions, brightness, haptic feedback, overflow menu
+         * @hide
+         */
+        public static final String HARDWARE_KEYS_ENABLE = "hardware_keys_enable";
+
+        /**
          * Controls whether tap gesture is enabled.
          * @hide
          */
