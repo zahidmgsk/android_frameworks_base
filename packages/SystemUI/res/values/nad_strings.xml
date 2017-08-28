@@ -85,4 +85,8 @@
     <string name="accessibility_quick_settings_location_high_accuracy">Location reporting: high accuracy mode.</string>
 
     <string name="status_bar_vpn">VPN</string>
+
+    <!-- Advanced Reboot -->
+    <string name="global_action_restart_advanced">Advanced reboot</string>
+
 </resources>
