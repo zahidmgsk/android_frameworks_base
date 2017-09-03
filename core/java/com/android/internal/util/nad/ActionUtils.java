@@ -26,6 +26,8 @@ import android.os.SystemClock;
 import android.view.IWindowManager;
 import android.view.WindowManagerGlobal;
 
+import com.android.internal.statusbar.IStatusBarService;
+
 public class ActionUtils {
 
     // Screen off
@@ -40,5 +42,38 @@ public class ActionUtils {
     public static void toggleVolumePanel(Context context) {
         AudioManager am = (AudioManager) context.getSystemService(Context.AUDIO_SERVICE);
         am.adjustVolume(AudioManager.ADJUST_SAME, AudioManager.FLAG_SHOW_UI);
+    }
+
+    public static boolean deviceHasFlashlight(Context ctx) {
+        return ctx.getPackageManager().hasSystemFeature(PackageManager.FEATURE_CAMERA_FLASH);
+    }
+
+    public static void toggleCameraFlash() {
+        FireActions.toggleCameraFlash();
+    }
+
+    private static final class FireActions {
+        private static IStatusBarService mStatusBarService = null;
+
+        private static IStatusBarService getStatusBarService() {
+            synchronized (FireActions.class) {
+                if (mStatusBarService == null) {
+                    mStatusBarService = IStatusBarService.Stub.asInterface(
+                            ServiceManager.getService("statusbar"));
+                }
+                return mStatusBarService;
+            }
+        }
+
+        public static void toggleCameraFlash() {
+            IStatusBarService service = getStatusBarService();
+            if (service != null) {
+                try {
+                    service.toggleCameraFlash();
+                } catch (RemoteException e) {
+                    // do nothing.
+                }
+            }
+        }
     }
 }
