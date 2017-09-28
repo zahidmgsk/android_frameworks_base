@@ -136,4 +136,11 @@
     <string name="clock_title_spectrum" translatable="false">Spectrum</string>
     <string name="clock_title_dot" translatable="false">Dot</string>
     <string name="clock_title_sneeky" translatable="false">Sneeky</string>
+
+    <!-- USB Tethering tile -->
+    <string name="accessibility_quick_settings_usb_tether_off">USB tethering off</string>
+    <string name="accessibility_quick_settings_usb_tether_on">USB tethering on</string>
+    <string name="accessibility_quick_settings_usb_tether_changed_off">USB tethering turned off</string>
+    <string name="accessibility_quick_settings_usb_tether_changed_on">USB tethering turned on</string>
+    <string name="quick_settings_usb_tether_label">USB tethering</string>
 </resources>
