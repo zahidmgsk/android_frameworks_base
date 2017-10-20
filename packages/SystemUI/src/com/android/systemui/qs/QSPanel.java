@@ -233,6 +233,11 @@ public class QSPanel extends LinearLayout implements Tunable, Callback, Brightne
     protected void addViewsAboveTiles() {
         mBrightnessView = LayoutInflater.from(mContext).inflate(
             R.layout.quick_settings_brightness_dialog, this, false);
+
+        mBrightnessView.setPadding(mBrightnessView.getPaddingLeft(),
+                mBrightnessView.getPaddingTop(), mBrightnessView.getPaddingRight(),
+                 mContext.getResources().getDimensionPixelSize(R.dimen.qs_brightness_footer_padding));
+
         addView(mBrightnessView);
 
         ImageView brightnessIcon = (ImageView) mBrightnessView.findViewById(R.id.brightness_icon);
@@ -392,10 +397,15 @@ public class QSPanel extends LinearLayout implements Tunable, Callback, Brightne
 
     @Override
     public void onTuningChanged(String key, String newValue) {
+        try {
+            if (QS_SHOW_BRIGHTNESS_SLIDER.equals(key) && mBrightnessView != null) {
+                updateViewVisibilityForTuningValue(mBrightnessView, newValue);
+            }
+        } catch (Exception e){
+            // Do nothing
+        }
         if (QS_SHOW_AUTO_BRIGHTNESS.equals(key) && mIsAutomaticBrightnessAvailable) {
             updateViewVisibilityForTuningValue(mAutoBrightnessView, newValue);
-        } else if (QS_SHOW_BRIGHTNESS_SLIDER.equals(key) && mBrightnessView != null) {
-            updateViewVisibilityForTuningValue(mBrightnessView, newValue);
         }
     }
 
