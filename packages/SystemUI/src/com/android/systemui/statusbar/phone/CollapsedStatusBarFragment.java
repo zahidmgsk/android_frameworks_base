@@ -22,6 +22,10 @@ import android.annotation.Nullable;
 import android.app.Fragment;
 import android.content.ContentResolver;
 import android.database.ContentObserver;
+import android.graphics.drawable.BitmapDrawable;
+import android.graphics.drawable.ColorDrawable;
+import android.graphics.drawable.Drawable;
+import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Parcelable;
@@ -35,6 +39,7 @@ import android.view.ViewStub;
 import android.widget.ImageSwitcher;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.ImageView;
 
 import com.android.systemui.Dependency;
 import com.android.systemui.Interpolators;
@@ -92,6 +97,7 @@ public class CollapsedStatusBarFragment extends Fragment implements CommandQueue
     // Nad Logo
     private ImageView mNadLogo;
     private boolean mShowLogo;
+    private int mLogoStyle;
 
     // Clock
     private View mClockView;
@@ -113,6 +119,9 @@ public class CollapsedStatusBarFragment extends Fragment implements CommandQueue
                     Settings.System.STATUS_BAR_LOGO),
                     false, this, UserHandle.USER_ALL);
             mContentResolver.registerContentObserver(Settings.System.getUriFor(
+                    Settings.System.STATUS_BAR_LOGO_STYLE),
+                    false, this, UserHandle.USER_ALL);
+            mContentResolver.registerContentObserver(Settings.System.getUriFor(
                     Settings.System.STATUS_BAR_CLOCK),
                     false, this, UserHandle.USER_ALL);
             mContentResolver.registerContentObserver(Settings.System.getUriFor(
@@ -121,7 +130,11 @@ public class CollapsedStatusBarFragment extends Fragment implements CommandQueue
         }
 
         @Override
-        public void onChange(boolean selfChange) {
+        public void onChange(boolean selfChange, Uri uri) {
+            if ((uri.equals(Settings.System.getUriFor(Settings.System.STATUS_BAR_LOGO))) ||
+                (uri.equals(Settings.System.getUriFor(Settings.System.STATUS_BAR_LOGO_STYLE)))) {
+                 updateStatusBarLogo(true);
+            }
             updateSettings(true);
         }
     }
@@ -511,6 +524,9 @@ public class CollapsedStatusBarFragment extends Fragment implements CommandQueue
         mShowClock = Settings.System.getIntForUser(
                 mContentResolver, Settings.System.STATUS_BAR_CLOCK, 1,
                 UserHandle.USER_CURRENT) == 1;
+        mLogoStyle = Settings.System.getIntForUser(
+                mContentResolver, Settings.System.STATUS_BAR_LOGO_STYLE, 0,
+                UserHandle.USER_CURRENT);
         if (!mShowClock) {
             mClockStyle = 1; 
         } else {
@@ -520,6 +536,45 @@ public class CollapsedStatusBarFragment extends Fragment implements CommandQueue
         }
         setCarrierLabel(animate);
         updateClockStyle(animate);
+        updateStatusBarLogo(animate);
+    }
+
+    private void updateStatusBarLogo(boolean animate) {
+        Drawable logo = null;
+        if (mStatusBar == null) return;
+        if (getContext() == null) {
+            return;
+        }
+
+        switch(mLogoStyle) {
+                // Default HOME logo, first time
+            case 0:
+                logo = getContext().getDrawable(R.drawable.status_bar_nad_logo);
+                break;
+            case 1:
+                logo = getContext().getDrawable(R.drawable.status_bar_nad_logo1);
+                break;
+            case 2:
+                logo = getContext().getDrawable(R.drawable.status_bar_cannabis);
+                break;
+            case 3:
+                logo = getContext().getDrawable(R.drawable.status_bar_smoking);
+                break;
+            default:
+                logo = getContext().getDrawable(R.drawable.status_bar_nad_logo);
+                break;
+        }
+
+        if (mNadLogo != null) {
+            if (logo == null) {
+                // Something wrong. Do not show anything
+                mNadLogo.setImageDrawable(logo);
+                mShowLogo = false;
+                return;
+            }
+            mNadLogo.setImageDrawable(logo);
+        }
+
         if (mNotificationIconAreaInner != null) {
             if (mShowLogo) {
                 if (mNotificationIconAreaInner.getVisibility() == View.VISIBLE) {

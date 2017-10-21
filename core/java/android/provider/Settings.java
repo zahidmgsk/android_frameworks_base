@@ -5396,10 +5396,16 @@ public final class Settings {
         public static final String CUSTOM_CARRIER_LABEL = "custom_carrier_label";
 
         /**
-         * Whether to display our du logo in the statusbar for extra swag
+         * Whether to display our Nad logo in the statusbar
          * @hide
          */
         public static final String STATUS_BAR_LOGO = "status_bar_logo";
+
+       /**
+        * Statusbar logo Style
+        * @hide
+         */
+        public static final String STATUS_BAR_LOGO_STYLE = "status_bar_logo_style";
 
         /**
          * Whether to change the transparency of the qs panel
