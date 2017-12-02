@@ -123,6 +123,10 @@ public class TileLayout extends ViewGroup implements QSTileLayout {
                     UserHandle.USER_CURRENT);
         }
 
+        if (mResourceColumns < 1) {
+            mResourceColumns = 1;
+        }
+
         mCellHeight = mContext.getResources().getDimensionPixelSize(R.dimen.qs_tile_height);
         mCellMarginHorizontal = res.getDimensionPixelSize(R.dimen.qs_tile_margin_horizontal);
         mCellMarginVertical= res.getDimensionPixelSize(R.dimen.qs_tile_margin_vertical);
@@ -195,6 +199,9 @@ public class TileLayout extends ViewGroup implements QSTileLayout {
             mRows = Settings.System.getIntForUser(mContext.getContentResolver(),
                         Settings.System.QS_ROWS_LANDSCAPE, 2,
                         UserHandle.USER_CURRENT);
+        }
+        if (mRows < mMinRows) {
+            mRows = mMinRows;
         }
         if (mRows > (tilesCount + mColumns - 1) / mColumns) {
             mRows = (tilesCount + mColumns - 1) / mColumns;
