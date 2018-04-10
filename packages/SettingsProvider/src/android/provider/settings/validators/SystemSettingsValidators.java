@@ -210,6 +210,18 @@ public class SystemSettingsValidators {
                         }
                     }
                 });
+        VALIDATORS.put(
+                System.KEY_VALIDATOR,
+                new Validator() {
+                    @Override
+                    public boolean validate(@Nullable String value) {
+                        try {
+                            return Long.parseLong(value) >= 0;
+                        } catch (NumberFormatException e) {
+                            return false;
+                        }
+                    }
+                });
         VALIDATORS.put(System.WIFI_STATIC_IP, LENIENT_IP_ADDRESS_VALIDATOR);
         VALIDATORS.put(System.WIFI_STATIC_GATEWAY, LENIENT_IP_ADDRESS_VALIDATOR);
         VALIDATORS.put(System.WIFI_STATIC_NETMASK, LENIENT_IP_ADDRESS_VALIDATOR);
