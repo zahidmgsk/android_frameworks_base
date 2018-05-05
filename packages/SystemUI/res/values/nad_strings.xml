@@ -146,4 +146,7 @@
     <string name="empty_app_killed">App</string>
 
     <string name="app_picker_dialog_title">Select an app</string>
+
+    <!-- CPUInfo tile -->
+    <string name="quick_settings_cpuinfo_label">CPU Info</string>
 </resources>
