@@ -93,5 +93,6 @@ public class SystemSettings {
         Settings.System.BUTTON_BACKLIGHT_ENABLE,
         Settings.System.BUTTON_BACKLIGHT_TIMEOUT,
         Settings.System.BUTTON_BACKLIGHT_ON_TOUCH_ONLY,
+        Settings.System.FORCE_SHOW_NAVBAR,
     };
 }
