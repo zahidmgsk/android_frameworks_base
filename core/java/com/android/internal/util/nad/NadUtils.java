@@ -41,7 +41,9 @@ import android.view.WindowManagerGlobal;
 
 import com.android.internal.R;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 
 public class NadUtils {
 
@@ -119,6 +121,12 @@ public class NadUtils {
 
     public static boolean deviceHasFlashlight(Context ctx) {
         return ctx.getPackageManager().hasSystemFeature(PackageManager.FEATURE_CAMERA_FLASH);
+    }
+
+    // Check for Chinese language
+    public static boolean isChineseLanguage() {
+       return Resources.getSystem().getConfiguration().locale.getLanguage().startsWith(
+               Locale.CHINESE.getLanguage());
     }
 
     // Returns today's passed time in Millisecond
