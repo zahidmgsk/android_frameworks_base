@@ -176,6 +176,7 @@ public class QuickStatusBarHeader extends RelativeLayout implements
     private float mHeaderImageHeight;
     private boolean mForceHideQsStatusBar;
     private boolean mBatteryInQS;
+    private boolean mHideDragHandle;
     private BatteryMeterView mBatteryMeterView;
 
     // Data Usage
@@ -337,7 +338,8 @@ public class QuickStatusBarHeader extends RelativeLayout implements
         Dependency.get(TunerService.class).addTunable(this,
                 QS_SHOW_BRIGHTNESS_SLIDER,
                 QS_SHOW_AUTO_BRIGHTNESS,
-                QSPanel.QS_SHOW_BRIGHTNESS_BUTTONS);
+                QSPanel.QS_SHOW_BRIGHTNESS_BUTTONS,
+                QSFooterImpl.QS_SHOW_DRAG_HANDLE);
     }
 
     private List<String> getIgnoredIconSlots() {
@@ -523,6 +525,7 @@ public class QuickStatusBarHeader extends RelativeLayout implements
             if (mHeaderImageEnabled) {
                 qsHeight += mHeaderImageHeight;
             }
+
             lp.height = Math.max(getMinimumHeight(), qsHeight);
         }
 
@@ -993,6 +996,9 @@ public class QuickStatusBarHeader extends RelativeLayout implements
             updateResources();
         } else if (QSPanel.QS_SHOW_BRIGHTNESS_BUTTONS.equals(key)) {
             mBrightnessButton = TunerService.parseIntegerSwitch(newValue, true);
+            updateResources();
+        } else if (QSFooterImpl.QS_SHOW_DRAG_HANDLE.equals(key)) {
+            mHideDragHandle = TunerService.parseIntegerSwitch(newValue, true);
             updateResources();
         }
     }
