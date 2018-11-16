@@ -52,4 +52,7 @@
     <!-- Reboot/Recovery QS tile -->
     <string name="quick_settings_reboot_label">Reboot</string>
     <string name="quick_settings_reboot_recovery_label">Recovery</string>
+
+    <!-- SystemUI tuner -->
+    <string name="systemui_tuner_navbar_title">Stock navbar</string>
 </resources>
