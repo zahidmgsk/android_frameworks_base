@@ -89,6 +89,10 @@ public class CollapsedStatusBarFragment extends Fragment implements CommandQueue
     private View mCustomCarrierLabel;
     private int mShowCarrierLabel;
 
+    // Nad Logo
+    private ImageView mNadLogo;
+    private boolean mShowLogo;
+
     private class SettingsObserver extends ContentObserver {
         SettingsObserver(Handler handler) {
             super(handler);
@@ -97,6 +101,9 @@ public class CollapsedStatusBarFragment extends Fragment implements CommandQueue
          void observe() {
             mContentResolver.registerContentObserver(Settings.System.getUriFor(
                     Settings.System.STATUS_BAR_SHOW_CARRIER),
+                    false, this, UserHandle.USER_ALL);
+            mContentResolver.registerContentObserver(Settings.System.getUriFor(
+                    Settings.System.STATUS_BAR_LOGO),
                     false, this, UserHandle.USER_ALL);
         }
 
@@ -165,6 +172,7 @@ public class CollapsedStatusBarFragment extends Fragment implements CommandQueue
         mBatteryMeterView = mStatusBar.findViewById(R.id.battery);
         mBatteryMeterView.addCallback(mBatteryMeterViewCallback);
         mClockView = mStatusBar.findViewById(R.id.clock);
+        mNadLogo = (ImageView) mStatusBar.findViewById(R.id.status_bar_logo);
         mCustomCarrierLabel = mStatusBar.findViewById(R.id.statusbar_carrier_text);
         updateSettings(false);
         showSystemIconArea(false);
@@ -205,6 +213,7 @@ public class CollapsedStatusBarFragment extends Fragment implements CommandQueue
         if (mBatteryMeterView != null) {
             mBatteryMeterView.removeCallback(mBatteryMeterViewCallback);
         }
+        Dependency.get(DarkIconDispatcher.class).removeDarkReceiver(mNadLogo);
     }
 
     public void initNotificationIconArea(NotificationIconAreaController
@@ -345,11 +354,17 @@ public class CollapsedStatusBarFragment extends Fragment implements CommandQueue
     public void hideNotificationIconArea(boolean animate) {
         animateHide(mNotificationIconAreaInner, animate);
         animateHide(mCenteredIconArea, animate);
+        if (mShowLogo) {
+            animateHide(mNadLogo, animate);
+        }
     }
 
     public void showNotificationIconArea(boolean animate) {
         animateShow(mNotificationIconAreaInner, animate);
         animateShow(mCenteredIconArea, animate);
+        if (mShowLogo) {
+            animateShow(mNadLogo, animate);
+        }
     }
 
     public void hideOperatorName(boolean animate) {
@@ -475,6 +490,18 @@ public class CollapsedStatusBarFragment extends Fragment implements CommandQueue
         mShowCarrierLabel = Settings.System.getIntForUser(
                 mContentResolver, Settings.System.STATUS_BAR_SHOW_CARRIER, 1,
                 UserHandle.USER_CURRENT);
+        mShowLogo = Settings.System.getIntForUser(
+                mContentResolver, Settings.System.STATUS_BAR_LOGO, 0,
+                UserHandle.USER_CURRENT) == 1;
+        if (mNotificationIconAreaInner != null) {
+            if (mShowLogo) {
+                if (mNotificationIconAreaInner.getVisibility() == View.VISIBLE) {
+                    animateShow(mNadLogo, animate);
+                }
+            } else {
+                animateHiddenState(mNadLogo, View.GONE, animate);
+            }
+        }
         setCarrierLabel(animate);
     }
 }
