@@ -20,6 +20,7 @@ import static android.app.StatusBarManager.DISABLE_SYSTEM_INFO;
 
 import android.annotation.Nullable;
 import android.app.Fragment;
+import android.content.ContentResolver;
 import android.database.ContentObserver;
 import android.os.Bundle;
 import android.os.Handler;
@@ -80,6 +81,8 @@ public class CollapsedStatusBarFragment extends Fragment implements CommandQueue
     private StatusIconContainer mStatusIcons;
     private int mSignalClusterEndPadding = 0;
 
+    private ContentResolver mContentResolver;
+
     private Handler mHandler;
 
     // Custom Carrier
@@ -92,7 +95,7 @@ public class CollapsedStatusBarFragment extends Fragment implements CommandQueue
         }
 
          void observe() {
-            getContext().getContentResolver().registerContentObserver(Settings.System.getUriFor(
+            mContentResolver.registerContentObserver(Settings.System.getUriFor(
                     Settings.System.STATUS_BAR_CARRIER),
                     false, this, UserHandle.USER_ALL);
         }
@@ -124,6 +127,7 @@ public class CollapsedStatusBarFragment extends Fragment implements CommandQueue
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        mContentResolver = getContext().getContentResolver();
         mKeyguardStateController = Dependency.get(KeyguardStateController.class);
         mNetworkController = Dependency.get(NetworkController.class);
         mStatusBarStateController = Dependency.get(StatusBarStateController.class);
