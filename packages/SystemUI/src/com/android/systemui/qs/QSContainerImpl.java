@@ -87,12 +87,12 @@ public class QSContainerImpl extends FrameLayout implements
     private int mContentPaddingEnd = -1;
     private boolean mAnimateBottomOnNextLayout;
 
-    private Drawable mQsBackGround;
     private boolean mHeaderImageEnabled;
     private ImageView mBackgroundImage;
     private StatusBarHeaderMachine mStatusBarHeaderMachine;
     private Drawable mCurrentBackground;
     private boolean mLandscape;
+    private boolean mQsBackgroundAlpha;
 
     public QSContainerImpl(Context context, AttributeSet attrs) {
         super(context, attrs);
@@ -114,8 +114,8 @@ public class QSContainerImpl extends FrameLayout implements
         mBackground = findViewById(R.id.quick_settings_background);
         mStatusBarBackground = findViewById(R.id.quick_settings_status_bar_background);
         mBackgroundGradient = findViewById(R.id.quick_settings_gradient_view);
-        mQsBackGround = getContext().getDrawable(R.drawable.qs_background_primary);
         mBackgroundImage = findViewById(R.id.qs_header_image_view);
+        mBackgroundImage.setClipToOutline(true);
         updateSettings();
         updateResources();
         mHeader.getHeaderQsPanel().setMediaVisibilityChangedListener((visible) -> {
@@ -169,7 +169,7 @@ public class QSContainerImpl extends FrameLayout implements
         // Hide the backgrounds when in landscape mode.
         if (mLandscape) {
             mBackgroundGradient.setVisibility(View.INVISIBLE);
-        } else {
+        } else if (!mQsBackgroundAlpha) {
             mBackgroundGradient.setVisibility(View.VISIBLE);
         }
         updateStatusbarVisibility();
@@ -197,17 +197,20 @@ public class QSContainerImpl extends FrameLayout implements
 
     private void updateSettings() {
         ContentResolver resolver = getContext().getContentResolver();
-        int mQsBackGroundAlpha = Settings.System.getIntForUser(resolver,
+        int bgAlpha = Settings.System.getIntForUser(resolver,
                 Settings.System.QS_PANEL_BG_ALPHA, 255,
                 UserHandle.USER_CURRENT);
 
-        if (mQsBackGroundAlpha < 255 ) {
-            mBackground.setVisibility(View.INVISIBLE);
+        Drawable bg = mBackground.getBackground();
+        if (bgAlpha < 255 ) {
+            mQsBackgroundAlpha = true;
+            bg.setAlpha(bgAlpha);
+            mBackground.setBackground(bg);
             mBackgroundGradient.setVisibility(View.INVISIBLE);
-            mQsBackGround.setAlpha(mQsBackGroundAlpha);
-            setBackground(mQsBackGround);
         } else {
-            mBackground.setVisibility(View.VISIBLE);
+            mQsBackgroundAlpha = false;
+            bg.setAlpha(255);
+            mBackground.setBackground(bg);
             mBackgroundGradient.setVisibility(View.VISIBLE);
         }
     }
@@ -286,10 +289,10 @@ public class QSContainerImpl extends FrameLayout implements
                 com.android.internal.R.dimen.quick_qs_offset_height) + (mHeaderImageEnabled ?
                 mContext.getResources().getDimensionPixelSize(R.dimen.qs_header_image_offset) : 0);
 
-        int statusBarSideMargin = mContext.getResources().getDimensionPixelSize(
-                R.dimen.qs_header_image_side_margin);
+        int statusBarSideMargin = mHeaderImageEnabled ? mContext.getResources().getDimensionPixelSize(
+                R.dimen.qs_header_image_side_margin) : 0;
 
-        ((LayoutParams) mQSPanelContainer.getLayoutParams()).topMargin = topMargin;
+        ((LayoutParams) mQSPanelContainer.getLayoutParams()).topMargin = topMargin + statusBarBottomMargin;
         mQSPanelContainer.setLayoutParams(mQSPanelContainer.getLayoutParams());
 
         ViewGroup.MarginLayoutParams lp = (ViewGroup.MarginLayoutParams) mStatusBarBackground.getLayoutParams();
