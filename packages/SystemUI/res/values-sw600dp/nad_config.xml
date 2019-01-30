@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!--
-/*
+/* //device/apps/common/assets/res/any/strings.xml
+**
 ** Copyright 2006, The Android Open Source Project
 **
 ** Licensed under the Apache License, Version 2.0 (the "License");
@@ -16,22 +17,6 @@
 ** limitations under the License.
 */
 -->
-
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
-    <!-- Whether to use the mask for the quicksettings icons-->
-    <bool name="config_useMaskForQs">true</bool>
-
-    <!-- Allow devices override audio panel location to the left side -->
-    <bool name="config_audioPanelOnLeftSide">false</bool>
-
-    <!-- Max visible notification icons -->
-    <integer name="config_maxVisibleNotificationIcons">5</integer>
-    <integer name="config_maxVisibleNotificationIconsOnLock">6</integer>
-
-    <!-- Navbar -->
-    <string name="config_navBarLayoutHandleArrows" translatable="false">back[1.7WC];home_handle;ime_switcher[1.7WC]</string>
-
-    <!-- Whether the qs statusbar is hidden -->
-    <bool name="qs_status_bar_hidden">false</bool>
+    <bool name="qs_status_bar_hidden">true</bool>
 </resources>
-
