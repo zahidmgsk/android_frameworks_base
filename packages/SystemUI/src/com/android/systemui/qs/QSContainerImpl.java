@@ -171,7 +171,7 @@ public class QSContainerImpl extends FrameLayout implements
         // Hide the backgrounds when in landscape mode.
         if (mLandscape || mForceHideQsStatusBar) {
             mBackgroundGradient.setVisibility(View.INVISIBLE);
-        } else if (!mQsBackgroundAlpha) {
+        } else if (!mQsBackgroundAlpha || !mLandscape) {
             mBackgroundGradient.setVisibility(View.VISIBLE);
         }
         updateStatusbarVisibility();
@@ -294,8 +294,15 @@ public class QSContainerImpl extends FrameLayout implements
         int statusBarSideMargin = mHeaderImageEnabled ? mContext.getResources().getDimensionPixelSize(
                 R.dimen.qs_header_image_side_margin) : 0;
 
-        ((LayoutParams) mQSPanelContainer.getLayoutParams()).topMargin = topMargin + statusBarBottomMargin;
+        int gradientTopMargin = !mHeaderImageEnabled ? mContext.getResources().getDimensionPixelSize(
+                com.android.internal.R.dimen.quick_qs_offset_height) : 0;
+
+        ((LayoutParams) mQSPanelContainer.getLayoutParams()).topMargin = topMargin;
         mQSPanelContainer.setLayoutParams(mQSPanelContainer.getLayoutParams());
+
+        ViewGroup.MarginLayoutParams mlp = (ViewGroup.MarginLayoutParams) mBackgroundGradient.getLayoutParams();
+        mlp.setMargins(0, gradientTopMargin, 0, 0);
+        mBackgroundGradient.setLayoutParams(mlp);
 
         ViewGroup.MarginLayoutParams lp = (ViewGroup.MarginLayoutParams) mStatusBarBackground.getLayoutParams();
         lp.height = topMargin;
