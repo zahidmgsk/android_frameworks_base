@@ -103,6 +103,10 @@ public class NadUtils {
         return SystemProperties.getBoolean("ro.build.ab_update", false);
     }
 
+    public static boolean deviceHasFlashlight(Context ctx) {
+        return ctx.getPackageManager().hasSystemFeature(PackageManager.FEATURE_CAMERA_FLASH);
+    }
+
     // Check to see if a package is installed
     public static boolean isPackageInstalled(Context context, String pkg, boolean ignoreState) {
         if (pkg != null) {
