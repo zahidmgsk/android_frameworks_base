@@ -48,6 +48,8 @@ public class NavbarUtilities {
     public static final int KEY_ACTION_RINGER_MODES = 17;
     public static final int KEY_ACTION_KILL_APP = 18;
     public static final int KEY_ACTION_PARTIAL_SCREENSHOT = 19;
+    public static final int KEY_ACTION_SKIP_TRACK = 20;
+    public static final int KEY_ACTION_PREVIOUS_TRACK= 21;
 
     // Special values, used internal only.
     public static final int KEY_ACTION_HOME = 100;
@@ -139,7 +141,9 @@ public class NavbarUtilities {
             KEY_ACTION_CUSTOM_APP,
             KEY_ACTION_RINGER_MODES,
             KEY_ACTION_KILL_APP,
-            KEY_ACTION_PARTIAL_SCREENSHOT
+            KEY_ACTION_PARTIAL_SCREENSHOT,
+            KEY_ACTION_SKIP_TRACK,
+            KEY_ACTION_PREVIOUS_TRACK
     };
 
     /**

@@ -6407,6 +6407,12 @@ public class PhoneWindowManager implements WindowManagerPolicy {
             case NavbarUtilities.KEY_ACTION_PARTIAL_SCREENSHOT:
                 ActionUtils.takeScreenshot(false);
                 break;
+            case NavbarUtilities.KEY_ACTION_SKIP_TRACK:
+                mLineageButtons.skipTrack();
+                break;
+            case NavbarUtilities.KEY_ACTION_PREVIOUS_TRACK:
+                mLineageButtons.previousTrack();
+                break;
         }
     }
 
