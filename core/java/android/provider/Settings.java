@@ -4558,6 +4558,13 @@ public final class Settings {
         public static final String MEDIAPROJECTION_SYSUI_OK = "mediaprojection_sysui_ok";
 
         /**
+         * Whether to display screenrecord in the power menu
+         *
+         * @hide
+         */
+        public static final String POWERMENU_SCREENRECORD = "powermenu_screenrecord";
+
+        /**
          * Whether to show the battery info on the lockscreen while charging
          * @hide
          */
