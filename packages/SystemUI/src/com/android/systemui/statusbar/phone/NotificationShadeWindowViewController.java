@@ -465,14 +465,6 @@ public class NotificationShadeWindowViewController {
         }
     }
 
-    public void setLockscreenDoubleTapToSleep() {
-        boolean isDoubleTapEnabled = Settings.System.getIntForUser(mContext.getContentResolver(),
-                Settings.System.DOUBLE_TAP_SLEEP_LOCKSCREEN, 1, UserHandle.USER_CURRENT) == 1;
-        if (mNotificationPanelViewController != null) {
-            mNotificationPanelViewController.setLockscreenDoubleTapToSleep(isDoubleTapEnabled);
-        }
-    }
-
     public void setService(StatusBar statusBar, NotificationShadeWindowController controller) {
         mService = statusBar;
         mNotificationShadeWindowController = controller;
@@ -488,5 +480,21 @@ public class NotificationShadeWindowViewController {
         mTempRect.set(mTempLocation[0], mTempLocation[1], mTempLocation[0] + view.getWidth(),
                 mTempLocation[1] + view.getHeight());
         return mTempRect.contains(x, y);
+    }
+
+    public void updateSettings() {
+        boolean doubleTapToSleepEnabled = Settings.System.getIntForUser(
+                mView.getContext().getContentResolver(), Settings.System.DOUBLE_TAP_SLEEP_GESTURE, 0,
+                UserHandle.USER_CURRENT) == 1;
+        boolean isDoubleTapEnabled = Settings.System.getIntForUser(
+                mView.getContext().getContentResolver(), Settings.System.DOUBLE_TAP_SLEEP_LOCKSCREEN, 0,
+                UserHandle.USER_CURRENT) == 1;
+        if (mNotificationPanelViewController != null) {
+            mNotificationPanelViewController.updateDoubleTapToSleep(doubleTapToSleepEnabled);
+            mNotificationPanelViewController.setLockscreenDoubleTapToSleep(isDoubleTapEnabled);
+        }
+        if (mDragDownHelper != null) {
+            mDragDownHelper.updateDoubleTapToSleep(doubleTapToSleepEnabled);
+        }
     }
 }

@@ -273,9 +273,6 @@ public class NotificationPanelViewController extends PanelViewController {
     private VelocityTracker mQsVelocityTracker;
     private boolean mQsTracking;
 
-    private GestureDetector mLockscreenDoubleTapToSleep;
-    private boolean mIsLockscreenDoubleTapEnabled;
-
     /**
      * If set, the ongoing touch gesture might both trigger the expansion in {@link PanelView} and
      * the expansion for quick settings.
@@ -422,6 +419,12 @@ public class NotificationPanelViewController extends PanelViewController {
     private final ShadeController mShadeController;
     private int mDisplayId;
 
+    private int mStatusBarHeaderHeight;
+    private GestureDetector mDoubleTapGesture;
+    private GestureDetector mLockscreenDoubleTapToSleep;
+    private boolean mIsLockscreenDoubleTapEnabled;
+    private boolean mDoubleTapToSleepEnabled;
+
     /**
      * Cache the resource id of the theme to avoid unnecessary work in onThemeChanged.
      *
@@ -564,11 +567,18 @@ public class NotificationPanelViewController extends PanelViewController {
         mLockscreenUserManager = notificationLockscreenUserManager;
         mEntryManager = notificationEntryManager;
         mConversationNotificationManager = conversationNotificationManager;
-        mLockscreenDoubleTapToSleep = new GestureDetector(context,
+        mDoubleTapGesture = new GestureDetector(mView.getContext(), new GestureDetector.SimpleOnGestureListener() {
+            @Override
+            public boolean onDoubleTap(MotionEvent e) {
+                ActionUtils.switchScreenOff(mView.getContext());
+                return true;
+            }
+        });
+        mLockscreenDoubleTapToSleep = new GestureDetector(mView.getContext(),
                 new GestureDetector.SimpleOnGestureListener() {
             @Override
             public boolean onDoubleTap(MotionEvent e) {
-                ActionUtils.switchScreenOff(mContext);
+                ActionUtils.switchScreenOff(mView.getContext());
                 return true;
             }
         });
@@ -659,9 +669,9 @@ public class NotificationPanelViewController extends PanelViewController {
                 R.dimen.qs_notification_padding);
         mShelfHeight = mResources.getDimensionPixelSize(R.dimen.notification_shelf_height);
         mDarkIconSize = mResources.getDimensionPixelSize(R.dimen.status_bar_icon_drawing_size_dark);
-        int statusbarHeight = mResources.getDimensionPixelSize(
+        mStatusBarHeaderHeight = mResources.getDimensionPixelSize(
                 com.android.internal.R.dimen.status_bar_height);
-        mHeadsUpInset = statusbarHeight + mResources.getDimensionPixelSize(
+        mHeadsUpInset = mStatusBarHeaderHeight + mResources.getDimensionPixelSize(
                 R.dimen.heads_up_status_bar_padding);
     }
 
@@ -1265,6 +1275,10 @@ public class NotificationPanelViewController extends PanelViewController {
 
     public void setLockscreenDoubleTapToSleep(boolean isDoubleTapEnabled) {
         mIsLockscreenDoubleTapEnabled = isDoubleTapEnabled;
+    }
+
+    public void updateDoubleTapToSleep(boolean doubleTapToSleepEnabled) {
+        mDoubleTapToSleepEnabled = doubleTapToSleepEnabled;
     }
 
     private boolean handleQsTouch(MotionEvent event) {
@@ -3173,6 +3187,11 @@ public class NotificationPanelViewController extends PanelViewController {
                     return false;
                 }
 
+                if (!mQsExpanded
+                        && mDoubleTapToSleepEnabled
+                        && event.getY() < mStatusBarHeaderHeight) {
+                    mDoubleTapGesture.onTouchEvent(event);
+                }
                 // Make sure the next touch won't the blocked after the current ends.
                 if (event.getAction() == MotionEvent.ACTION_UP
                         || event.getAction() == MotionEvent.ACTION_CANCEL) {

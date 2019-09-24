@@ -1955,6 +1955,9 @@ public class StatusBar extends SystemUI implements DemoMode,
             resolver.registerContentObserver(Settings.System.getUriFor(
                     Settings.System.DOUBLE_TAP_SLEEP_LOCKSCREEN),
                     false, this, UserHandle.USER_ALL);
+            resolver.registerContentObserver(Settings.System.getUriFor(
+                    Settings.System.DOUBLE_TAP_SLEEP_GESTURE),
+                    false, this, UserHandle.USER_ALL);
         }
 
         @Override
@@ -1966,15 +1969,15 @@ public class StatusBar extends SystemUI implements DemoMode,
                 setQsRowsColumns();
             } else if (uri.equals(Settings.System.getUriFor(Settings.System.QS_TILE_TITLE_VISIBILITY))) {
                 updateQsPanelResources();
-            } else if (uri.equals(Settings.System.getUriFor(
-                    Settings.System.DOUBLE_TAP_SLEEP_LOCKSCREEN))) {
-                setStatusBarWindowViewOptions();
+            } else if (uri.equals(Settings.System.getUriFor(Settings.System.DOUBLE_TAP_SLEEP_LOCKSCREEN)) ||
+                       uri.equals(Settings.System.getUriFor(Settings.System.DOUBLE_TAP_SLEEP_GESTURE))) {
+                setStatusDoubleTapToSleep();
             }
         }
 
         public void update() {
             setQsRowsColumns();
-            setStatusBarWindowViewOptions();
+            setStatusDoubleTapToSleep();
         }
     }
 
@@ -1991,9 +1994,9 @@ public class StatusBar extends SystemUI implements DemoMode,
         }
     }
 
-    private void setStatusBarWindowViewOptions() {
+    private void setStatusDoubleTapToSleep() {
         if (mNotificationShadeWindowViewController != null) {
-            mNotificationShadeWindowViewController.setStatusBarWindowViewOptions();
+            mNotificationShadeWindowViewController.updateSettings();
         }
     }
 
