@@ -17,6 +17,7 @@
 package android.provider.settings.validators;
 
 import static android.provider.settings.validators.SettingsValidators.ANY_INTEGER_VALIDATOR;
+import static android.provider.settings.validators.SettingsValidators.ANY_STRING_VALIDATOR;
 import static android.provider.settings.validators.SettingsValidators.BOOLEAN_VALIDATOR;
 import static android.provider.settings.validators.SettingsValidators.COMPONENT_NAME_VALIDATOR;
 import static android.provider.settings.validators.SettingsValidators.DATE_FORMAT_VALIDATOR;
@@ -228,5 +229,11 @@ public class SystemSettingsValidators {
         VALIDATORS.put(System.BUTTON_BACKLIGHT_ON_TOUCH_ONLY, BOOLEAN_VALIDATOR);
         VALIDATORS.put(System.FORCE_SHOW_NAVBAR, ANY_INTEGER_VALIDATOR);
         VALIDATORS.put(System.ACCENT_COLOR, ANY_INTEGER_VALIDATOR);
+        VALIDATORS.put(System.STATUS_BAR_CUSTOM_HEADER, BOOLEAN_VALIDATOR);
+        VALIDATORS.put(System.STATUS_BAR_CUSTOM_HEADER_SHADOW, ANY_INTEGER_VALIDATOR);
+        VALIDATORS.put(System.STATUS_BAR_DAYLIGHT_HEADER_PACK, ANY_STRING_VALIDATOR);
+        VALIDATORS.put(System.STATUS_BAR_CUSTOM_HEADER_PROVIDER, ANY_STRING_VALIDATOR);
+        VALIDATORS.put(System.STATUS_BAR_CUSTOM_HEADER_IMAGE, ANY_STRING_VALIDATOR);
+        VALIDATORS.put(System.STATUS_BAR_FILE_HEADER_IMAGE, ANY_STRING_VALIDATOR);
     }
 }
