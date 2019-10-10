@@ -123,4 +123,7 @@
 
     <bool name="config_button_brightness_support">false</bool>
     <integer name="config_button_brightness_default">128</integer>
+
+    <!-- Default value for Ambiant Pulse light color -->
+    <integer name="config_AmbiantPulseLightColor" >0x3980FF</integer>
 </resources>
