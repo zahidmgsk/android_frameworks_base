@@ -117,5 +117,6 @@ public class SystemSettings {
         Settings.System.STATUSBAR_CLOCK_DATE_DISPLAY,
         Settings.System.STATUSBAR_CLOCK_DATE_STYLE,
         Settings.System.STATUSBAR_CLOCK_DATE_FORMAT,
+        Settings.System.STATUSBAR_CLOCK_DATE_POSITION,
     };
 }
