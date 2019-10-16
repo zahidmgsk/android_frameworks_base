@@ -4764,6 +4764,24 @@ public final class Settings {
         public static final String EGG_MODE = "egg_mode";
 
         /**
+         * Custom Ambient tilt gesture
+         * @hide
+         */
+        public static final String CUSTOM_AMBIENT_TILT_GESTURE = "custom_ambient_tilt_gesture";
+
+        /**
+         * Custom Ambient handwave gesture
+         * @hide
+         */
+        public static final String CUSTOM_AMBIENT_HANDWAVE_GESTURE = "custom_ambient_handwave_gesture";
+
+         /**
+         * Custom Ambient pocketmode gesture
+         * @hide
+         */
+        public static final String CUSTOM_AMBIENT_POCKETMODE_GESTURE = "custom_ambient_pocketmode_gesture";
+
+        /**
          * Setting to determine whether or not to show the battery percentage in the status bar.
          *    0 - Don't show percentage
          *    1 - Show percentage
