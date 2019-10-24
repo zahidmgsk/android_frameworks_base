@@ -42,10 +42,13 @@ import android.graphics.drawable.Drawable;
 import android.hardware.biometrics.BiometricSourceType;
 import android.os.Bundle;
 import android.os.PowerManager;
+import android.os.UserHandle;
 import android.os.SystemClock;
+import android.provider.Settings;
 import android.util.Log;
 import android.util.MathUtils;
 import android.view.LayoutInflater;
+import android.view.GestureDetector;
 import android.view.MotionEvent;
 import android.view.VelocityTracker;
 import android.view.View;
@@ -61,6 +64,7 @@ import android.widget.TextView;
 import com.android.internal.annotations.VisibleForTesting;
 import com.android.internal.logging.MetricsLogger;
 import com.android.internal.logging.nano.MetricsProto.MetricsEvent;
+import com.android.internal.util.nad.ActionUtils;
 import com.android.internal.util.LatencyTracker;
 import com.android.keyguard.KeyguardClockSwitch;
 import com.android.keyguard.KeyguardStatusView;
@@ -268,6 +272,9 @@ public class NotificationPanelViewController extends PanelViewController {
     private int mTrackingPointer;
     private VelocityTracker mQsVelocityTracker;
     private boolean mQsTracking;
+
+    private GestureDetector mLockscreenDoubleTapToSleep;
+    private boolean mIsLockscreenDoubleTapEnabled;
 
     /**
      * If set, the ongoing touch gesture might both trigger the expansion in {@link PanelView} and
@@ -557,7 +564,14 @@ public class NotificationPanelViewController extends PanelViewController {
         mLockscreenUserManager = notificationLockscreenUserManager;
         mEntryManager = notificationEntryManager;
         mConversationNotificationManager = conversationNotificationManager;
-
+        mLockscreenDoubleTapToSleep = new GestureDetector(context,
+                new GestureDetector.SimpleOnGestureListener() {
+            @Override
+            public boolean onDoubleTap(MotionEvent e) {
+                ActionUtils.switchScreenOff(mContext);
+                return true;
+            }
+        });
         mView.setBackgroundColor(Color.TRANSPARENT);
         OnAttachStateChangeListener onAttachStateChangeListener = new OnAttachStateChangeListener();
         mView.addOnAttachStateChangeListener(onAttachStateChangeListener);
@@ -1249,6 +1263,9 @@ public class NotificationPanelViewController extends PanelViewController {
         return mNotificationStackScroller.getOpeningHeight();
     }
 
+    public void setLockscreenDoubleTapToSleep(boolean isDoubleTapEnabled) {
+        mIsLockscreenDoubleTapEnabled = isDoubleTapEnabled;
+    }
 
     private boolean handleQsTouch(MotionEvent event) {
         final int action = event.getActionMasked();
@@ -3194,6 +3211,10 @@ public class NotificationPanelViewController extends PanelViewController {
                     mMetricsLogger.count(COUNTER_PANEL_OPEN, 1);
                     updateVerticalPanelPosition(event.getX());
                     handled = true;
+                }
+                if (mIsLockscreenDoubleTapEnabled && !mPulsing && !mDozing
+                        && mBarState == StatusBarState.KEYGUARD) {
+                    mLockscreenDoubleTapToSleep.onTouchEvent(event);
                 }
                 handled |= super.onTouch(v, event);
                 return !mDozing || mPulsing || handled;

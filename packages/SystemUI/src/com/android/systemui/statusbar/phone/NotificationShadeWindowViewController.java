@@ -465,6 +465,14 @@ public class NotificationShadeWindowViewController {
         }
     }
 
+    public void setLockscreenDoubleTapToSleep() {
+        boolean isDoubleTapEnabled = Settings.System.getIntForUser(mContext.getContentResolver(),
+                Settings.System.DOUBLE_TAP_SLEEP_LOCKSCREEN, 1, UserHandle.USER_CURRENT) == 1;
+        if (mNotificationPanelViewController != null) {
+            mNotificationPanelViewController.setLockscreenDoubleTapToSleep(isDoubleTapEnabled);
+        }
+    }
+
     public void setService(StatusBar statusBar, NotificationShadeWindowController controller) {
         mService = statusBar;
         mNotificationShadeWindowController = controller;

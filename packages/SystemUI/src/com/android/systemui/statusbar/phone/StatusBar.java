@@ -1952,6 +1952,9 @@ public class StatusBar extends SystemUI implements DemoMode,
             resolver.registerContentObserver(Settings.System.getUriFor(
                     Settings.System.QS_TILE_TITLE_VISIBILITY),
                     false, this, UserHandle.USER_ALL);
+            resolver.registerContentObserver(Settings.System.getUriFor(
+                    Settings.System.DOUBLE_TAP_SLEEP_LOCKSCREEN),
+                    false, this, UserHandle.USER_ALL);
         }
 
         @Override
@@ -1963,11 +1966,15 @@ public class StatusBar extends SystemUI implements DemoMode,
                 setQsRowsColumns();
             } else if (uri.equals(Settings.System.getUriFor(Settings.System.QS_TILE_TITLE_VISIBILITY))) {
                 updateQsPanelResources();
+            } else if (uri.equals(Settings.System.getUriFor(
+                    Settings.System.DOUBLE_TAP_SLEEP_LOCKSCREEN))) {
+                setStatusBarWindowViewOptions();
             }
         }
 
         public void update() {
             setQsRowsColumns();
+            setStatusBarWindowViewOptions();
         }
     }
 
@@ -1981,6 +1988,12 @@ public class StatusBar extends SystemUI implements DemoMode,
     private void updateQsPanelResources() {
         if (mQSPanel != null) {
             mQSPanel.updateResources();
+        }
+    }
+
+    private void setStatusBarWindowViewOptions() {
+        if (mNotificationShadeWindowViewController != null) {
+            mNotificationShadeWindowViewController.setStatusBarWindowViewOptions();
         }
     }
 
