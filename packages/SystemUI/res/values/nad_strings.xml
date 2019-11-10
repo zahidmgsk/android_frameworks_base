@@ -179,4 +179,7 @@
 
     <!-- Now playing lockscreen music Ticker -->
     <string name="ambientmusic_songinfo" formatted="false">%s by %s</string>
+
+    <!-- Power menu item for taking a Screen record [CHAR LIMIT=20]-->
+    <string name="global_action_screenrecord">Screen Record</string>
 </resources>
