@@ -9056,7 +9056,7 @@ public final class Settings {
          */
         public static final String AWARE_LOCK_ENABLED = "aware_lock_enabled";
 
-        /*
+        /**
          * Boolean value whether to link ringtone and notification volume
          * @hide
          */
