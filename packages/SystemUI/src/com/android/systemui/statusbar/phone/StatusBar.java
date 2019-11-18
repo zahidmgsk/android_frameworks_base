@@ -2312,6 +2312,9 @@ public class StatusBar extends SystemUI implements DemoMode,
             resolver.registerContentObserver(Settings.System.getUriFor(
                     Settings.System.BRIGHTNESS_SLIDER_QS_UNEXPANDED),
                     false, this, UserHandle.USER_ALL);
+            resolver.registerContentObserver(Settings.System.getUriFor(
+                    Settings.System.LOCKSCREEN_MEDIA_BLUR),
+                    false, this, UserHandle.USER_ALL);
         }
 
         @Override
@@ -2383,6 +2386,7 @@ public class StatusBar extends SystemUI implements DemoMode,
         setGestureNavOptions();
         setMediaHeadsup();
         setQsBatteryPercentMode();
+        setLockScreenMediaBlurLevel();
         updateCorners();
         updateGamingPeekMode();
         updateTickerAnimation();
@@ -2425,6 +2429,12 @@ public class StatusBar extends SystemUI implements DemoMode,
     private void setHeadsUpBlacklist() {
         if (mPresenter != null)
             mPresenter.setHeadsUpBlacklist();
+    }
+
+    private void setLockScreenMediaBlurLevel() {
+        if (mMediaManager != null) {
+            mMediaManager.setLockScreenMediaBlurLevel();
+        }
     }
 
     private void setScreenBrightnessMode() {

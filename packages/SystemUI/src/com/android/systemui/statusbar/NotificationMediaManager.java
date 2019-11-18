@@ -134,6 +134,8 @@ public class NotificationMediaManager implements Dumpable {
     @Nullable
     private LockscreenWallpaper mLockscreenWallpaper;
 
+    private float mLockscreenMediaBlur;
+
     private final Handler mHandler = Dependency.get(MAIN_HANDLER);
 
     private final Context mContext;
@@ -884,13 +886,19 @@ public class NotificationMediaManager implements Dumpable {
             case 2:
                 return Bitmap.createBitmap(ImageHelper.getColoredBitmap(new BitmapDrawable(mBackdropBack.getResources(), artwork), mContext.getResources().getColor(R.color.system_light_accent)));
             case 3:
-                return Bitmap.createBitmap(ImageHelper.getBlurredImage(mContext, artwork, getLockScreenMediaBlurLevel()));
+                return Bitmap.createBitmap(ImageHelper.getBlurredImage(mContext, artwork, mLockscreenMediaBlur));
             case 4:
-                return Bitmap.createBitmap(ImageHelper.getGrayscaleBlurredImage(mContext, artwork, getLockScreenMediaBlurLevel()));
+                return Bitmap.createBitmap(ImageHelper.getGrayscaleBlurredImage(mContext, artwork, mLockscreenMediaBlur));
             case 5:
             default:
-                return mMediaArtworkProcessor.processArtwork(mContext, artwork, getLockScreenMediaBlurLevel());
+                return mMediaArtworkProcessor.processArtwork(mContext, artwork, mLockscreenMediaBlur);
         }
+    }
+
+    public void setLockScreenMediaBlurLevel() {
+        mLockscreenMediaBlur = (float) Settings.System.getIntForUser(mContext.getContentResolver(),
+                Settings.System.LOCKSCREEN_MEDIA_BLUR, 100,
+                UserHandle.USER_CURRENT) / 4;
     }
 
     @MainThread
@@ -954,13 +962,6 @@ public class NotificationMediaManager implements Dumpable {
         void onMetadataOrStateChanged(MediaMetadata metadata, @PlaybackState.State int state);
 
         default void setMediaNotificationColor(boolean colorizedMedia, int color) {};
-    }
-
-    private float getLockScreenMediaBlurLevel() {
-        float level = (float) Settings.System.getIntForUser(mContext.getContentResolver(),
-                Settings.System.LOCKSCREEN_MEDIA_BLUR, 100,
-                UserHandle.USER_CURRENT) / 4;
-        return level;
     }
 
     private void triggerKeyEvents(int key, MediaController controller) {
