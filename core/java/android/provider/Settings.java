@@ -5300,7 +5300,13 @@ public final class Settings {
          * Whether to show VoLTE icon or not
          * @hide
          */
-        public static final String SHOW_VOLTE_ICON = "volte_icon";
+        public static final String SHOW_VOLTE_ICON = "show_volte_icon";
+
+        /**
+         * VoLTE icon style
+         * @hide
+         */
+        public static final String VOLTE_ICON_STYLE = "volte_icon_style";
 
         /**
          * Status bar carrier label
@@ -5780,6 +5786,7 @@ public final class Settings {
             PRIVATE_SETTINGS.add(ACCENT_COLOR);
             PRIVATE_SETTINGS.add(SHOW_FOURG);
             PRIVATE_SETTINGS.add(SHOW_VOLTE_ICON);
+            PRIVATE_SETTINGS.add(VOLTE_ICON_STYLE);
             PRIVATE_SETTINGS.add(STATUS_BAR_CUSTOM_HEADER);
             PRIVATE_SETTINGS.add(STATUS_BAR_CUSTOM_HEADER_SHADOW);
             PRIVATE_SETTINGS.add(STATUS_BAR_DAYLIGHT_HEADER_PACK);
