@@ -87,5 +87,6 @@ public class SystemSettings {
         Settings.System.QS_PANEL_BG_USE_NEW_TINT,
         Settings.System.QS_SHOW_BATTERY_PERCENT,
         Settings.System.VOLUME_ROCKER_WAKE,
+        Settings.System.NAVIGATION_BAR_ARROW_KEYS,
     };
 }
