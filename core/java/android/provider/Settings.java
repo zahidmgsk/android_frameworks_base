@@ -4869,6 +4869,11 @@ public final class Settings {
         private static final Validator QS_PANEL_BG_USE_NEW_TINT_VALIDATOR = ANY_INTEGER_VALIDATOR;
 
         /**
+         * @hide
+         */
+        public static final String QS_LABEL_USE_NEW_TINT = "qs_label_use_new_tint";
+
+        /**
          * IMPORTANT: If you add a new public settings you also have to add it to
          * PUBLIC_SETTINGS below. If the new setting is hidden you have to add
          * it to PRIVATE_SETTINGS below. Also add a validator that can validate
