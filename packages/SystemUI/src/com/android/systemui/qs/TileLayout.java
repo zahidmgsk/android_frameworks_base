@@ -2,9 +2,12 @@ package com.android.systemui.qs;
 
 import static com.android.systemui.util.Utils.useQsMediaPlayer;
 
+import android.content.ContentResolver;
 import android.content.Context;
 import android.content.res.Configuration;
 import android.content.res.Resources;
+import android.os.UserHandle;
+import android.provider.Settings;
 import android.provider.Settings;
 import android.util.AttributeSet;
 import android.view.View;
@@ -113,6 +116,7 @@ public class TileLayout extends ViewGroup implements QSTileLayout {
 
     public boolean updateResources() {
         final Resources res = mContext.getResources();
+        final ContentResolver resolver = mContext.getContentResolver();
 
         if (res.getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT) {
             mResourceColumns = Settings.System.getIntForUser(resolver,
