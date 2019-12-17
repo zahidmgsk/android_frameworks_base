@@ -3,6 +3,7 @@ package com.android.systemui.qs;
 import static com.android.systemui.util.Utils.useQsMediaPlayer;
 
 import android.content.Context;
+import android.content.res.Configuration;
 import android.content.res.Resources;
 import android.provider.Settings;
 import android.util.AttributeSet;
@@ -111,7 +112,17 @@ public class TileLayout extends ViewGroup implements QSTileLayout {
 
     public boolean updateResources() {
         final Resources res = mContext.getResources();
-        mResourceColumns = Math.max(1, res.getInteger(R.integer.quick_settings_num_columns));
+
+        if (res.getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT) {
+            mResourceColumns = Settings.System.getIntForUser(resolver,
+                    Settings.System.QS_COLUMNS_PORTRAIT, 5,
+                    UserHandle.USER_CURRENT);
+        } else {
+            mResourceColumns = Settings.System.getIntForUser(resolver,
+                    Settings.System.QS_COLUMNS_LANDSCAPE, 5,
+                    UserHandle.USER_CURRENT);
+        }
+
         mCellHeight = mContext.getResources().getDimensionPixelSize(R.dimen.qs_tile_height);
         mCellMarginHorizontal = res.getDimensionPixelSize(R.dimen.qs_tile_margin_horizontal);
         mCellMarginVertical= res.getDimensionPixelSize(R.dimen.qs_tile_margin_vertical);
@@ -176,10 +187,14 @@ public class TileLayout extends ViewGroup implements QSTileLayout {
                 + mCellMarginVertical;
         final int previousRows = mRows;
         mRows = availableHeight / (mCellHeight + mCellMarginVertical);
-        if (mRows < mMinRows) {
-            mRows = mMinRows;
-        } else if (mRows >= mMaxAllowedRows) {
-            mRows = mMaxAllowedRows;
+        if (mContext.getResources().getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT) {
+            mRows = Settings.System.getIntForUser(mContext.getContentResolver(),
+                    Settings.System.QS_ROWS_PORTRAIT, 3,
+                    UserHandle.USER_CURRENT);
+        } else {
+            mRows = Settings.System.getIntForUser(mContext.getContentResolver(),
+                        Settings.System.QS_ROWS_LANDSCAPE, 2,
+                        UserHandle.USER_CURRENT);
         }
         if (mRows > (tilesCount + mColumns - 1) / mColumns) {
             mRows = (tilesCount + mColumns - 1) / mColumns;
