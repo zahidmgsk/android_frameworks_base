@@ -131,7 +131,7 @@ public class TileLayout extends ViewGroup implements QSTileLayout {
                     Settings.System.QS_COLUMNS_LANDSCAPE, 4,
                     UserHandle.USER_CURRENT);
             mResourceRows = Settings.System.getIntForUser(mContext.getContentResolver(),
-                        Settings.System.QS_ROWS_LANDSCAPE, 1,
+                        Settings.System.QS_ROWS_LANDSCAPE, 2,
                         UserHandle.USER_CURRENT);
         }
 
