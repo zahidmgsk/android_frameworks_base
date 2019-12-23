@@ -17,6 +17,7 @@
 package com.android.internal.util.nad;
 
 import android.Manifest;
+import android.app.UiModeManager;
 import android.content.Context;
 import android.content.om.IOverlayManager;
 import android.content.om.OverlayInfo;
@@ -145,5 +146,14 @@ public class NadUtils {
                 throws RemoteException {
             return mService.getOverlayInfosForTarget(target, userId);
         }
+    }
+
+    // Method to detect whether the system dark theme is enabled or not
+    public static boolean isDarkTheme(Context context) {
+        UiModeManager mUiModeManager =
+                context.getSystemService(UiModeManager.class);
+        if (mUiModeManager == null) return false;
+        int mode = mUiModeManager.getNightMode();
+        return (mode == UiModeManager.MODE_NIGHT_YES);
     }
 }
