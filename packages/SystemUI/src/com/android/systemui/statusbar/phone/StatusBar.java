@@ -436,7 +436,8 @@ public class StatusBar extends SystemUI implements DemoMode,
 
     private final DisplayMetrics mDisplayMetrics;
 
-    private boolean mHeadsUpDisabled, mGamingModeActivated;
+    private boolean mGamingModeActivated;
+    private int mHeadsUpDisabled;
 
     // XXX: gesture research
     private final GestureRecorder mGestureRec = DEBUG_GESTURES
@@ -2022,6 +2023,9 @@ public class StatusBar extends SystemUI implements DemoMode,
                 setQsBatteryPercentMode();
             } else if (uri.equals(Settings.System.getUriFor(Settings.System.FORCE_SHOW_NAVBAR))) {
                 updateNavigationBar(false);
+            } else if (uri.equals(Settings.System.getUriFor(Settings.System.GAMING_MODE_ACTIVE)) ||
+                    uri.equals(Settings.System.getUriFor(Settings.System.GAMING_MODE_HEADSUP_TOGGLE))) {
+                setGamingMode();
             }
           update();
         }
@@ -2086,9 +2090,9 @@ public class StatusBar extends SystemUI implements DemoMode,
                 UserHandle.USER_CURRENT) == 1;
         mHeadsUpDisabled = Settings.System.getIntForUser(mContext.getContentResolver(),
                 Settings.System.GAMING_MODE_HEADSUP_TOGGLE, 1,
-                UserHandle.USER_CURRENT) == 1;
+                UserHandle.USER_CURRENT);
         if (mNotificationInterruptStateProvider != null)
-            mNotificationInterruptStateProvider.setGamingPeekMode(mGamingModeActivated && mHeadsUpDisabled);
+            mNotificationInterruptStateProvider.setGamingPeekMode(mGamingModeActivated, mHeadsUpDisabled);
     }
 
     @VisibleForTesting
