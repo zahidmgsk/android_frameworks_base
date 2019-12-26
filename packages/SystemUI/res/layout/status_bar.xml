@@ -80,7 +80,7 @@
                     android:src="@drawable/status_bar_logo"
                     android:scaleType="centerInside"
                     android:paddingEnd="4dp"
-                    android:layout_gravity="center"
+                    android:layout_gravity="center_vertical"
                     android:gravity="center_vertical"
                     android:visibility="gone" />
 
@@ -108,7 +108,6 @@
 
                 <com.android.systemui.statusbar.AlphaOptimizedFrameLayout
                     android:id="@+id/notification_icon_area"
-                    android:paddingStart="2dp"
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
                     android:layout_weight="1"

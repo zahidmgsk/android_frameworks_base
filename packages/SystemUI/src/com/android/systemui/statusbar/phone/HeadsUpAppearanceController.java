@@ -57,6 +57,7 @@ public class HeadsUpAppearanceController implements OnHeadsUpChangedListener,
     private final View mCenteredIconView;
     private final View mClockView;
     private final View mOperatorNameView;
+    private final View mNadLogoView;
     private final View mCarrierLabelView;
     private final DarkIconDispatcher mDarkIconDispatcher;
     private final NotificationPanelViewController mNotificationPanelViewController;
@@ -109,7 +110,8 @@ public class HeadsUpAppearanceController implements OnHeadsUpChangedListener,
                 statusBarView.findViewById(R.id.clock),
                 statusBarView.findViewById(R.id.operator_name_frame),
                 statusBarView.findViewById(R.id.centered_icon_area),
-                statusBarView.findViewById(R.id.statusbar_carrier_text));
+                statusBarView.findViewById(R.id.statusbar_carrier_text),
+                statusBarView.findViewById(R.id.status_bar_logo));
     }
 
     @VisibleForTesting
@@ -127,7 +129,8 @@ public class HeadsUpAppearanceController implements OnHeadsUpChangedListener,
             View clockView,
             View operatorNameView,
             View centeredIconView,
-            View carrierLabelView) {
+            View carrierLabelView,
+            View nadLogoView) {
         mNotificationIconAreaController = notificationIconAreaController;
         mHeadsUpManager = headsUpManager;
         mHeadsUpManager.addListener(this);
@@ -144,6 +147,7 @@ public class HeadsUpAppearanceController implements OnHeadsUpChangedListener,
         mStackScroller.addOnLayoutChangeListener(mStackScrollLayoutChangeListener);
         mStackScroller.setHeadsUpAppearanceController(this);
         mClockView = clockView;
+        mNadLogoView = nadLogoView;
         mCarrierLabelView = carrierLabelView;
         mOperatorNameView = operatorNameView;
         mDarkIconDispatcher = Dependency.get(DarkIconDispatcher.class);
@@ -291,6 +295,9 @@ public class HeadsUpAppearanceController implements OnHeadsUpChangedListener,
                 if (mOperatorNameView != null) {
                     hide(mOperatorNameView, View.INVISIBLE);
                 }
+               if (mNadLogoView.getVisibility() != View.GONE) {
+                    hide(mNadLogoView, View.INVISIBLE);
+                }
                 if (mCarrierLabelView.getVisibility() != View.GONE) {
                     hide(mCarrierLabelView, View.INVISIBLE);
                 }
@@ -301,6 +308,9 @@ public class HeadsUpAppearanceController implements OnHeadsUpChangedListener,
                 }
                 if (mOperatorNameView != null) {
                     show(mOperatorNameView);
+                }
+               if (mNadLogoView.getVisibility() != View.GONE) {
+                    show(mNadLogoView);
                 }
                 if (mCarrierLabelView.getVisibility() != View.GONE) {
                     show(mCarrierLabelView);
