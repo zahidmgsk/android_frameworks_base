@@ -29,8 +29,10 @@ import android.animation.ValueAnimator;
 import android.app.ActivityManager;
 import android.app.Fragment;
 import android.app.StatusBarManager;
+import android.content.ContentResolver;
 import android.content.pm.ResolveInfo;
 import android.content.res.Configuration;
+import android.database.ContentObserver;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.ColorFilter;
@@ -40,6 +42,8 @@ import android.graphics.Rect;
 import android.graphics.Region;
 import android.graphics.drawable.Drawable;
 import android.hardware.biometrics.BiometricSourceType;
+import android.net.Uri;
+import android.os.Handler;
 import android.os.Bundle;
 import android.os.PowerManager;
 import android.os.UserHandle;
@@ -393,6 +397,9 @@ public class NotificationPanelViewController extends PanelViewController {
     private ArrayList<Runnable> mVerticalTranslationListener = new ArrayList<>();
     private HeadsUpAppearanceController mHeadsUpAppearanceController;
 
+    private SettingsObserver mSettingsObserver;
+    private Handler mHandler = new Handler();
+
     private int mPanelAlpha;
     private Runnable mPanelAlphaEndAction;
     private float mBottomAreaShadeAlpha;
@@ -424,6 +431,7 @@ public class NotificationPanelViewController extends PanelViewController {
     private GestureDetector mLockscreenDoubleTapToSleep;
     private boolean mIsLockscreenDoubleTapEnabled;
     private boolean mDoubleTapToSleepEnabled;
+    private boolean mShowLockscreenStatusBar;
 
     /**
      * Cache the resource id of the theme to avoid unnecessary work in onThemeChanged.
@@ -594,7 +602,7 @@ public class NotificationPanelViewController extends PanelViewController {
         if (DEBUG) {
             mView.getOverlay().add(new DebugDrawable());
         }
-
+        mSettingsObserver = new SettingsObserver(mHandler);
         onFinishInflate();
     }
 
@@ -1614,6 +1622,7 @@ public class NotificationPanelViewController extends PanelViewController {
             };
 
     private void animateKeyguardStatusBarIn(long duration) {
+        if (!mShowLockscreenStatusBar) return;
         mKeyguardStatusBar.setVisibility(View.VISIBLE);
         mKeyguardStatusBar.setAlpha(0f);
         ValueAnimator anim = ValueAnimator.ofFloat(0f, 1f);
@@ -2246,7 +2255,7 @@ public class NotificationPanelViewController extends PanelViewController {
                 mFirstBypassAttempt && mUpdateMonitor.shouldListenForFace()
                         || mDelayShowingKeyguardStatusBar;
         mKeyguardStatusBar.setVisibility(
-                newAlpha != 0f && !mDozing && !hideForBypass ? View.VISIBLE : View.INVISIBLE);
+                newAlpha != 0f && !mDozing && !hideForBypass && mShowLockscreenStatusBar ? View.VISIBLE : View.INVISIBLE);
     }
 
     private void updateKeyguardBottomAreaAlpha() {
@@ -2837,6 +2846,37 @@ public class NotificationPanelViewController extends PanelViewController {
             return false;
         }
         return !isFullWidth() || !mShowIconsWhenExpanded;
+    }
+
+    class SettingsObserver extends ContentObserver {
+        SettingsObserver(Handler handler) {
+            super(handler);
+        }
+
+        void observe() {
+            ContentResolver resolver = mView.getContext().getContentResolver();
+            resolver.registerContentObserver(Settings.System.getUriFor(
+                    Settings.System.LOCKSCREEN_STATUS_BAR),
+                    false, this, UserHandle.USER_ALL);
+            update();
+        }
+
+        void unobserve() {
+            ContentResolver resolver = mView.getContext().getContentResolver();
+            resolver.unregisterContentObserver(this);
+        }
+
+        @Override
+        public void onChange(boolean selfChange, Uri uri) {
+            update();
+        }
+
+        public void update() {
+            ContentResolver resolver = mView.getContext().getContentResolver();
+            mShowLockscreenStatusBar = Settings.System.getIntForUser(
+                    resolver, Settings.System.LOCKSCREEN_STATUS_BAR, 1,
+                    UserHandle.USER_CURRENT) == 1;
+        }
     }
 
     private final FragmentListener mFragmentListener = new FragmentListener() {
@@ -3613,7 +3653,7 @@ public class NotificationPanelViewController extends PanelViewController {
                 }
             } else {
                 mKeyguardStatusBar.setAlpha(1f);
-                mKeyguardStatusBar.setVisibility(keyguardShowing ? View.VISIBLE : View.INVISIBLE);
+                mKeyguardStatusBar.setVisibility(keyguardShowing && mShowLockscreenStatusBar ? View.VISIBLE : View.INVISIBLE);
                 if (keyguardShowing && oldState != mBarState) {
                     if (mQs != null) {
                         mQs.hideImmediately();
@@ -3653,6 +3693,7 @@ public class NotificationPanelViewController extends PanelViewController {
         @Override
         public void onViewAttachedToWindow(View v) {
             FragmentHostManager.get(mView).addTagListener(QS.TAG, mFragmentListener);
+            mSettingsObserver.observe();
             mStatusBarStateController.addCallback(mStatusBarStateListener);
             mZenModeController.addCallback(mZenModeControllerCallback);
             mConfigurationController.addCallback(mConfigurationListener);
@@ -3666,6 +3707,7 @@ public class NotificationPanelViewController extends PanelViewController {
         @Override
         public void onViewDetachedFromWindow(View v) {
             FragmentHostManager.get(mView).removeTagListener(QS.TAG, mFragmentListener);
+            mSettingsObserver.unobserve();
             mStatusBarStateController.removeCallback(mStatusBarStateListener);
             mZenModeController.removeCallback(mZenModeControllerCallback);
             mConfigurationController.removeCallback(mConfigurationListener);
