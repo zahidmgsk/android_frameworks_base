@@ -156,6 +156,7 @@ public class ScreenDecorations extends SystemUI implements Tunable,
     private boolean mFullscreenMode = false;
     private boolean mImmerseMode = false;
     private StatusBar mStatusBar;
+    private boolean mCustomCutout;
 
     private CameraAvailabilityListener.CameraTransitionCallback mCameraTransitionCallback =
             new CameraAvailabilityListener.CameraTransitionCallback() {
@@ -428,6 +429,7 @@ public class ScreenDecorations extends SystemUI implements Tunable,
     }
 
     private void setupDecorations() {
+        mCustomCutout = mContext.getResources().getBoolean(R.bool.config_customCutout);
         mOverlay = LayoutInflater.from(mContext)
                 .inflate(R.layout.rounded_corners, null);
         mCutoutTop = new DisplayCutoutView(mContext, true,
@@ -448,6 +450,7 @@ public class ScreenDecorations extends SystemUI implements Tunable,
         mBottomOverlay.setForceDarkAllowed(false);
 
         updateViews();
+        initRoundCornerViews();
 
         mWindowManager.addView(mOverlay, getWindowLayoutParams());
         mWindowManager.addView(mBottomOverlay, getBottomLayoutParams());
@@ -620,24 +623,24 @@ public class ScreenDecorations extends SystemUI implements Tunable,
 
         if (mRotation == RotationUtils.ROTATION_NONE) {
             updateView(topLeft, Gravity.TOP | Gravity.LEFT, 0);
-            updateView(topRight, Gravity.TOP | Gravity.RIGHT, 90);
-            updateView(bottomLeft, Gravity.BOTTOM | Gravity.LEFT, 270);
-            updateView(bottomRight, Gravity.BOTTOM | Gravity.RIGHT, 180);
+            updateView(topRight, Gravity.TOP | Gravity.RIGHT, mCustomCutout ? 0 : 90);
+            updateView(bottomLeft, Gravity.BOTTOM | Gravity.LEFT, mCustomCutout ? 0 : 270);
+            updateView(bottomRight, Gravity.BOTTOM | Gravity.RIGHT, mCustomCutout ? 0 : 180);
         } else if (mRotation == RotationUtils.ROTATION_LANDSCAPE) {
             updateView(topLeft, Gravity.TOP | Gravity.LEFT, 0);
-            updateView(topRight, Gravity.BOTTOM | Gravity.LEFT, 270);
-            updateView(bottomLeft, Gravity.TOP | Gravity.RIGHT, 90);
-            updateView(bottomRight, Gravity.BOTTOM | Gravity.RIGHT, 180);
+            updateView(topRight, Gravity.BOTTOM | Gravity.LEFT, mCustomCutout ? 180 : 270);
+            updateView(bottomLeft, Gravity.TOP | Gravity.RIGHT, mCustomCutout ? 180 : 90);
+            updateView(bottomRight, Gravity.BOTTOM | Gravity.RIGHT, mCustomCutout ? 0 : 180);
         } else if (mRotation == RotationUtils.ROTATION_UPSIDE_DOWN) {
             updateView(topLeft, Gravity.BOTTOM | Gravity.LEFT, 270);
-            updateView(topRight, Gravity.BOTTOM | Gravity.RIGHT, 180);
-            updateView(bottomLeft, Gravity.TOP | Gravity.LEFT, 0);
+            updateView(topRight, Gravity.BOTTOM | Gravity.RIGHT, mCustomCutout ? 270 : 180);
+            updateView(bottomLeft, Gravity.TOP | Gravity.LEFT, mCustomCutout ? 90 : 0);
             updateView(bottomRight, Gravity.TOP | Gravity.RIGHT, 90);
         } else if (mRotation == RotationUtils.ROTATION_SEASCAPE) {
             updateView(topLeft, Gravity.BOTTOM | Gravity.RIGHT, 180);
-            updateView(topRight, Gravity.TOP | Gravity.RIGHT, 90);
-            updateView(bottomLeft, Gravity.BOTTOM | Gravity.LEFT, 270);
-            updateView(bottomRight, Gravity.TOP | Gravity.LEFT, 0);
+            updateView(topRight, Gravity.TOP | Gravity.RIGHT, mCustomCutout ? 0 : 90);
+            updateView(bottomLeft, Gravity.BOTTOM | Gravity.LEFT, mCustomCutout ? 0 : 270);
+            updateView(bottomRight, Gravity.TOP | Gravity.LEFT, mCustomCutout ? 180 : 0);
         }
 
         updateAssistantHandleViews();
@@ -810,65 +813,59 @@ public class ScreenDecorations extends SystemUI implements Tunable,
 
     @Override
     public void onTuningChanged(String key, String newValue) {
-        switch (key) {
-            case SIZE:
-                mHandler.post(() -> {
+        mHandler.post(() -> {
+            if (mOverlay == null) return;
+            // If custom cutout is used, initRoundCornerViews() will set the size
+            if (mCustomCutout) return;
+            if (SIZE.equals(key)) {
                 if (mOverlay == null) setupDecorations();
-                    if (mOverlay == null) {
-                        if (TunerService.parseIntegerSwitch(newValue, false))
-                            setupDecorations();
-                        else
-                            return;
+                int size = mRoundedDefault;
+                int sizeTop = mRoundedDefaultTop;
+                int sizeBottom = mRoundedDefaultBottom;
+                boolean sizeSet = true;
+                if (newValue != null) {
+                    try {
+                        size = (int) (Integer.parseInt(newValue) * mDensity);
+                    } catch (Exception e) {
                     }
-                    int size = mRoundedDefault;
-                    int sizeTop = mRoundedDefaultTop;
-                    int sizeBottom = mRoundedDefaultBottom;
-                    boolean sizeSet = true;
-                    if (newValue != null) {
-                        try {
-                            size = (int) (Integer.parseInt(newValue) * mDensity);
-                        } catch (Exception e) {
-                        }
-                    } else {
-                        size = (int) (Secure.getIntForUser(mContext.getContentResolver(), SIZE,
-                                -1, UserHandle.USER_CURRENT) * mDensity);
-                    }
+                } else {
+                    size = (int) (Secure.getIntForUser(mContext.getContentResolver(), SIZE,
+                            -1, UserHandle.USER_CURRENT) * mDensity);
+                }
 
-                    // Special case, default behavaiour (framework values)
-                    if (size == (int) (-1 * mDensity)) {
-                        sizeSet = false; // Assume no sizes were set
-                    }
+                // Special case, default behavaiour (framework values)
+                if (size == (int) (-1 * mDensity)) {
+                    sizeSet = false; // Assume no sizes were set
+                }
 
-                    // Choose a sane safe size in immerse, often
-                    // defaults are too large
-                    if (!sizeSet && mImmerseMode) {
-                        size = (int) (20 * mDensity);
-                        sizeSet = true;
-                    }
+                // Choose a sane safe size in immerse, often
+                // defaults are too large
+                if (!sizeSet && mImmerseMode) {
+                    size = (int) (20 * mDensity);
+                    sizeSet = true;
+                }
                 // If we set a runtime size, let's ignore the
                 // bottom and top resources
-                 if (size < 0) size = 0;
-                 if (sizeSet) {
+                if (size < 0) size = 0;
+                if (sizeSet) {
+                    sizeTop = size;
+                    sizeBottom = size;
+                } else {
+                    if (sizeTop == 0) {
                         sizeTop = size;
+                    }
+                    if (sizeBottom == 0) {
                         sizeBottom = size;
-                  } else {
-                      if (sizeTop == 0) {
-                          sizeTop = size;
-                      }
-                      if (sizeBottom == 0) {
-                          sizeBottom = size;
-                      }
-                  }
-                    updateWindowVisibilities();
-                    setSize(mOverlay.findViewById(R.id.left), sizeTop);
-                    setSize(mOverlay.findViewById(R.id.right), sizeTop);
-                    setSize(mBottomOverlay.findViewById(R.id.left), sizeBottom);
-                    setSize(mBottomOverlay.findViewById(R.id.right), sizeBottom);
-                });
-                break;
-            default:
-                break;
-        }
+                    }
+                }
+
+                updateWindowVisibilities();
+                setSize(mOverlay.findViewById(R.id.left), sizeTop);
+                setSize(mOverlay.findViewById(R.id.right), sizeTop);
+                setSize(mBottomOverlay.findViewById(R.id.left), sizeBottom);
+                setSize(mBottomOverlay.findViewById(R.id.right), sizeBottom);
+            }
+        });
     }
 
     private void setSize(View view, int pixelSize) {
@@ -881,6 +878,13 @@ public class ScreenDecorations extends SystemUI implements Tunable,
             params.height = pixelSize;
             view.setLayoutParams(params);
         }
+    }
+
+    private void setSize(View view, int width, int height) {
+        LayoutParams params = view.getLayoutParams();
+        params.width = width;
+        params.height = height;
+        view.setLayoutParams(params);
     }
 
     @Override
@@ -1493,4 +1497,35 @@ public class ScreenDecorations extends SystemUI implements Tunable,
 
     @Override
     public void onPulsingChanged(boolean pulsing) {}
+
+    private void initRoundCornerViews() {
+        if (!mCustomCutout) {
+            return;
+        }
+
+        Resources res = mContext.getResources();
+
+        int topWidth = res.getDimensionPixelSize(R.dimen.config_customCutoutTopWidth);
+        int topHeight = res.getDimensionPixelSize(R.dimen.config_customCutoutTopHeight);
+        int bottomWidth = res.getDimensionPixelSize(R.dimen.config_customCutoutBottomWidth);
+        int bottomHeight = res.getDimensionPixelSize(R.dimen.config_customCutoutBottomHeight);
+
+        ImageView topLeft = (ImageView) mOverlay.findViewById(R.id.left);
+        ImageView topRight = (ImageView) mOverlay.findViewById(R.id.right);
+        ImageView bottomLeft = (ImageView) mBottomOverlay.findViewById(R.id.left);
+        ImageView bottomRight = (ImageView) mBottomOverlay.findViewById(R.id.right);
+
+        topLeft.setImageResource(R.drawable.rounded_top);
+        topRight.setImageResource(R.drawable.rounded_top);
+        bottomLeft.setImageResource(R.drawable.rounded_bottom);
+        bottomRight.setImageResource(R.drawable.rounded_bottom);
+
+        setSize(topLeft, topWidth, topHeight);
+        setSize(topRight, topWidth, topHeight);
+        setSize(bottomLeft, bottomWidth, bottomHeight);
+        setSize(bottomRight, bottomWidth, bottomHeight);
+
+        topRight.setRotationY(180.0f);
+        bottomRight.setRotationY(180.0f);
+    }
 }
