@@ -40,6 +40,7 @@ import android.provider.Settings;
 import android.service.notification.ZenModeConfig;
 import android.text.format.DateUtils;
 import android.util.AttributeSet;
+import android.util.TypedValue;
 import android.util.Log;
 import android.util.MathUtils;
 import android.util.Pair;
@@ -163,9 +164,9 @@ public class QuickStatusBarHeader extends RelativeLayout implements
     private boolean mLandscape;
     private boolean mDataUsageLocation;
 
-    private boolean mLandscape;
     private boolean mHeaderImageEnabled;
     private boolean mForceHideQsStatusBar;
+    private float mHeaderImageHeight;
 
     // Used for RingerModeTracker
     private final LifecycleRegistry mLifecycle = new LifecycleRegistry(this);
@@ -226,6 +227,7 @@ public class QuickStatusBarHeader extends RelativeLayout implements
         mRingerContainer.setOnClickListener(this::onClick);
         mCarrierGroup = findViewById(R.id.carrier_group);
         mForceHideQsStatusBar = mContext.getResources().getBoolean(R.bool.qs_status_bar_hidden);
+        mHeaderImageHeight = (float) 25;
         mDataUsageView = findViewById(R.id.data_sim_usage);
         mDataUsageLayout = findViewById(R.id.daily_data_usage_layout);
         mDataUsageImage = findViewById(R.id.daily_data_usage_icon);
@@ -389,7 +391,7 @@ public class QuickStatusBarHeader extends RelativeLayout implements
 
         int topMargin = resources.getDimensionPixelSize(
                 com.android.internal.R.dimen.quick_qs_offset_height) + (mHeaderImageEnabled ?
-                resources.getDimensionPixelSize(R.dimen.qs_header_image_offset) : 0);
+                (int) mHeaderImageHeight : 0);
 
         mSystemIconsView.getLayoutParams().height = topMargin;
         mSystemIconsView.setLayoutParams(mSystemIconsView.getLayoutParams());
@@ -402,7 +404,7 @@ public class QuickStatusBarHeader extends RelativeLayout implements
                     com.android.internal.R.dimen.quick_qs_total_height);
 
             if (mHeaderImageEnabled) {
-                qsHeight += resources.getDimensionPixelSize(R.dimen.qs_header_image_offset);
+                qsHeight += mHeaderImageHeight;
             }
 
             lp.height = WRAP_CONTENT;
@@ -414,9 +416,7 @@ public class QuickStatusBarHeader extends RelativeLayout implements
     }
 
     private void updateSettings() {
-        mHeaderImageEnabled = Settings.System.getIntForUser(getContext().getContentResolver(),
-                Settings.System.STATUS_BAR_CUSTOM_HEADER, 0,
-                UserHandle.USER_CURRENT) == 1;
+        updateHeaderImage();
         updateBatteryInQs();
         updateStatusbarProperties();
         updateDataUsageDialy();
@@ -486,6 +486,18 @@ public class QuickStatusBarHeader extends RelativeLayout implements
     public void setBatteryPercentMode() {
         mBatteryMeterView.setPercentShowMode(getBatteryPercentMode());
         mBatteryRemainingIcon.setPercentShowMode(getBatteryPercentMode());
+    }
+
+    private void updateHeaderImage() {
+        mHeaderImageEnabled = Settings.System.getIntForUser(mContext.getContentResolver(),
+                Settings.System.STATUS_BAR_CUSTOM_HEADER, 0,
+                UserHandle.USER_CURRENT) == 1;
+        int mImageHeight = Settings.System.getIntForUser(mContext.getContentResolver(),
+                Settings.System.STATUS_BAR_CUSTOM_HEADER_HEIGHT, 25,
+                UserHandle.USER_CURRENT);
+        mHeaderImageHeight = Math.round(TypedValue.applyDimension(
+                TypedValue.COMPLEX_UNIT_DIP, mImageHeight,
+                getResources().getDisplayMetrics()));
     }
 
     public void setExpanded(boolean expanded) {
@@ -783,6 +795,9 @@ public class QuickStatusBarHeader extends RelativeLayout implements
                     this, UserHandle.USER_ALL);
             resolver.registerContentObserver(Settings.System.getUriFor(
                     Settings.System.STATUS_BAR_CUSTOM_HEADER), false,
+                    this, UserHandle.USER_ALL);
+            resolver.registerContentObserver(Settings.System.getUriFor(
+                    Settings.System.STATUS_BAR_CUSTOM_HEADER_HEIGHT), false,
                     this, UserHandle.USER_ALL);
         }
 

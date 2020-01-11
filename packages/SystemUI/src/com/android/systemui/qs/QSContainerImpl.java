@@ -32,6 +32,7 @@ import android.os.Handler;
 import android.os.UserHandle;
 import android.provider.Settings;
 import android.util.AttributeSet;
+import android.util.TypedValue;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.FrameLayout;
@@ -93,6 +94,7 @@ public class QSContainerImpl extends FrameLayout implements
     private Drawable mCurrentBackground;
     private boolean mLandscape;
     private boolean mQsBackgroundAlpha;
+    private float mHeaderImageHeight;
     private boolean mForceHideQsStatusBar;
 
     public QSContainerImpl(Context context, AttributeSet attrs) {
@@ -118,8 +120,7 @@ public class QSContainerImpl extends FrameLayout implements
         mBackgroundImage = findViewById(R.id.qs_header_image_view);
         mBackgroundImage.setClipToOutline(true);
         mForceHideQsStatusBar = mContext.getResources().getBoolean(R.bool.qs_status_bar_hidden);
-        updateSettings();
-        updateResources();
+        mHeaderImageHeight = (float) 25;
         mHeader.getHeaderQsPanel().setMediaVisibilityChangedListener((visible) -> {
             if (mHeader.getHeaderQsPanel().isShown()) {
                 mAnimateBottomOnNextLayout = true;
@@ -131,7 +132,8 @@ public class QSContainerImpl extends FrameLayout implements
             }
         });
 
-
+        updateSettings();
+        updateResources();
         setImportantForAccessibility(IMPORTANT_FOR_ACCESSIBILITY_NO);
     }
 
@@ -189,6 +191,9 @@ public class QSContainerImpl extends FrameLayout implements
             resolver.registerContentObserver(Settings.System.getUriFor(
                     Settings.System.QS_PANEL_BG_ALPHA),
                     false, this, UserHandle.USER_ALL);
+            resolver.registerContentObserver(Settings.System.getUriFor(
+                    Settings.System.STATUS_BAR_CUSTOM_HEADER_HEIGHT),
+                    false,this, UserHandle.USER_ALL);
         }
 
         @Override
@@ -202,6 +207,12 @@ public class QSContainerImpl extends FrameLayout implements
         int bgAlpha = Settings.System.getIntForUser(resolver,
                 Settings.System.QS_PANEL_BG_ALPHA, 255,
                 UserHandle.USER_CURRENT);
+        int mImageHeight = Settings.System.getIntForUser(resolver,
+                Settings.System.STATUS_BAR_CUSTOM_HEADER_HEIGHT, 25,
+                UserHandle.USER_CURRENT);
+        mHeaderImageHeight = Math.round(TypedValue.applyDimension(
+                TypedValue.COMPLEX_UNIT_DIP, mImageHeight,
+                getResources().getDisplayMetrics()));
 
         Drawable bg = mBackground.getBackground();
         if (bgAlpha < 255 ) {
@@ -215,6 +226,8 @@ public class QSContainerImpl extends FrameLayout implements
             mBackground.setBackground(bg);
             mBackgroundGradient.setVisibility(View.VISIBLE);
         }
+        updateResources();
+        updateStatusbarVisibility();
     }
 
     @Override
@@ -289,7 +302,7 @@ public class QSContainerImpl extends FrameLayout implements
     private void updateResources() {
         int topMargin = mContext.getResources().getDimensionPixelSize(
                 com.android.internal.R.dimen.quick_qs_offset_height) + (mHeaderImageEnabled ?
-                mContext.getResources().getDimensionPixelSize(R.dimen.qs_header_image_offset) : 0);
+                (int) mHeaderImageHeight : 0);
 
         int statusBarSideMargin = mHeaderImageEnabled ? mContext.getResources().getDimensionPixelSize(
                 R.dimen.qs_header_image_side_margin) : 0;
@@ -308,6 +321,7 @@ public class QSContainerImpl extends FrameLayout implements
         lp.height = topMargin;
         lp.setMargins(statusBarSideMargin, 0, statusBarSideMargin, 0);
         mStatusBarBackground.setLayoutParams(lp);
+        updateStatusbarVisibility();
 
         mSideMargins = getResources().getDimensionPixelSize(R.dimen.notification_side_paddings);
         mContentPaddingStart = getResources().getDimensionPixelSize(
@@ -322,7 +336,6 @@ public class QSContainerImpl extends FrameLayout implements
         if (mHeaderImageEnabled) {
             mStatusBarBackground.setBackgroundColor(Color.TRANSPARENT);
         }
-        updateSettings();
     }
 
     /**

@@ -101,5 +101,6 @@ public class SystemSettings {
         Settings.System.STATUS_BAR_CUSTOM_HEADER_PROVIDER,
         Settings.System.STATUS_BAR_CUSTOM_HEADER_IMAGE,
         Settings.System.STATUS_BAR_FILE_HEADER_IMAGE,
+        Settings.System.STATUS_BAR_CUSTOM_HEADER_HEIGHT,
     };
 }

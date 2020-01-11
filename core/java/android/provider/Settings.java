@@ -5389,6 +5389,12 @@ public final class Settings {
         public static final String STATUS_BAR_FILE_HEADER_IMAGE = "status_bar_file_header_image";
 
         /**
+         * Header height
+         * @hide
+         */
+        public static final String STATUS_BAR_CUSTOM_HEADER_HEIGHT = "status_bar_custom_header_height";
+
+        /**
          * Keys we no longer back up under the current schema, but want to continue to
          * process when restoring historical backup datasets.
          *
@@ -5538,6 +5544,7 @@ public final class Settings {
             PRIVATE_SETTINGS.add(STATUS_BAR_CUSTOM_HEADER_PROVIDER);
             PRIVATE_SETTINGS.add(STATUS_BAR_CUSTOM_HEADER_IMAGE);
             PRIVATE_SETTINGS.add(STATUS_BAR_FILE_HEADER_IMAGE);
+            PRIVATE_SETTINGS.add(STATUS_BAR_CUSTOM_HEADER_HEIGHT);
         }
 
         /**

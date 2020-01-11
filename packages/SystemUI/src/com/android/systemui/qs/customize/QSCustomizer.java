@@ -96,6 +96,7 @@ public class QSCustomizer extends LinearLayout implements OnMenuItemClickListene
     private int mDefaultColumns;
 
     private boolean mHeaderImageEnabled;
+    private float mHeaderImageHeight;
 
     @Inject
     public QSCustomizer(Context context, AttributeSet attrs,
@@ -112,6 +113,7 @@ public class QSCustomizer extends LinearLayout implements OnMenuItemClickListene
         TypedValue value = new TypedValue();
         mContext.getTheme().resolveAttribute(android.R.attr.homeAsUpIndicator, value, true);
         mDefaultColumns = Math.max(1, mContext.getResources().getInteger(R.integer.quick_settings_num_columns));
+        mHeaderImageHeight = (float) 25;
         mToolbar.setNavigationIcon(
                 getResources().getDrawable(value.resourceId, mContext.getTheme()));
         mToolbar.setNavigationOnClickListener(new OnClickListener() {
@@ -164,8 +166,7 @@ public class QSCustomizer extends LinearLayout implements OnMenuItemClickListene
         lp.height = mContext.getResources().getDimensionPixelSize(
                 com.android.internal.R.dimen.quick_qs_offset_height);
         if (mHeaderImageEnabled) {
-            lp.height += mContext.getResources().getDimensionPixelSize(
-                    R.dimen.qs_header_image_offset);
+            lp.height += mHeaderImageHeight;
         }
         mTransparentView.setLayoutParams(lp);
         int columns;
@@ -419,5 +420,11 @@ public class QSCustomizer extends LinearLayout implements OnMenuItemClickListene
         mHeaderImageEnabled = Settings.System.getIntForUser(mContext.getContentResolver(),
                 Settings.System.STATUS_BAR_CUSTOM_HEADER, 0,
                 UserHandle.USER_CURRENT) == 1;
+        int mImageHeight = Settings.System.getIntForUser(getContext().getContentResolver(),
+                Settings.System.STATUS_BAR_CUSTOM_HEADER_HEIGHT, 25,
+                UserHandle.USER_CURRENT);
+        mHeaderImageHeight = Math.round(TypedValue.applyDimension(
+                TypedValue.COMPLEX_UNIT_DIP, mImageHeight,
+                getResources().getDisplayMetrics()));
     }
 }
