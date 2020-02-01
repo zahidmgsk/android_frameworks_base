@@ -292,6 +292,7 @@ public class QSCustomizer extends LinearLayout implements OnMenuItemClickListene
             case MENU_RESET:
                 mUiEventLogger.log(QSEditEvent.QS_EDIT_RESET);
                 reset();
+                resetQsOptions();
                 break;
         }
         updateResources();
@@ -300,6 +301,17 @@ public class QSCustomizer extends LinearLayout implements OnMenuItemClickListene
 
     private void reset() {
         mTileAdapter.resetTileSpecs(mHost, QSTileHost.getDefaultSpecs(mContext));
+    }
+
+    private void resetQsOptions() {
+        // reset QS panel columns
+        Settings.System.putInt(mContext.getContentResolver(),
+                Settings.System.QS_COLUMNS_PORTRAIT, mDefaultColumns);
+        Settings.System.putInt(mContext.getContentResolver(),
+                Settings.System.QS_COLUMNS_LANDSCAPE, mDefaultColumns);
+        // reset QS tile title visibility
+        Settings.System.putInt(mContext.getContentResolver(),
+                Settings.System.QS_TILE_TITLE_VISIBILITY, 1);
     }
 
     private void setTileSpecs() {
