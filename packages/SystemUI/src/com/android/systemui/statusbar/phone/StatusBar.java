@@ -508,6 +508,7 @@ public class StatusBar extends SystemUI implements DemoMode,
 
     private boolean mSysuiRoundedFwvals;
     private boolean mGamingModeActivated;
+    private boolean mUnexpandedQSBrightnessSlider;
     private int mHeadsUpDisabled;
 
     // XXX: gesture research
@@ -2307,6 +2308,9 @@ public class StatusBar extends SystemUI implements DemoMode,
             resolver.registerContentObserver(Settings.System.getUriFor(
                     Settings.System.NUSANTARA_WINGS_STYLE),
                     false, this, UserHandle.USER_ALL);
+            resolver.registerContentObserver(Settings.System.getUriFor(
+                    Settings.System.BRIGHTNESS_SLIDER_QS_UNEXPANDED),
+                    false, this, UserHandle.USER_ALL);
         }
 
         @Override
@@ -2358,6 +2362,8 @@ public class StatusBar extends SystemUI implements DemoMode,
                     mQSPanel.getHost().reloadAllTiles();
                 }
             } else if (uri.equals(Settings.System.getUriFor(Settings.System.NUSANTARA_WINGS_STYLE))) {
+            } else if (uri.equals(Settings.System.getUriFor(Settings.System.BRIGHTNESS_SLIDER_QS_UNEXPANDED))) {
+                updateBrightnessSliderOverlay();
             }
             update();
         }
@@ -2382,6 +2388,7 @@ public class StatusBar extends SystemUI implements DemoMode,
         updateTickerTickDuration();
         updateKeyguardStatusSettings();
         updateTileStyle();
+        updateBrightnessSliderOverlay();
         }
     }
 
@@ -2508,6 +2515,23 @@ public class StatusBar extends SystemUI implements DemoMode,
          int qsTileStyle = Settings.System.getIntForUser(mContext.getContentResolver(),
                  Settings.System.QS_TILE_STYLE, 0, mLockscreenUserManager.getCurrentUserId());
      }
+
+    public void updateBrightnessSliderOverlay() {
+        boolean UnexpandedQSBrightnessSlider = Settings.System.getIntForUser(mContext.getContentResolver(),
+                        Settings.System.BRIGHTNESS_SLIDER_QS_UNEXPANDED, 0, UserHandle.USER_CURRENT) == 1;
+        if (mUnexpandedQSBrightnessSlider != UnexpandedQSBrightnessSlider){
+            mUnexpandedQSBrightnessSlider = UnexpandedQSBrightnessSlider;
+            mUiOffloadThread.submit(() -> {
+                final IOverlayManager mOverlayManager = IOverlayManager.Stub.asInterface(
+                                ServiceManager.getService(Context.OVERLAY_SERVICE));
+                try {
+                    mOverlayManager.setEnabled("com.extendedui.overlay.brightnessslider",
+                                mUnexpandedQSBrightnessSlider, mLockscreenUserManager.getCurrentUserId());
+                } catch (RemoteException ignored) {
+                }
+            });
+        }
+    }
 
     /**
      * All changes to the status bar and notifications funnel through here and are batched.

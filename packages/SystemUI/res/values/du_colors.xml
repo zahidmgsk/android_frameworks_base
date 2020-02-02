@@ -46,5 +46,7 @@
     
     <!-- Color of the FOD view -->
     <color name="config_fodColorBackground">#20000000</color>
-    
+    <color name="brightness_slider_background">#f2f2f2</color>
+    <color name="brightness_slider_icons">@android:color/black</color>
+    <color name="brightness_slider_progress">?android:attr/colorAccent</color>
 </resources>
