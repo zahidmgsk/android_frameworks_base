@@ -1022,7 +1022,8 @@
     <string name="bubbles_user_education_got_it" msgid="8282812431953161143">"ОК"</string>
     <string name="bubbles_app_settings" msgid="5779443644062348657">"<xliff:g id="NOTIFICATION_TITLE">%1$s</xliff:g>: настройки"</string>
     <string name="notification_content_system_nav_changed" msgid="5077913144844684544">"Параметры навигации в системе обновлены. Чтобы изменить их, перейдите в настройки."</string>
-    <string name="notification_content_gesture_nav_available" msgid="4431460803004659888">"Чтобы обновить параметры навигации в системе, перейдите в настройки."</string>
+    <string name="notification_content_gesture_nav_available" msgid="4431460803004659888">"Чтобы обновить параметры навигации в системе, перейдите в 
+настройки."</string>
     <string name="inattentive_sleep_warning_title" msgid="3891371591713990373">"Переход в режим ожидания"</string>
     <string name="priority_onboarding_title" msgid="2893070698479227616">"Разговор помечен как важный"</string>
     <string name="priority_onboarding_behavior" msgid="5342816047020432929">"Преимущества:"</string>
@@ -1093,4 +1094,5 @@
     <string name="controls_added_tooltip" msgid="4842812921719153085">"Удерживайте кнопку питания, чтобы увидеть новые элементы управления"</string>
     <string name="controls_menu_add" msgid="4447246119229920050">"Добавить виджеты"</string>
     <string name="controls_menu_edit" msgid="890623986951347062">"Изменить виджеты"</string>
+    <string name="media_output_title" msgid="115223550977351699">"Где воспроизводить"</string>
 </resources>
