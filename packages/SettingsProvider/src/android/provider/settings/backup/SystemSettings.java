@@ -88,5 +88,10 @@ public class SystemSettings {
         Settings.System.QS_SHOW_BATTERY_PERCENT,
         Settings.System.VOLUME_ROCKER_WAKE,
         Settings.System.NAVIGATION_BAR_ARROW_KEYS,
+        Settings.System.CUSTOM_BUTTON_BRIGHTNESS,
+        Settings.System.CUSTOM_BUTTON_USE_SCREEN_BRIGHTNESS,
+        Settings.System.BUTTON_BACKLIGHT_ENABLE,
+        Settings.System.BUTTON_BACKLIGHT_TIMEOUT,
+        Settings.System.BUTTON_BACKLIGHT_ON_TOUCH_ONLY,
     };
 }
