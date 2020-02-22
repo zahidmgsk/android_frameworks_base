@@ -16,6 +16,7 @@
 
 package com.android.internal.util.nad;
 
+import android.app.ActivityManager;
 import android.content.Context;
 import android.content.Intent;
 import android.media.AudioManager;
@@ -64,6 +65,18 @@ public class ActionUtils {
     public static void toggleVolumePanel(Context context) {
         AudioManager am = (AudioManager) context.getSystemService(Context.AUDIO_SERVICE);
         am.adjustVolume(AudioManager.ADJUST_SAME, AudioManager.FLAG_SHOW_UI);
+    }
+
+    // Clear notifications
+    public static void clearAllNotifications() {
+        IStatusBarService service = getStatusBarService();
+        if (service != null) {
+            try {
+                service.onClearAllNotifications(ActivityManager.getCurrentUser());
+            } catch (RemoteException e) {
+                // do nothing.
+            }
+        }
     }
 
     // Toggle camera
