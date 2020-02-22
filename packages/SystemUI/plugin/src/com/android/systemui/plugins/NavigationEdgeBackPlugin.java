@@ -50,6 +50,7 @@ public interface NavigationEdgeBackPlugin extends Plugin {
     void onMotionEvent(MotionEvent motionEvent);
 
     void setBackArrowVisibility();
+    void setBackGestureHaptic();
 
     void setLongSwipeEnabled(boolean enabled);
 

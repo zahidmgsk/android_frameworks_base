@@ -753,6 +753,12 @@ public class EdgeBackGestureHandler extends CurrentUserTracker implements Displa
         }
     }
 
+    public void setBackGestureHaptic() {
+        if (mEdgeBackPlugin != null) {
+            mEdgeBackPlugin.setBackGestureHaptic();
+        }
+    }
+
     public void dump(PrintWriter pw) {
         pw.println("EdgeBackGestureHandler:");
         pw.println("  mIsEnabled=" + mIsEnabled);

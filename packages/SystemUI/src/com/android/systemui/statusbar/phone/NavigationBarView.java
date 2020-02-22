@@ -806,6 +806,10 @@ public class NavigationBarView extends FrameLayout implements
         mEdgeBackGestureHandler.setBackArrowVisibility();
     }
 
+    public void updateBackGestureHaptic() {
+        mEdgeBackGestureHandler.setBackGestureHaptic();
+    }
+
     public void updateDisabledSystemUiStateFlags() {
         int displayId = mContext.getDisplayId();
 

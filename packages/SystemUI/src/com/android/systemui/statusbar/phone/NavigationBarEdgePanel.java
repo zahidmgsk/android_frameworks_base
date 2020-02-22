@@ -27,6 +27,7 @@ import android.graphics.Point;
 import android.graphics.Rect;
 import android.os.SystemClock;
 import android.os.VibrationEffect;
+import android.os.Vibrator;
 import android.os.UserHandle;
 import android.provider.Settings;
 import android.util.MathUtils;
@@ -123,6 +124,7 @@ public class NavigationBarEdgePanel extends View implements NavigationEdgeBackPl
             = new PathInterpolator(1.0f / RUBBER_BAND_AMOUNT_APPEAR, 1.0f, 1.0f, 1.0f);
 
     private final WindowManager mWindowManager;
+    private final Vibrator mVibrator;
     private final VibratorHelper mVibratorHelper;
 
     /**
@@ -193,7 +195,6 @@ public class NavigationBarEdgePanel extends View implements NavigationEdgeBackPl
      * The current translation of the arrow
      */
     private float mCurrentTranslation;
-    private boolean mBackArrowVisibility;
 
     /**
      * Where the arrow will be in the resting position.
@@ -215,6 +216,10 @@ public class NavigationBarEdgePanel extends View implements NavigationEdgeBackPl
     private float mDisappearAmount;
     private long mVibrationTime;
     private int mScreenSize;
+
+    private boolean mBackArrowVisibility;
+    private boolean mBackHapticEnabled;
+    private boolean mVibrateOnOpening;
 
     private DynamicAnimation.OnAnimationEndListener mSetGoneEndListener
             = new DynamicAnimation.OnAnimationEndListener() {
@@ -272,6 +277,7 @@ public class NavigationBarEdgePanel extends View implements NavigationEdgeBackPl
         super(context);
 
         mWindowManager = context.getSystemService(WindowManager.class);
+        mVibrator = context.getSystemService(Vibrator.class);
         mVibratorHelper = Dependency.get(VibratorHelper.class);
 
         mDensity = context.getResources().getDisplayMetrics().density;
@@ -337,10 +343,14 @@ public class NavigationBarEdgePanel extends View implements NavigationEdgeBackPl
         loadColors(context);
         updateArrowDirection();
         setBackArrowVisibility();
+        setBackGestureHaptic();
 
         mSwipeThreshold = context.getResources()
                 .getDimension(R.dimen.navigation_edge_action_drag_threshold);
         setVisibility(GONE);
+
+        mVibrateOnOpening = context.getResources().getBoolean(
+                R.bool.config_vibrateOnIconAnimation);
 
         mRegionSamplingHelper = new RegionSamplingHelper(this,
                 new RegionSamplingHelper.SamplingCallback() {
@@ -397,6 +407,13 @@ public class NavigationBarEdgePanel extends View implements NavigationEdgeBackPl
     public void setBackArrowVisibility() {
         mBackArrowVisibility = Settings.Secure.getIntForUser(mContext.getContentResolver(),
                 Settings.Secure.HIDE_BACK_ARROW_GESTURE, 0,
+                UserHandle.USER_CURRENT) == 1;
+    }
+
+    @Override
+    public void setBackGestureHaptic() {
+        mBackHapticEnabled = Settings.Secure.getIntForUser(mContext.getContentResolver(),
+                Settings.Secure.BACK_GESTURE_HAPTIC, 1,
                 UserHandle.USER_CURRENT) == 1;
     }
 
@@ -617,8 +634,8 @@ public class NavigationBarEdgePanel extends View implements NavigationEdgeBackPl
         mVelocityTracker.computeCurrentVelocity(1000);
         // Only do the extra translation if we're not already flinging
         boolean isSlow = Math.abs(mVelocityTracker.getXVelocity()) < 500;
-        if (isSlow
-                || SystemClock.uptimeMillis() - mVibrationTime >= GESTURE_DURATION_FOR_CLICK_MS) {
+        if (mBackHapticEnabled && (isSlow
+                || SystemClock.uptimeMillis() - mVibrationTime >= GESTURE_DURATION_FOR_CLICK_MS)) {
             mVibratorHelper.vibrate(VibrationEffect.EFFECT_CLICK);
         }
 
@@ -706,8 +723,14 @@ public class NavigationBarEdgePanel extends View implements NavigationEdgeBackPl
         // Apply a haptic on drag slop passed
         if (!mDragSlopPassed && touchTranslation > mSwipeThreshold) {
             mDragSlopPassed = true;
-            mVibratorHelper.vibrate(VibrationEffect.EFFECT_TICK);
-            mVibrationTime = SystemClock.uptimeMillis();
+            if (mBackHapticEnabled) {
+                if (mVibrateOnOpening) {
+                    mVibratorHelper.vibrate(VibrationEffect.EFFECT_TICK);
+                    mVibrationTime = SystemClock.uptimeMillis();
+                } else {
+                    mVibrator.vibrate(VibrationEffect.createOneShot(30, VibrationEffect.DEFAULT_AMPLITUDE));
+                }
+            }
 
             // Let's show the arrow and animate it in!
             mDisappearAmount = 0.0f;

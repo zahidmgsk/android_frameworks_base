@@ -10061,6 +10061,12 @@ public final class Settings {
         public static final String HIDE_BACK_ARROW_GESTURE = "hide_back_arrow_gesture";
 
         /**
+         * Whether to vibrate for back gesture
+         * @hide
+         */
+        public static final String BACK_GESTURE_HAPTIC = "back_gesture_haptic";
+
+        /**
          * Controls whether the people strip is enabled.
          * @hide
          */
