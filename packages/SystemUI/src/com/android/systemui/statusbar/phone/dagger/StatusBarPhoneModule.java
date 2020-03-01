@@ -96,6 +96,7 @@ import com.android.systemui.statusbar.policy.FlashlightController;
 import com.android.systemui.statusbar.policy.KeyguardStateController;
 import com.android.systemui.statusbar.policy.NetworkController;
 import com.android.systemui.statusbar.policy.RemoteInputQuickSettingsDisabler;
+import com.android.systemui.statusbar.policy.TaskHelper;
 import com.android.systemui.statusbar.policy.UserInfoControllerImpl;
 import com.android.systemui.statusbar.policy.UserSwitcherController;
 
@@ -201,7 +202,8 @@ public interface StatusBarPhoneModule {
             KeyguardIndicationController keyguardIndicationController,
             Lazy<NotificationShadeDepthController> notificationShadeDepthController,
             DismissCallbackRegistry dismissCallbackRegistry,
-            StatusBarTouchableRegionManager statusBarTouchableRegionManager) {
+            StatusBarTouchableRegionManager statusBarTouchableRegionManager,
+            TaskHelper taskHelper) {
         return new StatusBar(
                 context,
                 notificationsController,
@@ -280,6 +282,7 @@ public interface StatusBarPhoneModule {
                 keyguardIndicationController,
                 dismissCallbackRegistry,
                 notificationShadeDepthController,
-                statusBarTouchableRegionManager);
+                statusBarTouchableRegionManager,
+                taskHelper);
     }
 }

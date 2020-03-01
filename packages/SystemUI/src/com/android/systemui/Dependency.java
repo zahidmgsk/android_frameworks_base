@@ -113,6 +113,7 @@ import com.android.systemui.statusbar.policy.RotationLockController;
 import com.android.systemui.statusbar.policy.SecurityController;
 import com.android.systemui.statusbar.policy.SensorPrivacyController;
 import com.android.systemui.statusbar.policy.SmartReplyConstants;
+import com.android.systemui.statusbar.policy.TaskHelper;
 import com.android.systemui.statusbar.policy.UserInfoController;
 import com.android.systemui.statusbar.policy.UserSwitcherController;
 import com.android.systemui.statusbar.policy.ZenModeController;
@@ -324,6 +325,7 @@ public class Dependency {
     @Inject Lazy<ProtoTracer> mProtoTracer;
     @Inject Lazy<Divider> mDivider;
     @Inject Lazy<CustomSettingsService> mCustomSettingsService;
+    @Inject Lazy<TaskHelper> mTaskHelper;
 
     @Inject
     public Dependency() {
@@ -521,6 +523,7 @@ public class Dependency {
         mProviders.put(RecordingController.class, mRecordingController::get);
         mProviders.put(Divider.class, mDivider::get);
         mProviders.put(CustomSettingsService.class, mCustomSettingsService::get);
+        mProviders.put(TaskHelper.class, mTaskHelper::get);
 
         sDependency = this;
     }
