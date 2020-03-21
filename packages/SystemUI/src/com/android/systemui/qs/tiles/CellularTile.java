@@ -99,7 +99,7 @@ public class CellularTile extends QSTileImpl<SignalState> {
         if (getState().state == Tile.STATE_UNAVAILABLE) {
             return new Intent(Settings.ACTION_WIRELESS_SETTINGS);
         }
-        return new Intent(Settings.Panel.ACTION_MOBILE_DATA);
+        return getCellularSettingIntent();
     }
 
     @Override
@@ -306,13 +306,7 @@ public class CellularTile extends QSTileImpl<SignalState> {
     }
 
     static Intent getCellularSettingIntent() {
-        Intent intent = new Intent(Settings.Panel.ACTION_MOBILE_DATA);
-        int dataSub = SubscriptionManager.getDefaultDataSubscriptionId();
-        if (dataSub != SubscriptionManager.INVALID_SUBSCRIPTION_ID) {
-            intent.putExtra(Settings.EXTRA_SUB_ID,
-                    SubscriptionManager.getDefaultDataSubscriptionId());
-        }
-        return intent;
+        return new Intent(Settings.Panel.ACTION_MOBILE_DATA);
     }
 
     private final class CellularDetailAdapter implements DetailAdapter {
@@ -350,13 +344,23 @@ public class CellularTile extends QSTileImpl<SignalState> {
             final DataUsageDetailView v = (DataUsageDetailView) (convertView != null
                     ? convertView
                     : LayoutInflater.from(mContext).inflate(R.layout.data_usage, parent, false));
-            DataUsageController.DataUsageInfo info = mDataController.getDataUsageInfo(
-                    DataUsageUtils.getMobileTemplate(mContext,
-                            SubscriptionManager.getDefaultDataSubscriptionId()));
 
-            DataUsageController.DataUsageInfo info_daily = mDataController.getDataUsageInfo(
-                    DataUsageUtils.getMobileTemplate(mContext,
-                            SubscriptionManager.getDefaultDataSubscriptionId()));
+            DataUsageController.DataUsageInfo info = null;
+            int defaultSubId = SubscriptionManager.getDefaultDataSubscriptionId();
+            if (defaultSubId == SubscriptionManager.INVALID_SUBSCRIPTION_ID) {
+                info = mDataController.getDataUsageInfo();
+            } else {
+                info = mDataController.getDataUsageInfo(
+                        DataUsageUtils.getMobileTemplate(mContext, defaultSubId));
+            }
+
+            DataUsageController.DataUsageInfo info_dialy = null;
+            if (defaultSubId == SubscriptionManager.INVALID_SUBSCRIPTION_ID) {
+                info_dialy = mDataController.getDailyDataUsageInfo();
+            } else {
+                info_dialy = mDataController.getDailyDataUsageInfo(
+                        DataUsageUtils.getMobileTemplate(mContext, defaultSubId));
+            }
 
             if (info == null) return v;
             v.bind(info, info_dialy);
