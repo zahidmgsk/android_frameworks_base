@@ -119,4 +119,12 @@
 
     <!-- the padding on the start and the end of the statusbar -->
     <dimen name="status_bar_extra_padding">8dp</dimen>
+
+    <dimen name="volume_dialog_panel_land_margin">68dp</dimen>
+
+    <!-- Screen record -->
+    <dimen name="screenrecord_dialog_padding">18dp</dimen>
+    <dimen name="screenrecord_logo_size">24dp</dimen>
+    <dimen name="screenrecord_status_icon_radius">5dp</dimen>
+    <dimen name="screenrecord_status_text_size">14sp</dimen>
 </resources>
