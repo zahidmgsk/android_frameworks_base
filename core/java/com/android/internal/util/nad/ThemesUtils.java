@@ -77,6 +77,11 @@ public class ThemesUtils {
             "com.android.theme.nadclear.systemui",
     };
 
+    public static final String[] MATERIAL_OCEAN = {
+            "com.android.theme.materialocean.system",
+            "com.android.theme.materialocean.systemui",
+    };
+
     public static final String[] FONTS = {
             "com.android.theme.font.notoserifsource",
             "com.android.theme.font.cagliostrosource",
