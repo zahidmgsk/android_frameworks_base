@@ -4787,6 +4787,14 @@ public final class Settings {
         public static final String STATUS_BAR_SHOW_BATTERY_PERCENT = "status_bar_show_battery_percent";
 
         /**
+         * Setting to determine whether or not to show the battery percentage in the qs status bar header.
+         *    0 - Show remaining time
+         *    1 - Show percentage
+         * @hide
+         */
+        public static final String QS_SHOW_BATTERY_PERCENT = "qs_header_show_battery_percent";
+
+        /**
          * Whether or not to enable multiple audio focus.
          * When enabled, requires more management by user over application playback activity,
          * for instance pausing media apps when another starts.
@@ -5022,6 +5030,7 @@ public final class Settings {
             PRIVATE_SETTINGS.add(EGG_MODE);
             PRIVATE_SETTINGS.add(DISPLAY_COLOR_MODE);
             PRIVATE_SETTINGS.add(DOUBLE_TAP_SLEEP_GESTURE);
+            PRIVATE_SETTINGS.add(QS_SHOW_BATTERY_PERCENT);
         }
 
         /**
