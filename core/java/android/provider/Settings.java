@@ -10086,6 +10086,12 @@ public final class Settings {
         public static final String BACK_GESTURE_HAPTIC = "back_gesture_haptic";
 
         /**
+         * Whether face unlock is allowed only on security view.
+         * @hide
+         */
+        public static final String FACE_UNLOCK_ALWAYS_REQUIRE_SWIPE = "face_unlock_always_require_swipe";
+
+        /**
          * Controls whether the people strip is enabled.
          * @hide
          */
