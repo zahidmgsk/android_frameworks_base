@@ -262,4 +262,12 @@ public class NadUtils {
             return hasNavigationBar == 1;
         }
     }
+
+    // Check if gesture navbar is enabled
+    public static boolean isGestureNavbar() {
+        return NadUtils.isThemeEnabled("com.android.internal.systemui.navbar.gestural_narrow_back")
+                || NadUtils.isThemeEnabled("com.android.internal.systemui.navbar.gestural")
+                || NadUtils.isThemeEnabled("com.android.internal.systemui.navbar.gestural_wide_back")
+                || NadUtils.isThemeEnabled("com.android.internal.systemui.navbar.gestural_extra_wide_back");
+    }
 }
