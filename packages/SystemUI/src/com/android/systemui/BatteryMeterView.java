@@ -151,9 +151,6 @@ public class BatteryMeterView extends LinearLayout implements
         atts.recycle();
 
         mSettingObserver = new SettingObserver(new Handler(context.getMainLooper()));
-        mShowPercentAvailable = context.getResources().getBoolean(
-                com.android.internal.R.bool.config_battery_percentage_setting_available);
-
 
         addOnAttachStateChangeListener(
                 new DisableStateTracker(DISABLE_NONE, DISABLE2_SYSTEM_ICONS,
@@ -172,7 +169,7 @@ public class BatteryMeterView extends LinearLayout implements
                 getResources().getDimensionPixelOffset(R.dimen.battery_margin_bottom));
         addView(mBatteryIconView, mlp);
 
-        updateShowPercent(false);
+        updateShowPercent();
         mDualToneHandler = new DualToneHandler(context);
         // Init to not dark at all.
         onDarkChanged(new Rect(), 0, DarkIconDispatcher.DEFAULT_ICON_TINT);
@@ -182,7 +179,7 @@ public class BatteryMeterView extends LinearLayout implements
             public void onUserSwitched(int newUserId) {
                 mUser = newUserId;
                 getContext().getContentResolver().unregisterContentObserver(mSettingObserver);
-                updateShowPercent(false);
+                updateShowPercent();
             }
         };
 
@@ -221,12 +218,7 @@ public class BatteryMeterView extends LinearLayout implements
      */
     public void setPercentShowMode(@BatteryPercentMode int mode) {
         mShowPercentMode = mode;
-        updateShowPercent(false);
-    }
-
-    public void setPercentShowMode(@BatteryPercentMode int mode, boolean forceShow) {
-        mShowPercentMode = mode;
-        updateShowPercent(forceShow);
+        updateShowPercent();
     }
 
     /**
@@ -306,7 +298,7 @@ public class BatteryMeterView extends LinearLayout implements
         getContext().getContentResolver().registerContentObserver(
                 Settings.Global.getUriFor(Settings.Global.BATTERY_ESTIMATES_LAST_UPDATE_TIME),
                 false, mSettingObserver);
-        updateShowPercent(false);
+        updateShowPercent();
         updateSettings();
         mUserTracker.startTracking();
         mSettingObserver.observe();
@@ -333,7 +325,7 @@ public class BatteryMeterView extends LinearLayout implements
             mThemedDrawable.setCharging(mCharging);
             mCircleDrawable.setCharging(mCharging);
             mFullCircleDrawable.setCharging(mCharging);
-            updateShowPercent(false);
+            updateShowPercent();
         } else {
             updatePercentText();
         }
@@ -344,7 +336,7 @@ public class BatteryMeterView extends LinearLayout implements
         mThemedDrawable.setPowerSaveEnabled(isPowerSave);
         mCircleDrawable.setPowerSaveEnabled(isPowerSave);
         mFullCircleDrawable.setPowerSaveEnabled(isPowerSave);
-        updateShowPercent(false);
+        updateShowPercent();
     }
 
     private TextView loadPercentView() {
@@ -356,7 +348,7 @@ public class BatteryMeterView extends LinearLayout implements
      * Updates percent view by removing old one and reinflating if necessary
      */
     public void updatePercentView() {
-        updateShowPercent(false);
+        updateShowPercent();
     }
 
     private void updatePercentText() {
@@ -410,7 +402,7 @@ public class BatteryMeterView extends LinearLayout implements
         }
     }
 
-    private void updateShowPercent(boolean forceShow) {
+    private void updateShowPercent() {
         final boolean showing = mBatteryPercentView != null;
         final boolean drawPercentInside = mShowPercentMode == MODE_DEFAULT &&
                 mShowBatteryPercent == BATTERY_PERCENT_SHOW_INSIDE;
@@ -427,13 +419,10 @@ public class BatteryMeterView extends LinearLayout implements
                     mBatteryPercentView.setTextAppearance(mPercentageStyleId);
                 }
                 if (mTextColor != 0) mBatteryPercentView.setTextColor(mTextColor);
-                updatePercentText();
                 addView(mBatteryPercentView,
                         new ViewGroup.LayoutParams(
                                 LayoutParams.WRAP_CONTENT,
                                 LayoutParams.MATCH_PARENT));
-            } else if (forceShow) {
-                updatePercentText();
             }
             if (mBatteryStyle == BATTERY_STYLE_TEXT) {
                 mBatteryPercentView.setPaddingRelative(0, 0, 0, 0);
@@ -474,7 +463,7 @@ public class BatteryMeterView extends LinearLayout implements
 
     @Override
     public void onOverlayChanged() {
-        updateShowPercent(false);
+        updateShowPercent();
         updateSettings();
     }
 
@@ -574,13 +563,13 @@ public class BatteryMeterView extends LinearLayout implements
         @Override
         public void onChange(boolean selfChange, Uri uri) {
             super.onChange(selfChange, uri);
-            updateShowPercent(false);
+            updateShowPercent();
             updateSettings();
-            if (TextUtils.equals(uri.getLastPathSegment(),
+            /*if (TextUtils.equals(uri.getLastPathSegment(),
                     Settings.Global.BATTERY_ESTIMATES_LAST_UPDATE_TIME)) {
                 // update the text for sure if the estimate in the cache was updated
                 updatePercentText();
-            }
+            }*/ //updatePercentText gets called always by updateShowPercent
         }
     }
 }
