@@ -243,4 +243,11 @@
     <string name="status_bar_screen_record" translatable="false">screen_record</string>
     <string name="screenrecord_video_bitrate_label">Video Bitrate</string>
     <string name="screenrecord_video_bitrate_summary">Set the video bitrate for better video quality, at the cost of a bigger file.</string>
+
+    <!-- App lock -->
+    <string name="applock_locked">&#160;is Locked.</string>
+    <string name="applock_fingerprint_face">, fingerprint or your face to unlock.</string>
+    <string name="applock_face">&#160;or your face to unlock.</string>
+    <string name="applock_fingerprint">&#160;or your fingerprint to unlock.</string>
+    <string name="applock_locked_notification">App is locked</string>
 </resources>
