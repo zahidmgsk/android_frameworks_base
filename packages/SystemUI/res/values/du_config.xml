@@ -67,4 +67,7 @@
 
     <!-- Whether to disable assist hint on lockscreen -->
     <bool name="config_disableAssistHintOnLockscreen">false</bool>
+
+    <!-- Allow devices to use a lower screenrecording bitrate because of old hardware -->
+    <bool name="config_device_needs_lower_bitrate">false</bool>
 </resources>
