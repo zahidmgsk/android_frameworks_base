@@ -134,4 +134,7 @@
 
     <!-- Ending padding for custom status bar elements -->
     <dimen name="status_bar_end_padding">1dp</dimen>
+
+    <!-- Biometric Prompt -->
+    <dimen name="biometric_dialog_fod_margin">44dp</dimen>
 </resources>
