@@ -41,6 +41,7 @@ public class QSAnimator implements Callback, PageListener, Listener, OnLayoutCha
 
     private static final String ALLOW_FANCY_ANIMATION = "sysui_qs_fancy_anim";
     private static final String MOVE_FULL_ROWS = "sysui_qs_move_whole_rows";
+    public static final String QS_SHOW_BRIGHTNESS_SLIDER = "qs_show_brightness_slider";
 
     public static final float EXPANDED_TILE_DELAY = .86f;
 
@@ -65,6 +66,7 @@ public class QSAnimator implements Callback, PageListener, Listener, OnLayoutCha
     private TouchAnimator mNonfirstPageAnimator;
     private TouchAnimator mNonfirstPageDelayedAnimator;
     private TouchAnimator mBrightnessAnimator;
+    private boolean mIsQuickQsBrightnessEnabled;
 
     private boolean mOnKeyguard;
 
@@ -135,6 +137,7 @@ public class QSAnimator implements Callback, PageListener, Listener, OnLayoutCha
     public void onViewAttachedToWindow(View v) {
         Dependency.get(TunerService.class).addTunable(this, ALLOW_FANCY_ANIMATION,
                 MOVE_FULL_ROWS, QuickQSPanel.NUM_QUICK_TILES);
+        Dependency.get(TunerService.class).addTunable(this, QS_SHOW_BRIGHTNESS_SLIDER);
     }
 
     @Override
@@ -157,6 +160,13 @@ public class QSAnimator implements Callback, PageListener, Listener, OnLayoutCha
         } else if (QuickQSPanel.NUM_QUICK_TILES.equals(key)) {
             mNumQuickTiles = mQuickQsPanel.getNumQuickTiles(mQs.getContext());
             clearAnimationState();
+        } else if (QS_SHOW_BRIGHTNESS_SLIDER.equals(key)) {
+            try {
+                mIsQuickQsBrightnessEnabled = Integer.parseInt(newValue) > 2;
+            } catch (NumberFormatException e) {
+                // Catches exception as newValue may be null or malformed.
+                mIsQuickQsBrightnessEnabled = false;
+            }
         }
         updateAnimators();
     }
@@ -273,7 +283,7 @@ public class QSAnimator implements Callback, PageListener, Listener, OnLayoutCha
             if (brightness != null) {
                 firstPageBuilder.addFloat(brightness, "translationY", heightDiff, 0);
                 mBrightnessAnimator = new TouchAnimator.Builder()
-                        .addFloat(brightness, "alpha", 0, 1)
+                        .addFloat(brightness, "alpha", mIsQuickQsBrightnessEnabled ? 1 : 0, 1)
                         .setStartDelay(.5f)
                         .build();
                 mAllViews.add(brightness);
