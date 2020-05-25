@@ -41,9 +41,9 @@ public class QSAnimator implements Callback, PageListener, Listener, OnLayoutCha
 
     private static final String ALLOW_FANCY_ANIMATION = "sysui_qs_fancy_anim";
     private static final String MOVE_FULL_ROWS = "sysui_qs_move_whole_rows";
+    public static final String QS_SHOW_BRIGHTNESS_SLIDER = "qs_show_brightness_slider";
 
     public static final float EXPANDED_TILE_DELAY = .86f;
-
 
     private final ArrayList<View> mAllViews = new ArrayList<>();
     /**
@@ -77,6 +77,8 @@ public class QSAnimator implements Callback, PageListener, Listener, OnLayoutCha
     private float mLastPosition;
     private QSTileHost mHost;
     private boolean mShowCollapsedOnKeyguard;
+
+    private boolean mIsQuickQsBrightnessEnabled;
 
     public QSAnimator(QS qs, QuickQSPanel quickPanel, QSPanel panel) {
         mQs = qs;
@@ -144,6 +146,7 @@ public class QSAnimator implements Callback, PageListener, Listener, OnLayoutCha
     public void onViewAttachedToWindow(View v) {
         Dependency.get(TunerService.class).addTunable(this, ALLOW_FANCY_ANIMATION,
                 MOVE_FULL_ROWS, QuickQSPanel.NUM_QUICK_TILES);
+        Dependency.get(TunerService.class).addTunable(this, QS_SHOW_BRIGHTNESS_SLIDER);
     }
 
     @Override
@@ -166,6 +169,8 @@ public class QSAnimator implements Callback, PageListener, Listener, OnLayoutCha
         } else if (QuickQSPanel.NUM_QUICK_TILES.equals(key)) {
             mNumQuickTiles = QuickQSPanel.parseNumTiles(newValue);
             clearAnimationState();
+        } else if (QS_SHOW_BRIGHTNESS_SLIDER.equals(key)) {
+            mIsQuickQsBrightnessEnabled = TunerService.parseInteger(newValue, 0) > 1;
         }
         updateAnimators();
     }
@@ -282,17 +287,16 @@ public class QSAnimator implements Callback, PageListener, Listener, OnLayoutCha
 
         if (mAllowFancy) {
             // Make brightness appear static position and alpha in through second half.
-            /*View brightness = mQsPanel.getBrightnessView();
             if (brightness != null) {
                 firstPageBuilder.addFloat(brightness, "translationY", heightDiff, 0);
                 mBrightnessAnimator = new TouchAnimator.Builder()
-                        .addFloat(brightness, "alpha", 0, 1)
+                        .addFloat(brightness, "alpha", mIsQuickQsBrightnessEnabled ? 1 : 0, 1)
                         .setStartDelay(.5f)
                         .build();
                 mAllViews.add(brightness);
             } else {
                 mBrightnessAnimator = null;
-            }*/
+            }
             mFirstPageAnimator = firstPageBuilder
                     .setListener(this)
                     .build();
@@ -302,6 +306,7 @@ public class QSAnimator implements Callback, PageListener, Listener, OnLayoutCha
                     .addFloat(tileLayout, "alpha", 0, 1);
             if (brightness != null) {
                 builder.addFloat(mQsPanel.getBrightnessView(), "alpha", 0, 1);
+                mAllViews.add(mQsPanel.getBrightnessView());
             }
             mFirstPageDelayedAnimator = builder.build();
 
@@ -319,9 +324,6 @@ public class QSAnimator implements Callback, PageListener, Listener, OnLayoutCha
             }
             if (mQsPanel.getDivider() != null) {
                 mAllViews.add(mQsPanel.getDivider());
-            }
-            if (brightness != null) {
-                mAllViews.add(mQsPanel.getBrightnessView());
             }
 
             float px = 0;
@@ -400,9 +402,9 @@ public class QSAnimator implements Callback, PageListener, Listener, OnLayoutCha
             mFirstPageDelayedAnimator.setPosition(position);
             mTranslationXAnimator.setPosition(position);
             mTranslationYAnimator.setPosition(position);
-            /*if (mBrightnessAnimator != null) {
+            if (mBrightnessAnimator != null) {
                 mBrightnessAnimator.setPosition(position);
-            }*/
+            }
         } else {
             mNonfirstPageAnimator.setPosition(position);
             mNonfirstPageDelayedAnimator.setPosition(position);
