@@ -59,6 +59,7 @@ import androidx.lifecycle.Lifecycle;
 import androidx.lifecycle.LifecycleOwner;
 import androidx.lifecycle.LifecycleRegistry;
 
+import com.android.internal.util.nad.NadUtils;
 import com.android.settingslib.Utils;
 import com.android.systemui.BatteryMeterView;
 import com.android.systemui.DualToneHandler;
@@ -421,9 +422,16 @@ public class QuickStatusBarHeader extends RelativeLayout implements
 
     private void updateDataUsageView() {
         if (mDataUsageView.isDataUsageEnabled() != 0) {
-            mDataUsageLayout.setVisibility(View.VISIBLE);
-            mDataUsageImage.setVisibility(View.VISIBLE);
-            mDataUsageView.setVisibility(View.VISIBLE);
+            if (NadUtils.isConnected(mContext)) {
+                DataUsageView.updateUsage();
+                mDataUsageLayout.setVisibility(View.VISIBLE);
+                mDataUsageImage.setVisibility(View.VISIBLE);
+                mDataUsageView.setVisibility(View.VISIBLE);
+            } else {
+                mDataUsageView.setVisibility(View.GONE);
+                mDataUsageImage.setVisibility(View.GONE);
+                mDataUsageLayout.setVisibility(View.GONE);
+            }
         } else {
             mDataUsageView.setVisibility(View.GONE);
             mDataUsageImage.setVisibility(View.GONE);
@@ -441,6 +449,7 @@ public class QuickStatusBarHeader extends RelativeLayout implements
         mExpanded = expanded;
         mHeaderQsPanel.setExpanded(expanded);
         updateEverything();
+        updateDataUsageView();
     }
 
     /**
