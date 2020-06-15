@@ -2146,6 +2146,7 @@ public class NotificationPanelViewController extends PanelViewController {
             alpha *= mClockPositionResult.clockAlpha;
         }
         mNotificationStackScroller.setAlpha(alpha);
+        mStatusBar.updateQSDataUsageInfo();
     }
 
     private float getFadeoutAlpha() {
