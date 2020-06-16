@@ -262,6 +262,7 @@ public class QuickStatusBarHeader extends RelativeLayout implements
         mIconManager.setTint(fillColor);
         mNextAlarmIcon.setImageTintList(ColorStateList.valueOf(fillColor));
         mRingerModeIcon.setImageTintList(ColorStateList.valueOf(fillColor));
+        mDataUsageImage.setImageTintList(ColorStateList.valueOf(fillColor));
 
         mBatteryMeterView = findViewById(R.id.battery);
         mBatteryMeterView.setForceShowPercent(true);
