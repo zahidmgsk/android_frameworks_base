@@ -344,7 +344,9 @@ public class QSFooterImpl extends FrameLayout implements QSFooter,
     }
 
     private boolean showUserSwitcher() {
-        return mExpanded && mMultiUserSwitch.isMultiUserEnabled();
+        boolean miuiBrightnessSlider = Settings.System.getInt(mContext.getContentResolver(),
+                Settings.System.BRIGHTNESS_SLIDER_QS_UNEXPANDED, 0) != 0;
+        return mExpanded && mMultiUserSwitch.isMultiUserEnabled() && !miuiBrightnessSlider;
     }
 
     private void updateListeners() {
