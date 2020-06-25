@@ -6541,6 +6541,15 @@ public final class Settings {
         public static final String QS_DATAUSAGE_LOCATION = "qs_datausage_location";
 
         /**
+         * @hide
+         */
+        public static final String OMNI_DOZE_BRIGHTNESS_FORCE = "doze_brightness_force";
+
+        /** @hide */
+        private static final Validator OMNI_DOZE_BRIGHTNESS_FORCE_VALIDATOR =
+                BOOLEAN_VALIDATOR;
+
+        /**
          * Settings to backup. This is here so that it's in the same place as the settings
          * keys and easy to update.
          *
@@ -6686,6 +6695,7 @@ public final class Settings {
             AMBIENT_LIGHT_PULSE_FOR_ALL,
             QS_DATAUSAGE,
             THEMING_SETTINGS_DASHBOARD_ICONS,
+            OMNI_DOZE_BRIGHTNESS_FORCE,
         };
 
         /**
@@ -6902,6 +6912,7 @@ public final class Settings {
             PRIVATE_SETTINGS.add(QS_TILE_STYLE);
             PRIVATE_SETTINGS.add(THEMING_SETTINGS_DASHBOARD_ICONS);
             PRIVATE_SETTINGS.add(SCREENSHOT_DEFAULT_MODE);
+            PRIVATE_SETTINGS.add(OMNI_DOZE_BRIGHTNESS_FORCE);
         }
 
         /**
@@ -7094,6 +7105,7 @@ public final class Settings {
             VALIDATORS.put(QS_DATAUSAGE, QS_DATAUSAGE_VALIDATOR);
             VALIDATORS.put(THEMING_SETTINGS_DASHBOARD_ICONS, THEMING_SETTINGS_DASHBOARD_ICONS_VALIDATOR);
             VALIDATORS.put(BRIGHTNESS_SLIDER_QS_UNEXPANDED, BRIGHTNESS_SLIDER_QS_UNEXPANDED_VALIDATOR);
+            VALIDATORS.put(OMNI_DOZE_BRIGHTNESS_FORCE, OMNI_DOZE_BRIGHTNESS_FORCE_VALIDATOR);
         }
 
         /**
