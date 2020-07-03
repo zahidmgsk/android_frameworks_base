@@ -6615,6 +6615,12 @@ public final class Settings {
         public static final String SCREENSHOT_DEFAULT_MODE = "screenshot_default_mode";
 
         /**
+         * A2DP codec priority
+         * @hide
+         */
+        public static final String A2DP_SOURCE_CODEC_PRIORITY = "a2dp_source_codec_priority";
+
+        /**
          * Ambient Edge Light Layout
          * @hide
          */
