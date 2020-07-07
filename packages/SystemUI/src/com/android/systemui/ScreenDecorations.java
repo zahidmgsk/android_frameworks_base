@@ -21,6 +21,7 @@ import static android.view.Surface.ROTATION_90;
 import static android.view.ViewGroup.LayoutParams.MATCH_PARENT;
 import static android.view.ViewGroup.LayoutParams.WRAP_CONTENT;
 import static android.view.WindowManager.LayoutParams.LAYOUT_IN_DISPLAY_CUTOUT_MODE_ALWAYS;
+import static android.view.WindowManager.LayoutParams.LAYOUT_IN_DISPLAY_CUTOUT_MODE_NEVER;
 
 import static com.android.systemui.tuner.TunablePadding.FLAG_END;
 import static com.android.systemui.tuner.TunablePadding.FLAG_START;
@@ -35,12 +36,14 @@ import android.annotation.NonNull;
 import android.app.ActivityManager;
 import android.app.Fragment;
 import android.content.BroadcastReceiver;
+import android.content.ContentResolver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.res.ColorStateList;
 import android.content.res.Configuration;
 import android.content.res.Resources;
+import android.database.ContentObserver;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Color;
@@ -53,10 +56,13 @@ import android.graphics.RectF;
 import android.graphics.Region;
 import android.graphics.drawable.VectorDrawable;
 import android.hardware.display.DisplayManager;
+import android.net.Uri;
 import android.os.Handler;
 import android.os.HandlerThread;
 import android.os.SystemProperties;
+import android.os.UserHandle;
 import android.provider.Settings.Secure;
+import android.provider.Settings.System;
 import android.util.DisplayMetrics;
 import android.util.Log;
 import android.util.MathUtils;
@@ -80,12 +86,15 @@ import android.widget.ImageView;
 import androidx.annotation.VisibleForTesting;
 
 import com.android.internal.util.Preconditions;
+import com.android.systemui.Dependency;
 import com.android.systemui.RegionInterceptingFrameLayout.RegionInterceptableView;
 import com.android.systemui.fragments.FragmentHostManager;
 import com.android.systemui.fragments.FragmentHostManager.FragmentListener;
 import com.android.systemui.plugins.qs.QS;
+import com.android.systemui.plugins.statusbar.StatusBarStateController;
 import com.android.systemui.qs.SecureSetting;
 import com.android.systemui.shared.system.QuickStepContract;
+import com.android.systemui.statusbar.SysuiStatusBarStateController;
 import com.android.systemui.statusbar.phone.CollapsedStatusBarFragment;
 import com.android.systemui.statusbar.phone.NavigationBarTransitions;
 import com.android.systemui.statusbar.phone.NavigationModeController;
@@ -103,7 +112,8 @@ import java.util.List;
  * for antialiasing and emulation purposes.
  */
 public class ScreenDecorations extends SystemUI implements Tunable,
-        NavigationBarTransitions.DarkIntensityListener {
+        NavigationBarTransitions.DarkIntensityListener,
+        StatusBarStateController.StateListener {
     private static final boolean DEBUG = false;
     private static final String TAG = "ScreenDecorations";
 
@@ -141,6 +151,11 @@ public class ScreenDecorations extends SystemUI implements Tunable,
     private boolean mInGesturalMode;
 
     private boolean mIsRoundedCornerMultipleRadius;
+    private final SysuiStatusBarStateController mStatusBarStateController =
+            (SysuiStatusBarStateController) Dependency.get(StatusBarStateController.class);
+    private boolean mFullscreenMode = false;
+    private boolean mImmerseMode = false;
+    private StatusBar mStatusBar;
 
     private CameraAvailabilityListener.CameraTransitionCallback mCameraTransitionCallback =
             new CameraAvailabilityListener.CameraTransitionCallback() {
@@ -182,11 +197,14 @@ public class ScreenDecorations extends SystemUI implements Tunable,
     public void start() {
         mHandler = startHandlerThread();
         mHandler.post(this::startOnScreenDecorationsThread);
+        mStatusBarStateController.addCallback(this);
         setupStatusBarPaddingIfNeeded();
         putComponent(ScreenDecorations.class, this);
         mInGesturalMode = QuickStepContract.isGesturalMode(
                 Dependency.get(NavigationModeController.class)
                         .addListener(this::handleNavigationModeChange));
+        mCustomSettingsObserver.observe();
+        mCustomSettingsObserver.update();
     }
 
     @VisibleForTesting
@@ -531,6 +549,7 @@ public class ScreenDecorations extends SystemUI implements Tunable,
                 // the rotation before window manager was ready (and was still waiting for sending
                 // the updated rotation).
                 updateLayoutParams();
+                updateCutoutMode();
             }
         });
     }
@@ -692,8 +711,7 @@ public class ScreenDecorations extends SystemUI implements Tunable,
     }
 
     private boolean hasRoundedCorners() {
-        return mRoundedDefault > 0 || mRoundedDefaultBottom > 0 || mRoundedDefaultTop > 0 || mIsRoundedCornerMultipleRadius ||
-                Secure.getIntForUser(mContext.getContentResolver(), SIZE, 0, UserHandle.USER_CURRENT) != 0;
+        return true;
     }
 
     private boolean shouldDrawCutout() {
@@ -759,7 +777,12 @@ public class ScreenDecorations extends SystemUI implements Tunable,
         } else {
             lp.gravity = Gravity.TOP | Gravity.LEFT;
         }
-        lp.layoutInDisplayCutoutMode = LAYOUT_IN_DISPLAY_CUTOUT_MODE_ALWAYS;
+        if (mImmerseMode && !mFullscreenMode) {
+            lp.layoutInDisplayCutoutMode = LAYOUT_IN_DISPLAY_CUTOUT_MODE_NEVER;
+        } else {
+            lp.layoutInDisplayCutoutMode = LAYOUT_IN_DISPLAY_CUTOUT_MODE_ALWAYS;
+        }
+
         if (isLandscape(mRotation)) {
             lp.width = WRAP_CONTENT;
             lp.height = MATCH_PARENT;
@@ -790,7 +813,7 @@ public class ScreenDecorations extends SystemUI implements Tunable,
         switch (key) {
             case SIZE:
                 mHandler.post(() -> {
-                    if (mCustomCutout) return;
+                if (mOverlay == null) setupDecorations();
                     if (mOverlay == null) {
                         if (TunerService.parseIntegerSwitch(newValue, false))
                             setupDecorations();
@@ -800,19 +823,35 @@ public class ScreenDecorations extends SystemUI implements Tunable,
                     int size = mRoundedDefault;
                     int sizeTop = mRoundedDefaultTop;
                     int sizeBottom = mRoundedDefaultBottom;
+                    boolean sizeSet = false;
                     if (newValue != null) {
                         try {
                             size = (int) (Integer.parseInt(newValue) * mDensity);
+                            sizeSet = true;
                         } catch (Exception e) {
                         }
                     }
 
-                    if (sizeTop == 0) {
+                    // Choose a sane safe size in immerse, often
+                    // defaults are too large
+                    if (!sizeSet && mImmerseMode) {
+                        size = (int) (20 * mDensity);
+                        sizeSet = true;
+                    }
+                // If we set a runtime size, let's ignore the
+                // bottom and top resources
+                 if (size < 0) size = 0;
+                 if (sizeSet) {
                         sizeTop = size;
-                    }
-                    if (sizeBottom == 0) {
                         sizeBottom = size;
-                    }
+                  } else {
+                      if (sizeTop == 0) {
+                          sizeTop = size;
+                      }
+                      if (sizeBottom == 0) {
+                          sizeBottom = size;
+                      }
+                  }
                     updateWindowVisibilities();
                     setSize(mOverlay.findViewById(R.id.left), sizeTop);
                     setSize(mOverlay.findViewById(R.id.right), sizeTop);
@@ -826,10 +865,15 @@ public class ScreenDecorations extends SystemUI implements Tunable,
     }
 
     private void setSize(View view, int pixelSize) {
-        LayoutParams params = view.getLayoutParams();
-        params.width = pixelSize;
-        params.height = pixelSize;
-        view.setLayoutParams(params);
+        if (pixelSize <= 0) {
+            view.setVisibility(View.INVISIBLE);
+        } else {
+            view.setVisibility(View.VISIBLE);
+            LayoutParams params = view.getLayoutParams();
+            params.width = pixelSize;
+            params.height = pixelSize;
+            view.setLayoutParams(params);
+        }
     }
 
     @Override
@@ -1325,4 +1369,94 @@ public class ScreenDecorations extends SystemUI implements Tunable,
             return true;
         }
     }
+
+    private boolean inFullscreenMode() {
+        if (mStatusBar == null) mStatusBar = SysUiServiceProvider.getComponent(mContext, StatusBar.class);
+        return mStatusBar != null && mStatusBar.inFullscreenMode();
+    }
+
+    private void updateAllForCutout() {
+        onTuningChanged(SIZE, null);
+        updateLayoutParams();
+    }
+
+    private void updateCutoutMode() {
+        boolean newImmerseMode;
+        if (mRotation == RotationUtils.ROTATION_LANDSCAPE ||
+                mRotation == RotationUtils.ROTATION_SEASCAPE)
+            newImmerseMode = false;
+        else
+            newImmerseMode = System.getIntForUser(mContext.getContentResolver(),
+                        System.DISPLAY_CUTOUT_MODE, 0, UserHandle.USER_CURRENT) == 1;
+        if (mImmerseMode != newImmerseMode) {
+            mImmerseMode = newImmerseMode;
+            if (mOverlay != null) {
+                if (!mHandler.getLooper().isCurrentThread()) {
+                    mHandler.post(() -> updateAllForCutout());
+                } else {
+                    updateAllForCutout();
+                }
+            }
+        }
+    }
+
+    private CustomSettingsObserver mCustomSettingsObserver = new CustomSettingsObserver(mHandler);
+    private class CustomSettingsObserver extends ContentObserver {
+        CustomSettingsObserver(Handler handler) {
+            super(handler);
+        }
+
+        void observe() {
+            ContentResolver resolver = mContext.getContentResolver();
+            resolver.registerContentObserver(System.getUriFor(
+                    System.DISPLAY_CUTOUT_MODE), false, this);
+        }
+
+        @Override
+        public void onChange(boolean selfChange, Uri uri) {
+            if (uri.equals(System.getUriFor(System.DISPLAY_CUTOUT_MODE))) {
+                updateCutoutMode();
+            }
+        }
+
+        @Override
+        public void onChange(boolean selfChange) {
+            update();
+        }
+
+        public void update() {
+            updateCutoutMode();
+        }
+    }
+
+
+    @Override
+    public void onStatePreChange(int oldState, int newState) {}
+
+    @Override
+    public void onStatePostChange() {}
+
+    @Override
+    public void onStateChanged(int newState) {}
+
+    @Override
+    public void onDozingChanged(boolean isDozing) {}
+
+    @Override
+    public void onDozeAmountChanged(float linear, float eased) {}
+
+    @Override
+    public void onSystemUiVisibilityChanged(int visibility) {
+        boolean fullscreenMode = inFullscreenMode();
+        if (fullscreenMode == mFullscreenMode) return;
+        mFullscreenMode = fullscreenMode;
+        if (!mHandler.getLooper().isCurrentThread()) {
+            mHandler.post(() -> updateLayoutParams());
+        } else {
+            updateLayoutParams();
+        }
+    }
+
+    @Override
+    public void onPulsingChanged(boolean pulsing) {}
 }
