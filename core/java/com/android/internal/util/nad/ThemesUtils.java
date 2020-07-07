@@ -94,7 +94,8 @@ public class ThemesUtils {
             "com.android.theme.font.firasans",
             "com.android.theme.font.ubuntu",
             "com.android.theme.font.titilliumweb",
-            "com.android.theme.font.caviardreamssource"
+            "com.android.theme.font.caviardreamssource",
+            "com.android.theme.font.linotte",
     };
 
     public static final String[] NAVBAR_STYLES = {
@@ -112,7 +113,7 @@ public class ThemesUtils {
     public static final String[] QS_HEADER_THEMES = {
             "com.android.systemui.qsheader.grey",
             "com.android.systemui.qsheader.lightgrey",
-            "com.android.systemui.qsheader.accent", 
+            "com.android.systemui.qsheader.accent",
             "com.android.systemui.qsheader.transparent",
     };
 }
