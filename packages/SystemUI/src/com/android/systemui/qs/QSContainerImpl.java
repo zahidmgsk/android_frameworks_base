@@ -76,7 +76,9 @@ public class QSContainerImpl extends FrameLayout implements
     private int mHeaderImageHeight;
     private boolean mForceHideQsStatusBar;
 
+    //Disco
     private boolean mQsDisco;
+    private int mQsDiscoDuration;
     private ValueAnimator mAnim;
 
     public QSContainerImpl(Context context, AttributeSet attrs) {
@@ -158,6 +160,9 @@ public class QSContainerImpl extends FrameLayout implements
             resolver.registerContentObserver(Settings.System.getUriFor(
                     Settings.System.QS_PANEL_DISCO), 
                     false, this, UserHandle.USER_ALL);
+            resolver.registerContentObserver(Settings.System.getUriFor(
+                    Settings.System.QS_PANEL_DISCO_DURATION),
+                    false, this, UserHandle.USER_ALL);
         }
 
         @Override
@@ -171,8 +176,11 @@ public class QSContainerImpl extends FrameLayout implements
         int bgAlpha = Settings.System.getIntForUser(resolver,
                 Settings.System.QS_PANEL_BG_ALPHA, 255,
                 UserHandle.USER_CURRENT);
-        mQsDisco = Settings.System.getInt(getContext().getContentResolver(),
+        mQsDisco = Settings.System.getInt(resolver,
                 Settings.System.QS_PANEL_DISCO, 0) == 1;
+        mQsDiscoDuration = Settings.System.getIntForUser(resolver,
+                Settings.System.QS_PANEL_DISCO_DURATION, 5,
+                UserHandle.USER_CURRENT);
 
         Drawable bg = mBackground.getBackground();
         if (bgAlpha < 255 ) {
@@ -215,7 +223,7 @@ public class QSContainerImpl extends FrameLayout implements
         stopDiscoMode();
         mAnim = ValueAnimator.ofFloat(0, 1);
         final float[] hsl = {0f, 1f, 0.5f};
-        mAnim.setDuration(5000);
+        mAnim.setDuration(mQsDiscoDuration *1000);
         mAnim.setRepeatCount(ValueAnimator.INFINITE);
         mAnim.setRepeatMode(ValueAnimator.RESTART);
         mAnim.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {

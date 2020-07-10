@@ -6691,6 +6691,12 @@ public final class Settings {
         public static final String QS_PANEL_DISCO = "qs_panel_disco";
 
         /**
+         * RGB PANEL Duration
+         * @hide
+         */
+        public static final String QS_PANEL_DISCO_DURATION = "qs_panel_disco_duration";
+
+        /**
          * Settings to backup. This is here so that it's in the same place as the settings
          * keys and easy to update.
          *
