@@ -134,35 +134,29 @@ public class QSTileView extends QSTileBaseView {
             mLabel.setText(state.label);
         }
         if (!Objects.equals(mSecondLine.getText(), state.secondaryLabel)) {
-
-            if (state.state == Tile.STATE_ACTIVE) {
-                mSecondLine.setTextColor(mColorLabelActive);
-            } else if (state.state == Tile.STATE_INACTIVE) {
-                mSecondLine.setTextColor(mColorLabelDefault);
-            }
-
             mSecondLine.setText(state.secondaryLabel);
             mSecondLine.setVisibility(TextUtils.isEmpty(state.secondaryLabel) ? View.GONE
                     : View.VISIBLE);
         }
-
-        if (state.state == Tile.STATE_ACTIVE) {
-            mLabel.setTextColor(mColorLabelActive);
-            mExpandIndicator.setImageTintList(mColorLabelActive);
-        } else if (state.state == Tile.STATE_INACTIVE) {
-            mLabel.setTextColor(mColorLabelDefault);
-            mExpandIndicator.setImageTintList(mColorLabelDefault);
-        }
         if (state.state == Tile.STATE_ACTIVE) {
             if (setQsLabelUseNewTint == 1) {
                 mLabel.setTextColor(mColorLabelActiveRandom);
+                mSecondLine.setTextColor(mColorLabelActiveRandom);
+                mExpandIndicator.setImageTintList(mColorLabelDefault);
             } else if (setQsLabelUseNewTint == 2) {
                 mLabel.setTextColor(mColorLabelActive);
+                mSecondLine.setTextColor(mColorLabelActive);
+                mExpandIndicator.setImageTintList(mColorLabelActive);
             } else {
                 mLabel.setTextColor(mColorLabelDefault);
+                mSecondLine.setTextColor(mColorLabelDefault);
+                mLabel.setTextColor(mColorLabelDefault);
+                mExpandIndicator.setImageTintList(mColorLabelDefault);
             }
         } else if (state.state == Tile.STATE_INACTIVE) {
             mLabel.setTextColor(mColorLabelDefault);
+            mExpandIndicator.setImageTintList(mColorLabelDefault);
+            mSecondLine.setTextColor(mColorLabelDefault);
         }
         boolean dualTarget = DUAL_TARGET_ALLOWED && state.dualTarget;
         mExpandIndicator.setVisibility(dualTarget ? View.VISIBLE : View.GONE);
