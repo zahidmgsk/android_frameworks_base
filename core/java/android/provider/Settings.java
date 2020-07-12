@@ -6685,6 +6685,12 @@ public final class Settings {
         public static final String QS_LABEL_USE_NEW_TINT = "qs_label_use_new_tint";
 
         /**
+         * Whether to RGB the QS panel or not
+         * @hide
+         */
+        public static final String QS_PANEL_DISCO = "qs_panel_disco";
+
+        /**
          * Settings to backup. This is here so that it's in the same place as the settings
          * keys and easy to update.
          *
