@@ -73,7 +73,6 @@ public class QSContainerImpl extends FrameLayout implements
     private boolean mQsBackgroundAlpha;
     private int mHeaderImageHeight;
     private boolean mForceHideQsStatusBar;
-    private boolean mImmerseMode;
 
     public QSContainerImpl(Context context, AttributeSet attrs) {
         super(context, attrs);
@@ -151,9 +150,6 @@ public class QSContainerImpl extends FrameLayout implements
             resolver.registerContentObserver(Settings.System
                             .getUriFor(Settings.System.STATUS_BAR_CUSTOM_HEADER_HEIGHT), false,
                     this, UserHandle.USER_ALL);
-            resolver.registerContentObserver(Settings.System
-                    .getUriFor(Settings.System.DISPLAY_CUTOUT_MODE), false,
-                    this, UserHandle.USER_ALL);
         }
 
         @Override
@@ -167,8 +163,6 @@ public class QSContainerImpl extends FrameLayout implements
         int bgAlpha = Settings.System.getIntForUser(resolver,
                 Settings.System.QS_PANEL_BG_ALPHA, 255,
                 UserHandle.USER_CURRENT);
-        mImmerseMode = Settings.System.getIntForUser(mContext.getContentResolver(),
-                Settings.System.DISPLAY_CUTOUT_MODE, 0, UserHandle.USER_CURRENT) == 1;
 
         Drawable bg = mBackground.getBackground();
         if (bgAlpha < 255 ) {
@@ -310,7 +304,7 @@ public class QSContainerImpl extends FrameLayout implements
 
     private void setBackgroundGradientVisibility(Configuration newConfig) {
         if (newConfig == null) newConfig = mContext.getResources().getConfiguration();
-        if (newConfig.orientation == ORIENTATION_LANDSCAPE || mImmerseMode) {
+        if (newConfig.orientation == ORIENTATION_LANDSCAPE) {
             mBackgroundGradient.setVisibility(View.INVISIBLE);
             mStatusBarBackground.setVisibility(View.INVISIBLE);
         } else {

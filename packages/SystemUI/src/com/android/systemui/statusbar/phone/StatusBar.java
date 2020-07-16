@@ -2389,9 +2389,6 @@ public class StatusBar extends SystemUI implements DemoMode,
             resolver.registerContentObserver(Settings.System.getUriFor(
                      Settings.System.QS_TILE_STYLE),
                     false, this, UserHandle.USER_ALL);
-            resolver.registerContentObserver(Settings.Secure.getUriFor(
-                    "sysui_rounded_size"),
-                    false, this, UserHandle.USER_ALL);
         }
 
         @Override
@@ -2436,8 +2433,7 @@ public class StatusBar extends SystemUI implements DemoMode,
             } else if (uri.equals(Settings.System.getUriFor(Settings.System.FORCE_SHOW_NAVBAR))) {
                 updateNavigationBar(getRegisterStatusBarResult(), false);
             } else if (uri.equals(Settings.System.getUriFor(Settings.System.DISPLAY_CUTOUT_MODE)) ||
-                    uri.equals(Settings.System.getUriFor(Settings.System.STOCK_STATUSBAR_IN_HIDE))||
-                    uri.equals(Settings.Secure.getUriFor("sysui_rounded_size"))) {
+                    uri.equals(Settings.System.getUriFor(Settings.System.STOCK_STATUSBAR_IN_HIDE))) {
                 handleCutout(null);
             } else if (uri.equals(Settings.System.getUriFor(Settings.System.SHOW_MEDIA_HEADS_UP))) {
                 setMediaHeadsup();
@@ -4977,22 +4973,6 @@ public class StatusBar extends SystemUI implements DemoMode,
         }
     }
 
-    private void setNotificationPanelPadding(boolean enable) {
-        if (mNotificationPanel == null) return;
-        if (enable) {
-            int size = (int) (Settings.Secure.getIntForUser(mContext.getContentResolver(),
-                    "sysui_rounded_size", -1, UserHandle.USER_CURRENT) * getDisplayDensity());
-            // Choose a sane safe size in immerse, often
-            // defaults are too large
-            if (size < 0) {
-                size = (int) (20 * getDisplayDensity());
-            }
-            mNotificationPanel.setPadding(size, 0, size, 0);
-        } else {
-            mNotificationPanel.setPadding(0, 0, 0, 0);
-        }
-    }
-
     private void handleCutout(Configuration newConfig) {
         boolean cutEnabled = mContext.getResources().getBoolean(
                            com.android.internal.R.bool.config_physicalDisplayCutout);
@@ -5011,7 +4991,6 @@ public class StatusBar extends SystemUI implements DemoMode,
         final boolean hideCutoutMode = mImmerseMode == 2;
         setBlackStatusBar(immerseMode);
         setCutoutOverlay(hideCutoutMode);
-        setNotificationPanelPadding(immerseMode);
         setStatusBarStockOverlay(hideCutoutMode && mStockStatusBar);
     }
 
