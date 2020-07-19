@@ -22,4 +22,10 @@
 
     <!-- Width of the battery icon in the status bar when set to circle style. -->
     <dimen name="status_bar_battery_icon_circle_width">13.5dp</dimen>
+
+    <!-- Starting padding for custom status bar elements -->
+    <dimen name="status_bar_start_padding">2dp</dimen>
+
+    <!-- Ending padding for custom status bar elements -->
+    <dimen name="status_bar_end_padding">1dp</dimen>
 </resources>
