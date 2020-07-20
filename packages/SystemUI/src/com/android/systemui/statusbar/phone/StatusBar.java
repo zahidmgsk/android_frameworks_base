@@ -2397,6 +2397,9 @@ public class StatusBar extends SystemUI implements DemoMode,
             resolver.registerContentObserver(Settings.System.getUriFor(
                     Settings.System.QS_LABEL_USE_NEW_TINT),
                     false, this, UserHandle.USER_ALL);
+            resolver.registerContentObserver(Settings.System.getUriFor(
+                    Settings.System.NUSANTARA_WINGS_STYLE),
+                    false, this, UserHandle.USER_ALL);
         }
 
         @Override
@@ -2450,6 +2453,7 @@ public class StatusBar extends SystemUI implements DemoMode,
                 if (mQSPanel != null) {
                     mQSPanel.getHost().reloadAllTiles();
                 }
+            } else if (uri.equals(Settings.System.getUriFor(Settings.System.NUSANTARA_WINGS_STYLE))) {
             }
             update();
         }

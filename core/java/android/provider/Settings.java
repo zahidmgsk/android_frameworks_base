@@ -6697,6 +6697,12 @@ public final class Settings {
         public static final String QS_PANEL_DISCO_DURATION = "qs_panel_disco_duration";
 
         /**
+         * Nusantara wings style
+         * @hide
+         */
+        public static final String NUSANTARA_WINGS_STYLE = "nusantara_wings_style";
+
+        /**
          * Settings to backup. This is here so that it's in the same place as the settings
          * keys and easy to update.
          *
