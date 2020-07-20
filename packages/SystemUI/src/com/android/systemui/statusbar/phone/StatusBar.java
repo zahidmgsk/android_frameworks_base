@@ -694,6 +694,9 @@ public class StatusBar extends SystemUI implements DemoMode,
     @VisibleForTesting
     protected WakefulnessLifecycle mWakefulnessLifecycle;
 
+    private int mImmerseMode;
+    private boolean mStockStatusBar = true;
+
     private final View.OnClickListener mGoToLockedShadeListener = v -> {
         if (mState == StatusBarState.KEYGUARD) {
             wakeUpIfDozing(SystemClock.uptimeMillis(), v, "SHADE_CLICK");
@@ -4993,23 +4996,23 @@ public class StatusBar extends SystemUI implements DemoMode,
     private void handleCutout(Configuration newConfig) {
         boolean cutEnabled = mContext.getResources().getBoolean(
                            com.android.internal.R.bool.config_physicalDisplayCutout);
+        mImmerseMode = Settings.System.getIntForUser(mContext.getContentResolver(),
+                        Settings.System.DISPLAY_CUTOUT_MODE, 0, UserHandle.USER_CURRENT);
+        mStockStatusBar = Settings.System.getIntForUser(mContext.getContentResolver(),
+                        Settings.System.STOCK_STATUSBAR_IN_HIDE, 1, UserHandle.USER_CURRENT) == 1;
         boolean immerseMode;
         if (!cutEnabled) return;
         if (newConfig == null) newConfig = mContext.getResources().getConfiguration();
         if (newConfig == null || newConfig.orientation == Configuration.ORIENTATION_PORTRAIT) {
-            immerseMode = Settings.System.getIntForUser(mContext.getContentResolver(),
-                        Settings.System.DISPLAY_CUTOUT_MODE, 0, UserHandle.USER_CURRENT) == 1;
+            immerseMode = mImmerseMode == 1;
         } else {
             immerseMode = false;
         }
-        final boolean hideCutoutMode = Settings.System.getIntForUser(mContext.getContentResolver(),
-                        Settings.System.DISPLAY_CUTOUT_MODE, 0, UserHandle.USER_CURRENT) == 2;
-        final boolean statusBarStock = Settings.System.getIntForUser(mContext.getContentResolver(),
-                        Settings.System.STOCK_STATUSBAR_IN_HIDE, 1, UserHandle.USER_CURRENT) == 1;
+        final boolean hideCutoutMode = mImmerseMode == 2;
         setBlackStatusBar(immerseMode);
         setCutoutOverlay(hideCutoutMode);
         setNotificationPanelPadding(immerseMode);
-        setStatusBarStockOverlay(hideCutoutMode && statusBarStock);
+        setStatusBarStockOverlay(hideCutoutMode && mStockStatusBar);
     }
 
     public void updateQSDataUsageInfo() {
