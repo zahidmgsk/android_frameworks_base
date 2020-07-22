@@ -84,5 +84,6 @@ public class ThemesUtils {
             "com.android.theme.font.firasans",
             "com.android.theme.font.ubuntu",
             "com.android.theme.font.titilliumweb",
+            "com.android.theme.font.caviardreamssource"
     };
 }
