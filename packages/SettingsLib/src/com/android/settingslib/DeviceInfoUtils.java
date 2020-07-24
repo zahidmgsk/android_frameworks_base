@@ -156,7 +156,7 @@ public class DeviceInfoUtils {
 
     public static String getSecurityPatch() {
         String patch = SystemProperties.get(
-                "ro.du.build.version.security_patch", Build.VERSION.SECURITY_PATCH);
+                "ro.nad.build.version.security_patch", Build.VERSION.SECURITY_PATCH);
         if (!"".equals(patch)) {
             try {
                 SimpleDateFormat template = new SimpleDateFormat("yyyy-MM-dd");
