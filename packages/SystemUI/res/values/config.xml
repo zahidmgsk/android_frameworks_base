@@ -119,7 +119,7 @@
     <string name="quick_settings_tiles_stock" translatable="false">
         wifi,cell,sync,battery,dnd,flashlight,sound,rotation,bt,airplane,nfc,location,hotspot,inversion,saver,work,cast,night,
         ambient_display,reboot,heads_up,screenshot,cpuinfo,fpsinfo,dataswitch,gaming,immersive,caffeine,theme,adb_network,hwkeys,navbar,
-        aod,usb_tether,screen_record,brightness,nfc
+        aod,usb_tether,screen_record,brightness,nfc,dc_dimming
     </string>
 
     <!-- The tiles to display in QuickSettings -->

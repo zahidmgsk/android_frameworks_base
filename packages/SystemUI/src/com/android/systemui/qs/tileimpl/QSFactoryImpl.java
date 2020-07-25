@@ -40,6 +40,7 @@ import com.android.systemui.qs.tiles.ColorInversionTile;
 import com.android.systemui.qs.tiles.CPUInfoTile;
 import com.android.systemui.qs.tiles.DataSaverTile;
 import com.android.systemui.qs.tiles.DataSwitchTile;
+import com.android.systemui.qs.tiles.DcDimmingTile;
 import com.android.systemui.qs.tiles.DndTile;
 import com.android.systemui.qs.tiles.FlashlightTile;
 import com.android.systemui.qs.tiles.FPSInfoTile;
@@ -102,6 +103,7 @@ public class QSFactoryImpl implements QSFactory {
     private final Provider<ScreenshotTile> mScreenshotTileProvider;
     private final Provider<CPUInfoTile> mCPUInfoTileProvider;
     private final Provider<DataSwitchTile> mDataSwitchTileProvider;
+    private final Provider<DcDimmingTile> mDcDimmingTileProvider;
     private final Provider<GamingModeTile> mGamingModeTileProvider;
     private final Provider<ImmersiveTile> mImmersiveTileProvider;
     private final Provider<CaffeineTile> mCaffeineTileProvider;
@@ -143,6 +145,7 @@ public class QSFactoryImpl implements QSFactory {
             Provider<ScreenshotTile> screenshotTileProvider,
             Provider<CPUInfoTile> cpuInfoTileProvider,
             Provider<DataSwitchTile> dataSwitchTileProvider,
+            Provider<DcDimmingTile> dcDimTileProvider,
             Provider<GamingModeTile> gamingModeTileProvider,
             Provider<ImmersiveTile> immersiveTileProvider,
             Provider<CaffeineTile> caffeineTileProvider,
@@ -180,6 +183,7 @@ public class QSFactoryImpl implements QSFactory {
         mScreenshotTileProvider = screenshotTileProvider;
         mCPUInfoTileProvider = cpuInfoTileProvider;
         mDataSwitchTileProvider = dataSwitchTileProvider;
+        mDcDimmingTileProvider = dcDimTileProvider;
         mGamingModeTileProvider = gamingModeTileProvider;
         mImmersiveTileProvider = immersiveTileProvider;
         mCaffeineTileProvider = caffeineTileProvider;
@@ -260,6 +264,8 @@ public class QSFactoryImpl implements QSFactory {
                 return mCPUInfoTileProvider.get();
             case "dataswitch":
                 return mDataSwitchTileProvider.get();
+            case "dc_dimming":
+                return mDcDimmingTileProvider.get();
             case "gaming":
                 return mGamingModeTileProvider.get();
             case "theme":
