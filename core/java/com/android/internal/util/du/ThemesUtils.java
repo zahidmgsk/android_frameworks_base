@@ -18,34 +18,6 @@ package com.android.internal.util.du;
 
 public class ThemesUtils {
 
-    public static final String[] ACCENTS = {
-            // AOSP colors
-            "com.android.theme.color.space", // Space
-            "com.android.theme.color.purple", // Purple
-            "com.android.theme.color.orchid", // Orchid
-            "com.android.theme.color.ocean", // Ocean
-            "com.android.theme.color.green", // Green
-            "com.android.theme.color.cinnamon", // Cinnamon
-            // Custom colors
-            "com.android.theme.color.amber", // Amber
-            "com.android.theme.color.blue", // Blue
-            "com.android.theme.color.bluegrey", // Blue Grey
-            "com.android.theme.color.brown", // Brown
-            "com.android.theme.color.cyan", // Cyan
-            "com.android.theme.color.deeporange", // Deep Orange
-            "com.android.theme.color.deeppurple", // Deep Purple
-            "com.android.theme.color.grey", // Grey
-            "com.android.theme.color.indigo", // Indigo
-            "com.android.theme.color.lightblue", // Light Blue
-            "com.android.theme.color.lightgreen", // Light Green
-            "com.android.theme.color.lime", // Lime
-            "com.android.theme.color.orange", // Orange
-            "com.android.theme.color.pink", // Pink
-            "com.android.theme.color.red", // Red
-            "com.android.theme.color.teal", // Teal
-            "com.android.theme.color.yellow", // Yellow
-    };
-
     public static final String[] ADAPTIVE_ICON_SHAPE = {
             "com.android.theme.icon.teardrop",
             "com.android.theme.icon.squircle",
@@ -108,11 +80,6 @@ public class ThemesUtils {
     public static final String[] MATERIAL_OCEAN = {
             "com.android.theme.materialocean.system",
             "com.android.theme.materialocean.systemui",
-    };
-
-    public static final String[] CORVUS_CLEAR = {
-            "com.android.theme.corvusclear.system",
-            "com.android.theme.corvusclear.systemui",
     };
 
     public static final String[] STATUSBAR_ICONS = {
