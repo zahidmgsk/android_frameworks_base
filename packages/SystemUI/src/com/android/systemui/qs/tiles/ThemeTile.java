@@ -19,7 +19,6 @@ package com.android.systemui.qs.tiles;
 import static android.os.UserHandle.USER_SYSTEM;
 
 import android.app.UiModeManager;
-import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.content.om.IOverlayManager;
@@ -191,8 +190,7 @@ public class ThemeTile extends QSTileImpl<BooleanState> {
 
         @Override
         public Intent getSettingsIntent() {
-            return new Intent().setComponent(new ComponentName(
-                    "com.dirtyunicorns.themes", "com.dirtyunicorns.themes.MainActivity"));
+            return new Intent(Settings.ACTION_DISPLAY_SETTINGS);
         }
 
         @Override
