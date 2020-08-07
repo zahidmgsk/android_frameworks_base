@@ -128,4 +128,10 @@
     <dimen name="screenrecord_status_icon_radius">5dp</dimen>
     <dimen name="screenrecord_status_text_size">14sp</dimen>
     <dimen name="qs_brightness_slider_height">28dp</dimen>
+
+    <!-- Media Card -->
+    <dimen name="volume_media_card_height">150dip</dimen>
+    <dimen name="volume_dialog_card_media_size">135dp</dimen>
+    <dimen name="volume_dialog_slider_margin_bottom">-12.5dp</dimen>
+    <dimen name="volume_dialog_media_elevation">9dp</dimen>
 </resources>

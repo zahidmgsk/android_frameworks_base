@@ -6529,6 +6529,12 @@ public final class Settings {
                 SettingsValidators.InclusiveIntegerRangeValidator(0, 1);
 
         /**
+        * Music Card in VolumePanel
+        * @hide
+        */
+        public static final String MUSIC_VOLUME_PANEL_DIALOG = "music_volume_panel_dialog";
+
+        /**
          * Settings to backup. This is here so that it's in the same place as the settings
          * keys and easy to update.
          *
