@@ -4646,11 +4646,6 @@ public final class Settings {
         /** @hide */
         private static final Validator VOLUME_KEY_CURSOR_CONTROL_VALIDATOR =
                 ANY_INTEGER_VALIDATOR;
-        /**
-         * Change volume up and down handlign based on rotation
-         * @hide
-         */
-        public static final String SWAP_VOLUME_BUTTONS = "swap_volume_buttons";
 
         /**
 	 ** Whether to use partial screenshot when using volume keys
@@ -5366,15 +5361,6 @@ public final class Settings {
         public static final String STATUS_BAR_CLOCK_AUTO_HIDE = "status_bar_clock_auto_hide";
         public static final String STATUS_BAR_CLOCK_AUTO_HIDE_HDURATION = "status_bar_clock_auto_hide_hduration";
         public static final String STATUS_BAR_CLOCK_AUTO_HIDE_SDURATION = "status_bar_clock_auto_hide_sduration";
-
-        /**
-         * Sensor block per-package
-         * @hide
-         */
-        public static final String SENSOR_BLOCK = "sensor_block";
-
-        private static final Validator SENSOR_BLOCK_VALIDATOR =
-                BOOLEAN_VALIDATOR;
 
         /**
          * Disable FC Notifications
@@ -6525,18 +6511,6 @@ public final class Settings {
         public static final String QS_LABEL_USE_NEW_TINT = "qs_label_use_new_tint";
 
         /**
-         * Whether to RGB the QS panel or not
-         * @hide
-         */
-        public static final String QS_PANEL_DISCO = "qs_panel_disco";
-
-        /**
-         * RGB PANEL Duration
-         * @hide
-         */
-        public static final String QS_PANEL_DISCO_DURATION = "qs_panel_disco_duration";
-
-        /**
          * Nusantara wings style
          * @hide
          */
@@ -6613,7 +6587,6 @@ public final class Settings {
             SCREENSHOT_SOUND,
             VOLUME_ROCKER_WAKE,
             VOLUME_BUTTON_MUSIC_CONTROL,
-            VOLUME_KEY_CURSOR_CONTROL,
             DOZE_ON_CHARGE,
             STATUS_BAR_CLOCK,
             STATUSBAR_CLOCK_STYLE,
@@ -6653,7 +6626,6 @@ public final class Settings {
             CUSTOM_DEVICE_PROXI_CHECK_ENABLED,
             CUSTOM_DEVICE_GESTURE_FEEDBACK_ENABLED,
             CUSTOM_DEVICE_FEATURE_SETTINGS,
-            SENSOR_BLOCK,
             STATUS_BAR_SHOW_TICKER,
             STATUS_BAR_TICKER_ANIMATION_MODE,
             STATUS_BAR_TICKER_TICK_DURATION, 
@@ -6814,8 +6786,6 @@ public final class Settings {
             PRIVATE_SETTINGS.add(SCREENSHOT_SOUND);
             PRIVATE_SETTINGS.add(VOLUME_ROCKER_WAKE);
             PRIVATE_SETTINGS.add(VOLUME_BUTTON_MUSIC_CONTROL);
-            PRIVATE_SETTINGS.add(VOLUME_KEY_CURSOR_CONTROL);
-            PRIVATE_SETTINGS.add(SWAP_VOLUME_BUTTONS);
             PRIVATE_SETTINGS.add(SHOW_VOLTE_ICON);
             PRIVATE_SETTINGS.add(DOZE_ON_CHARGE);
             PRIVATE_SETTINGS.add(TOAST_ICON);
@@ -6859,7 +6829,6 @@ public final class Settings {
             PRIVATE_SETTINGS.add(CUSTOM_DEVICE_PROXI_CHECK_ENABLED);
             PRIVATE_SETTINGS.add(CUSTOM_DEVICE_GESTURE_FEEDBACK_ENABLED);
             PRIVATE_SETTINGS.add(CUSTOM_DEVICE_FEATURE_SETTINGS);
-            PRIVATE_SETTINGS.add(SENSOR_BLOCK);
             PRIVATE_SETTINGS.add(STATUS_BAR_SHOW_TICKER);
             PRIVATE_SETTINGS.add(STATUS_BAR_TICKER_ANIMATION_MODE);
             PRIVATE_SETTINGS.add(STATUS_BAR_TICKER_TICK_DURATION);
@@ -7008,7 +6977,6 @@ public final class Settings {
             VALIDATORS.put(SCREENSHOT_SOUND, SCREENSHOT_SOUND_VALIDATOR);
             VALIDATORS.put(VOLUME_ROCKER_WAKE, VOLUME_ROCKER_WAKE_VALIDATOR);
             VALIDATORS.put(VOLUME_BUTTON_MUSIC_CONTROL, VOLUME_BUTTON_MUSIC_CONTROL_VALIDATOR);
-            VALIDATORS.put(VOLUME_KEY_CURSOR_CONTROL, VOLUME_KEY_CURSOR_CONTROL_VALIDATOR);
             VALIDATORS.put(SHOW_VOLTE_ICON, SHOW_VOLTE_ICON_VALIDATOR);
             VALIDATORS.put(DOZE_ON_CHARGE, DOZE_ON_CHARGE_VALIDATOR);
             VALIDATORS.put(STATUS_BAR_CLOCK, STATUS_BAR_CLOCK_VALIDATOR);
@@ -7054,7 +7022,6 @@ public final class Settings {
             VALIDATORS.put(CUSTOM_DEVICE_GESTURE_FEEDBACK_ENABLED, CUSTOM_DEVICE_GESTURE_FEEDBACK_ENABLED_VALIDATOR);
             VALIDATORS.put(CUSTOM_DEVICE_FEATURE_SETTINGS, CUSTOM_DEVICE_FEATURE_SETTINGS_VALIDATOR);
             VALIDATORS.put(ACCELEROMETER_ROTATION_ANGLES, ACCELEROMETER_ROTATION_ANGLES_VALIDATOR);
-            VALIDATORS.put(SENSOR_BLOCK, SENSOR_BLOCK_VALIDATOR);
             VALIDATORS.put(STATUS_BAR_SHOW_TICKER, STATUS_BAR_SHOW_TICKER_VALIDATOR);
             VALIDATORS.put(STATUS_BAR_TICKER_ANIMATION_MODE,
                     STATUS_BAR_TICKER_ANIMATION_MODE_VALIDATOR);
@@ -16401,14 +16368,6 @@ public final class Settings {
                 "location_global_kill_switch";
 
         /**
-         * If set to 1, the device identifier check will be relaxed to the previous READ_PHONE_STATE
-         * permission check for all apps.
-         * @hide
-         */
-        public static final String PRIVILEGED_DEVICE_IDENTIFIER_CHECK_RELAXED =
-                "privileged_device_identifier_check_relaxed";
-
-        /**
          * If set to 1, SettingsProvider's restoreAnyVersion="true" attribute will be ignored
          * and restoring to lower version of platform API will be skipped.
          *
@@ -16622,30 +16581,6 @@ public final class Settings {
          * @hide
          */
         public static final String ALLOW_SIGNATURE_FAKE = "allow_signature_fake";
-
-        /**
-         * Enable blocking wakelock
-         * @hide
-         */
-        public static final String WAKELOCK_BLOCKING_ENABLED = "wakelock_blocking_enabled";
-
-         /**
-         * List of wakelock blocks selected
-         * @hide
-         */
-        public static final String WAKELOCK_BLOCKING_LIST = "wakelock_blocking_list";
-
-        /**
-         * List of alarms blocks selected
-         * @hide
-         */
-        public static final String ALARM_BLOCKING_LIST = "alarm_blocking_list";
-
-        /**
-         * Enable blocking alarm
-         * @hide
-         */
-        public static final String ALARM_BLOCKING_ENABLED = "alarm_blocking_enabled";
 
         /**
          * Audio focus mode for ringtones when headset is connected

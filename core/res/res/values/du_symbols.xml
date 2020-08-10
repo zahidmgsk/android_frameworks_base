@@ -78,9 +78,6 @@
   <!-- Custom permission -->
   <java-symbol type="array" name="config_customPermissionsList" />
 
-  <!-- Sensor packages -->
-  <java-symbol type="array" name="config_blockPackagesSensorDrain" />
-
   <!-- Themes -->
   <java-symbol type="color" name="du_themes_qs_inactive_color" />
 

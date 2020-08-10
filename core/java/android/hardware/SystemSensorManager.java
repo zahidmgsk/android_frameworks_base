@@ -25,7 +25,6 @@ import android.os.Handler;
 import android.os.Looper;
 import android.os.MemoryFile;
 import android.os.MessageQueue;
-import android.provider.Settings;
 import android.util.Log;
 import android.util.SparseArray;
 import android.util.SparseBooleanArray;
@@ -163,23 +162,6 @@ public class SystemSensorManager extends SensorManager {
             throw new IllegalStateException("register failed, "
                 + "the sensor listeners size has exceeded the maximum limit "
                 + MAX_LISTENER_COUNT);
-        }
-        if (Settings.System.getInt(mContext.getContentResolver(),
-                Settings.System.SENSOR_BLOCK, 0) == 1) {
-            int sensortype = sensor.getType();
-            if (sensortype == Sensor.TYPE_SIGNIFICANT_MOTION ||
-                    sensortype == Sensor.TYPE_ACCELEROMETER ||
-                    sensortype == Sensor.TYPE_LINEAR_ACCELERATION) {
-                String pkgName = mContext.getPackageName();
-                for (String blockedPkgName : mContext.getResources().getStringArray(
-                        com.android.internal.R.array.config_blockPackagesSensorDrain)) {
-                    if (pkgName.equals(blockedPkgName)) {
-                        Log.w(TAG, "Preventing " + pkgName + "from draining battery using " +
-                                sensor.getStringType());
-                        return false;
-                    }
-                }
-            }
         }
 
         // Invariants to preserve:

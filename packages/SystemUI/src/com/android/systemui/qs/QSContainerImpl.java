@@ -19,7 +19,6 @@ package com.android.systemui.qs;
 import static android.app.StatusBarManager.DISABLE2_QUICK_SETTINGS;
 import static android.content.res.Configuration.ORIENTATION_LANDSCAPE;
 
-import android.animation.ValueAnimator;
 import android.content.ContentResolver;
 import android.content.Context;
 import android.content.res.Configuration;
@@ -28,7 +27,6 @@ import android.graphics.Point;
 import android.graphics.drawable.Drawable;
 import android.graphics.drawable.TransitionDrawable;
 import android.graphics.Color;
-import android.graphics.PorterDuff;
 import android.graphics.PorterDuff.Mode;
 import android.os.Handler;
 import android.os.UserHandle;
@@ -75,11 +73,6 @@ public class QSContainerImpl extends FrameLayout implements
     private boolean mQsBackgroundAlpha;
     private int mHeaderImageHeight;
     private boolean mForceHideQsStatusBar;
-
-    //Disco
-    private boolean mQsDisco;
-    private int mQsDiscoDuration;
-    private ValueAnimator mAnim;
 
     public QSContainerImpl(Context context, AttributeSet attrs) {
         super(context, attrs);
@@ -154,15 +147,9 @@ public class QSContainerImpl extends FrameLayout implements
             resolver.registerContentObserver(Settings.System.getUriFor(
                     Settings.System.QS_PANEL_BG_ALPHA),
                     false, this, UserHandle.USER_ALL);
-            resolver.registerContentObserver(Settings.System.getUriFor(
-                    Settings.System.STATUS_BAR_CUSTOM_HEADER_HEIGHT),
-                    false, this, UserHandle.USER_ALL);
-            resolver.registerContentObserver(Settings.System.getUriFor(
-                    Settings.System.QS_PANEL_DISCO), 
-                    false, this, UserHandle.USER_ALL);
-            resolver.registerContentObserver(Settings.System.getUriFor(
-                    Settings.System.QS_PANEL_DISCO_DURATION),
-                    false, this, UserHandle.USER_ALL);
+            resolver.registerContentObserver(Settings.System
+                            .getUriFor(Settings.System.STATUS_BAR_CUSTOM_HEADER_HEIGHT), false,
+                    this, UserHandle.USER_ALL);
         }
 
         @Override
@@ -175,11 +162,6 @@ public class QSContainerImpl extends FrameLayout implements
         ContentResolver resolver = getContext().getContentResolver();
         int bgAlpha = Settings.System.getIntForUser(resolver,
                 Settings.System.QS_PANEL_BG_ALPHA, 255,
-                UserHandle.USER_CURRENT);
-        mQsDisco = Settings.System.getInt(resolver,
-                Settings.System.QS_PANEL_DISCO, 0) == 1;
-        mQsDiscoDuration = Settings.System.getIntForUser(resolver,
-                Settings.System.QS_PANEL_DISCO_DURATION, 5,
                 UserHandle.USER_CURRENT);
 
         Drawable bg = mBackground.getBackground();
@@ -198,46 +180,6 @@ public class QSContainerImpl extends FrameLayout implements
         updateResources();
         updateStatusbarVisibility();
         setBackgroundGradientVisibility(null);
-        setDiscoMode();
-    }
-
-   private void setDiscoMode() {
-       if (mQsDisco) {
-           startDiscoMode();
-       } else {
-           stopDiscoMode();
-           if (mQsBackGround != null && mBackground != null) {
-               mBackground.setBackground(mQsBackGround);
-           }
-       }
-   }
-
-   private void stopDiscoMode() {
-        if (mAnim != null)
-            mAnim.cancel();
-            mAnim = null;
-    }
-
-    private void startDiscoMode() {
-        final float from = 0f;
-        final float to = 360f;
-        stopDiscoMode();
-        mAnim = ValueAnimator.ofFloat(0, 1);
-        final float[] hsl = {0f, 1f, 0.5f};
-        mAnim.setDuration(mQsDiscoDuration *1000);
-        mAnim.setRepeatCount(ValueAnimator.INFINITE);
-        mAnim.setRepeatMode(ValueAnimator.RESTART);
-        mAnim.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
-            @Override
-            public void onAnimationUpdate(ValueAnimator animation) {
-                hsl[0] = from + (to - from)*animation.getAnimatedFraction();
-                mQsBackGround.setColorFilter(com.android.internal.graphics.ColorUtils.HSLToColor(hsl), PorterDuff.Mode.SRC_ATOP);
-                if (mQsBackGround != null && mBackground != null) {
-                    mBackground.setBackground(mQsBackGround);
-                }
-            }
-        });
-        mAnim.start();
     }
 
     @Override
