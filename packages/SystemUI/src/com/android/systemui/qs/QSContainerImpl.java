@@ -206,8 +206,9 @@ public class QSContainerImpl extends FrameLayout implements
            startDiscoMode();
        } else {
            stopDiscoMode();
-           mQsBackGround = getContext().getDrawable(R.drawable.qs_background_primary);
-           mBackground.setBackground(mQsBackGround);
+           if (mQsBackGround != null && mBackground != null) {
+               mBackground.setBackground(mQsBackGround);
+           }
        }
    }
 
