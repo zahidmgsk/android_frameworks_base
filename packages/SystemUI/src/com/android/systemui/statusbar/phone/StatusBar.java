@@ -594,9 +594,6 @@ public class StatusBar extends SystemUI implements DemoMode,
 
     private boolean mWallpaperSupportsAmbientMode;
 
-    // LS visualizer on Ambient Display
-    private boolean mAmbientVisualizer;
-
     private final BroadcastReceiver mWallpaperChangedReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
@@ -2238,9 +2235,6 @@ public class StatusBar extends SystemUI implements DemoMode,
                     Settings.Secure.SHOW_BACK_ARROW_GESTURE),
                     false, this, UserHandle.USER_ALL);
             resolver.registerContentObserver(Settings.System.getUriFor(
-                    Settings.Secure.AMBIENT_VISUALIZER_ENABLED),
-                    false, this, UserHandle.USER_ALL);
-            resolver.registerContentObserver(Settings.System.getUriFor(
                     Settings.System.STATUS_BAR_SHOW_TICKER),
                     false, this, UserHandle.USER_ALL);
             resolver.registerContentObserver(Settings.System.getUriFor(
@@ -2338,9 +2332,6 @@ public class StatusBar extends SystemUI implements DemoMode,
             } else if (uri.equals(Settings.Secure.getUriFor(
                     Settings.Secure.FP_SWIPE_TO_DISMISS_NOTIFICATIONS))) {
                 setFpToDismissNotifications();
-            } else if (uri.equals(Settings.Secure.getUriFor(
-                    Settings.Secure.AMBIENT_VISUALIZER_ENABLED))) {
-                setAmbientVis();
             } else if (uri.equals(Settings.Secure.getUriFor(Settings.Secure.LOCKSCREEN_CLOCK_SELECTION)) ||
                        uri.equals(Settings.Secure.getUriFor(Settings.Secure.LOCKSCREEN_DATE_SELECTION))) {
                 updateKeyguardStatusSettings();
@@ -2386,7 +2377,6 @@ public class StatusBar extends SystemUI implements DemoMode,
         setPulseOnNewTracks();
         setFpToDismissNotifications();
         setHideArrowForBackGesture();
-        setAmbientVis();
         setStatusDoubleTapToSleep();
         setGestureNavOptions();
         setMediaHeadsup();
@@ -2482,12 +2472,6 @@ public class StatusBar extends SystemUI implements DemoMode,
         if (getNavigationBarView() != null) {
             getNavigationBarView().updateBackArrowForGesture();
         }
-    }
-
-    private void setAmbientVis() {
-        mAmbientVisualizer = Settings.Secure.getIntForUser(
-                mContext.getContentResolver(), Settings.Secure.AMBIENT_VISUALIZER_ENABLED, 0,
-                UserHandle.USER_CURRENT) == 1;
     }
 
     public boolean isNotificationForCurrentProfiles(StatusBarNotification n) {
@@ -4611,9 +4595,6 @@ public class StatusBar extends SystemUI implements DemoMode,
         }
 
         mStatusBarStateController.setIsDozing(dozing);
-        if (mAmbientVisualizer && mDozing) {
-            mVisualizerView.setVisible(true);
-        }
     }
 
     private void updateKeyguardState() {

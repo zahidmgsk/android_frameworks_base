@@ -5650,18 +5650,6 @@ public final class Settings {
         public static final String BATTERY_BAR_USE_GRADIENT_COLOR = "battery_bar_use_gradient_color";
 
         /**
-         * Whether to use a custom color for the visualizer on the lock screen
-         * @hide
-         */
-        public static final String LOCK_SCREEN_VISUALIZER_USE_CUSTOM_COLOR = "lock_screen_visualizer_use_custom_color";
-
-        /**
-         * Custom color of the visualizer on the lock screen
-         * @hide
-         */
-        public static final String LOCK_SCREEN_VISUALIZER_CUSTOM_COLOR = "lock_screen_visualizer_custom_color";
-
-        /**
          * Show Settings icon in QS Footer
          *
          * @hide
@@ -11615,42 +11603,6 @@ public final class Settings {
         private static final Validator LOCKSCREEN_VISUALIZER_ENABLED_VALIDATOR = BOOLEAN_VALIDATOR;
 
         /**
-         * Lockscreen lavalamp psychedelic colors
-         * @hide
-         */
-        public static final String LOCKSCREEN_LAVALAMP_ENABLED = "lockscreen_lavalamp_enabled";
-
-        /**
-         * Lockscreen lavalamp animation speed
-         * @hide
-         */
-        public static final String LOCKSCREEN_LAVALAMP_SPEED = "lockscreen_lavalamp_speed";
-
-        /**
-         * Whether to use automatic color for visualizer
-         * @hide
-         */
-        public static final String LOCKSCREEN_VISUALIZER_AUTOCOLOR = "lockscreen_visualizer_autocolor";
-
-        /**
-         * Number of bars shown in visualizer
-         * @hide
-         */
-        public static final String LOCKSCREEN_SOLID_UNITS_COUNT = "lockscreen_solid_units_count";
-
-        /**
-         * Visualizer sanity level
-         * @hide
-         */
-        public static final String LOCKSCREEN_SOLID_FUDGE_FACTOR = "lockscreen_solid_fudge_factor";
-
-        /**
-         * Visualizer opacity
-         * @hide
-         */
-        public static final String LOCKSCREEN_SOLID_UNITS_OPACITY = "lockscreen_solid_units_opacity";
-
-        /**
          * Setting to allow setting rounded corner size and content padding
          */
         public static final String SYSUI_ROUNDED_SIZE = "sysui_rounded_size";
@@ -11662,13 +11614,6 @@ public final class Settings {
          * @hide
          */
         public static final String SYSUI_ROUNDED_FWVALS = "sysui_rounded_fwvals";
-
-        /**
-         * Ambient Display Visualizer
-         *
-         * @hide
-         */
-        public static final String AMBIENT_VISUALIZER_ENABLED = "ambient_visualizer";
 
         /**
          * Select which lockscreen clock style to display
