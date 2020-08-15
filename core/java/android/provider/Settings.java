@@ -6512,11 +6512,11 @@ public final class Settings {
         public static final String SCREENRECORD_VIDEO_BITRATE = "screenrecord_video_bitrate";
 
         /**
-         * Toggle for clipboard access toast.
+         * Clipboard access info
          * @hide
          */
 
-        public static final String SHOW_CLIPBOARD_TOAST = "show_clipboard_toast";
+        public static final String CLIPBOARD_TOAST_INFO = "clipboard_toast_info";
 
         /**
          * Settings to backup. This is here so that it's in the same place as the settings
