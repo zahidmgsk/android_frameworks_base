@@ -510,6 +510,7 @@ public class NotificationStackScrollLayout extends ViewGroup implements ScrollAd
     private boolean mWillExpand;
     private boolean needsColorRefresh = true;
     private boolean mShowHeaders;
+    private boolean mCenterHeaders;
 
     @Inject
     public NotificationStackScrollLayout(
@@ -543,6 +544,9 @@ public class NotificationStackScrollLayout extends ViewGroup implements ScrollAd
         mShowHeaders = Settings.System.getIntForUser(getContext().getContentResolver(),
                 Settings.System.NOTIFICATION_HEADERS, 0, UserHandle.USER_CURRENT) == 1;
 
+        mCenterHeaders = Settings.System.getIntForUser(getContext().getContentResolver(),
+                Settings.System.CENTER_NOTIFICATION_HEADERS, 0, UserHandle.USER_CURRENT) == 1;
+
         mSectionsManager =
                 new NotificationSectionsManager(
                         this,
@@ -550,7 +554,8 @@ public class NotificationStackScrollLayout extends ViewGroup implements ScrollAd
                         statusBarStateController,
                         configurationController,
                         NotificationUtils.useNewInterruptionModel(context),
-                        mShowHeaders);
+                        mShowHeaders,
+                        mCenterHeaders);
         mSectionsManager.initialize(LayoutInflater.from(context));
 
         mAmbientState = new AmbientState(context, mSectionsManager, mHeadsUpManager);
