@@ -55,6 +55,8 @@ import com.android.systemui.plugins.qs.QSIconView;
 import com.android.systemui.plugins.qs.QSTile;
 import com.android.systemui.plugins.qs.QSTile.BooleanState;
 
+import java.util.Random;
+
 public class QSTileBaseView extends com.android.systemui.plugins.qs.QSTileView {
 
     private static final String TAG = "QSTileBaseView";
@@ -140,6 +142,7 @@ public class QSTileBaseView extends com.android.systemui.plugins.qs.QSTileView {
         }
         setImportantForAccessibility(View.IMPORTANT_FOR_ACCESSIBILITY_YES);
         setBackground(mTileBackground);
+        final float[] hsl = {0f, 1f, 0.5f};
 
         setPadding(0, 0, 0, 0);
         setClipChildren(false);
@@ -151,7 +154,7 @@ public class QSTileBaseView extends com.android.systemui.plugins.qs.QSTileView {
 
     private void setActiveColor(Context context) {
         if (setQsUseNewTint == 3) {
-            mColorActive = ColorUtils.genRandomAccentColor(isThemeDark(context), (long) (ColorUtils.getBootTime() + mIcon.toString().hashCode()));
+            mColorActive = randomColor();
         } else if (setQsUseNewTint == 1) {
             mColorActive = ColorUtils.genRandomAccentColor(isThemeDark(context));
             mColorActiveAlpha = adjustAlpha(mColorActive, 0.2f);
@@ -163,6 +166,15 @@ public class QSTileBaseView extends com.android.systemui.plugins.qs.QSTileView {
         } else {
             mColorActive = Utils.getColorAttrDefaultColor(context, android.R.attr.colorAccent);
         }
+    }
+
+    public int randomColor() {
+        Random r = new Random();
+        float hsl[] = new float[3];
+        hsl[0] = r.nextInt(360);
+        hsl[1] = r.nextFloat();
+        hsl[2] = (isThemeDark(mContext) ? 0.575f : 0.3f) + (r.nextFloat() * 0.125f);
+        return com.android.internal.graphics.ColorUtils.HSLToColor(hsl);
     }
 
     private static Boolean isThemeDark(Context context) {
