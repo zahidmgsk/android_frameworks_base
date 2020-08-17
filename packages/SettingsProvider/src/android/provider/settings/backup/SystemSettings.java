@@ -102,5 +102,12 @@ public class SystemSettings {
         Settings.System.STATUS_BAR_CUSTOM_HEADER_IMAGE,
         Settings.System.STATUS_BAR_FILE_HEADER_IMAGE,
         Settings.System.STATUS_BAR_CUSTOM_HEADER_HEIGHT,
+        Settings.System.GAMING_MODE_HEADS_UP,
+        Settings.System.GAMING_MODE_ZEN,
+        Settings.System.GAMING_MODE_NAVBAR,
+        Settings.System.GAMING_MODE_HW_BUTTONS,
+        Settings.System.GAMING_MODE_BRIGHTNESS_ENABLED,
+        Settings.System.GAMING_MODE_MEDIA_ENABLED,
+        Settings.System.GAMING_MODE_MEDIA,
     };
 }
