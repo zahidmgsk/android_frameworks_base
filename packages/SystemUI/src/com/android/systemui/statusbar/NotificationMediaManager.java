@@ -551,11 +551,15 @@ public class NotificationMediaManager implements Dumpable {
 
     public boolean getPlaybackStateIsEqual(@PlaybackState.State int state) {
         if (mMediaController != null) {
-            return state == mMediaController.getPlaybackState().getState();
+            if (mMediaController.getPlaybackState() != null) {
+               return state == mMediaController.getPlaybackState().getState();
+            } else {
+               return false;
+            }
         } else {
-            return false;
+          return false;
         }
-    }
+     }
 
     @Override
     public void dump(FileDescriptor fd, PrintWriter pw, String[] args) {
