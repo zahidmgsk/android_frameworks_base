@@ -72,6 +72,11 @@ public class ThemesUtils {
             "com.android.theme.solarizeddark.systemui",
     };
 
+    public static final String[] NAD_CLEAR = {
+            "com.android.theme.nadclear.system",
+            "com.android.theme.nadclear.systemui",
+    };
+
     public static final String[] FONTS = {
             "com.android.theme.font.notoserifsource",
             "com.android.theme.font.cagliostrosource",
