@@ -82,6 +82,11 @@ public class ThemesUtils {
             "com.android.theme.materialocean.systemui",
     };
 
+    public static final String[] NAD_CLEAR = {
+            "com.android.theme.nadclear.system",
+            "com.android.theme.nadclear.systemui",
+    };
+
     public static final String[] STATUSBAR_ICONS = {
             "com.android.theme.icon_pack.filled.android",
             "com.android.theme.icon_pack.rounded.android",
