@@ -227,7 +227,10 @@ public class QuickStatusBarHeader extends RelativeLayout implements
         mQsbDataUsageLayout = findViewById(R.id.qsb_daily_data_usage_layout);
         mQsbDataUsageImage = findViewById(R.id.qsb_daily_data_usage_icon);
         mQsbDataUsageView = findViewById(R.id.qsb_data_sim_usage);
-
+        if (mDataUsageView != null)
+            mDataUsageView.setOnClickListener(this);
+        if (mQsbDataUsageView != null)
+            mQsbDataUsageView.setOnClickListener(this);
         updateResources();
 
         Rect tintArea = new Rect(0, 0, 0, 0);
@@ -632,6 +635,12 @@ public class QuickStatusBarHeader extends RelativeLayout implements
         } else if (v == mBatteryRemainingIcon || v == mBatteryMeterView) {
             mActivityStarter.postStartActivityDismissingKeyguard(new Intent(
                 Intent.ACTION_POWER_USAGE_SUMMARY), 0);
+        } else if (v == mDataUsageView) {
+            mActivityStarter.postStartActivityDismissingKeyguard(new Intent(
+                    Settings.Panel.ACTION_MOBILE_DATA), 0);
+        } else if (v == mQsbDataUsageView) {
+            mActivityStarter.postStartActivityDismissingKeyguard(new Intent(
+                    Settings.Panel.ACTION_MOBILE_DATA), 0);
         }
     }
 
