@@ -182,6 +182,7 @@ public class QuickStatusBarHeader extends RelativeLayout implements
     private View mDataUsageLayout;
     private ImageView mDataUsageImage;
     private DataUsageView mDataUsageView;
+    private boolean mMiuiBrightnessSlider;
 
     private SettingsObserver mSettingsObserver = new SettingsObserver(mHandler);
 
@@ -518,6 +519,7 @@ public class QuickStatusBarHeader extends RelativeLayout implements
         updateStatusIconAlphaAnimator();
         updateHeaderTextContainerAlphaAnimator();
         updatePrivacyChipAlphaAnimator();
+        updateMiuiSliderView();
     }
 
     private void updateSettings() {
@@ -526,6 +528,15 @@ public class QuickStatusBarHeader extends RelativeLayout implements
         updateStatusbarProperties();
         updateshowBatteryInBar();
         updateDataUsageView();
+        updateMiuiSliderView();
+    }
+
+    private void updateMiuiSliderView() {
+        mMiuiBrightnessSlider = Settings.System.getInt(mContext.getContentResolver(),
+            Settings.System.BRIGHTNESS_SLIDER_QS_UNEXPANDED, 0) != 0;
+        if (mMiuiBrightnessSlider) {
+            removeView(mQuickQsBrightness);
+        }
     }
 
     private void updateBatteryStyle() {
@@ -917,6 +928,9 @@ public class QuickStatusBarHeader extends RelativeLayout implements
                     false, this, UserHandle.USER_ALL);
             resolver.registerContentObserver(Settings.System
                     .getUriFor(Settings.System.QS_DATAUSAGE),
+                    false, this, UserHandle.USER_ALL);
+            resolver.registerContentObserver(Settings.System
+                    .getUriFor(Settings.System.BRIGHTNESS_SLIDER_QS_UNEXPANDED),
                     false, this, UserHandle.USER_ALL);
         }
 
