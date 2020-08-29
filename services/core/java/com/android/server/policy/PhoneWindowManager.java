@@ -2497,7 +2497,7 @@ public class PhoneWindowManager implements WindowManagerPolicy {
             updateRotation(true);
         }
         sshotType = Settings.System.getIntForUser(mContext.getContentResolver(),
-        Settings.System.SCREENSHOT_TYPE, 0, UserHandle.USER_CURRENT);
+        Settings.System.SCREENSHOT_TYPE, 2, UserHandle.USER_CURRENT);
         readConfigurationDependentBehaviors();
     }
 
