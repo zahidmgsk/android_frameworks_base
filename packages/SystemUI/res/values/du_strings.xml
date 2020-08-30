@@ -162,6 +162,10 @@
     <string name="accessibility_quick_settings_caffeine_off">Caffeine off</string>
     <string name="accessibility_quick_settings_caffeine_on">Caffeine on</string>
 
+    <!-- Auto Brightness tile -->
+    <string name="quick_settings_auto_brightness_on">Auto brightness on</string>
+    <string name="quick_settings_auto_brightness_off">Auto brightness off</string>
+
     <!-- Screenshot toast -->
     <string name="delete_screenshot_toast">Screenshot deleted</string>
 
