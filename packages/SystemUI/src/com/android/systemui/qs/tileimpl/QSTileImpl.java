@@ -452,6 +452,8 @@ public abstract class QSTileImpl<TState extends State> implements QSTile, Lifecy
                         return ColorUtils.genRandomAccentColor(isThemeDark(context));
                     else if (setQsUseNewTint == 2)
                    return Utils.getColorAttrDefaultColor(context, android.R.attr.colorAccent);
+                    else if (setQsUseNewTint == 3)
+                   return Utils.getColorAttrDefaultColor(context, android.R.attr.textColorPrimary);
                 else
                    return Utils.getColorAttrDefaultColor(context, android.R.attr.colorPrimary);
             default:
