@@ -185,10 +185,13 @@ public class NadMusic extends RelativeLayout implements NotificationMediaManager
             if (mMediaManager.getMediaMetadata().getBitmap(MediaMetadata.METADATA_KEY_ALBUM_ART) != null) {
                 Palette.generateAsync((mMediaManager.getMediaMetadata().getBitmap(MediaMetadata.METADATA_KEY_ALBUM_ART)), this);
             }
+
             setVisibility(show ? View.VISIBLE : View.GONE);
+
         } else {
             setVisibility(View.GONE);
         }
+
         mArtwork.setClipToOutline(true);
    }
 

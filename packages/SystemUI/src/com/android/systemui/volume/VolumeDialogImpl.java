@@ -224,13 +224,13 @@ public class VolumeDialogImpl implements VolumeDialog,
         public void onChange(boolean selfChange) {
             update();
             initDialog();
-            updateRowsH(getActiveRow());
         }
 
         public void update() {
              mTimeOut = Settings.System.getIntForUser(mContext.getContentResolver(), Settings.System.VOLUME_DIALOG_TIMEOUT, 3, UserHandle.USER_CURRENT);
              mLeftVolumeRocker = Settings.System.getIntForUser(mContext.getContentResolver(),
                 Settings.System.AUDIO_PANEL_VIEW_POSITION, 0,UserHandle.USER_CURRENT) == 1;
+             updateRowsH(getActiveRow());
         }
     }
 
@@ -246,8 +246,6 @@ public class VolumeDialogImpl implements VolumeDialog,
         mShowActiveStreamOnly = showActiveStreamOnly();
         mHasSeenODICaptionsTooltip =
                 Prefs.getBoolean(context, Prefs.Key.HAS_SEEN_ODI_CAPTIONS_TOOLTIP, false);
-        settingsObserver = new SettingsObserver(mHandler);
-        settingsObserver.observe();
         mHasAlertSlider = mContext.getResources().getBoolean(com.android.internal.R.bool.config_hasAlertSlider);
         mVibrateOnSlider = mContext.getResources().getBoolean(R.bool.config_vibrateOnIconAnimation);
         mElevation = mContext.getResources().getDimension(R.dimen.volume_dialog_elevation);
@@ -461,6 +459,8 @@ public class VolumeDialogImpl implements VolumeDialog,
             updateNotificationRowH();
         }
 
+        settingsObserver = new SettingsObserver(mHandler);
+        settingsObserver.observe();
         updateRowsH(getActiveRow());
         initRingerH();
         initSettingsH();
