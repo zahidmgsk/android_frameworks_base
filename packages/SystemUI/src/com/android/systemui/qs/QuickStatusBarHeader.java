@@ -574,7 +574,7 @@ public class QuickStatusBarHeader extends RelativeLayout implements
 
     private void updateDataUsageDialy() {
         mDataUsageLocation = Settings.System.getIntForUser(mContext.getContentResolver(),
-                Settings.System.QS_DATAUSAGE_LOCATION, 1,
+                Settings.System.QS_DATAUSAGE_LOCATION, 0,
                 UserHandle.USER_CURRENT) == 1;
          if (mDataUsageLocation) {
              mDataUsageLayout.setVisibility(View.VISIBLE);
