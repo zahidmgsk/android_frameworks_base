@@ -150,12 +150,18 @@ public class QuickStatusBarHeader extends RelativeLayout implements
     private BatteryMeterView mBatteryMeterView;
     private RingerModeTracker mRingerModeTracker;
 
-    // Data Usage
+    // Data Usage - QQS
     private View mDataUsageLayout;
     private ImageView mDataUsageImage;
     private DataUsageView mDataUsageView;
 
+    // Data Usage - QSB
+    private View mQsbDataUsageLayout;
+    private ImageView mQsbDataUsageImage;
+    private DataUsageView mQsbDataUsageView;
+
     private boolean mLandscape;
+    private boolean mDataUsageLocation;
 
     // Used for RingerModeTracker
     private final LifecycleRegistry mLifecycle = new LifecycleRegistry(this);
@@ -218,6 +224,9 @@ public class QuickStatusBarHeader extends RelativeLayout implements
         mDataUsageView = findViewById(R.id.data_sim_usage);
         mDataUsageLayout = findViewById(R.id.daily_data_usage_layout);
         mDataUsageImage = findViewById(R.id.daily_data_usage_icon);
+        mQsbDataUsageLayout = findViewById(R.id.qsb_daily_data_usage_layout);
+        mQsbDataUsageImage = findViewById(R.id.qsb_daily_data_usage_icon);
+        mQsbDataUsageView = findViewById(R.id.qsb_data_sim_usage);
 
         updateResources();
 
@@ -390,7 +399,7 @@ public class QuickStatusBarHeader extends RelativeLayout implements
     private void updateSettings() {
         updateBatteryInQs();
         updateStatusbarProperties();
-        updateDataUsageView();
+        updateDataUsageDialy();
     }
 
     private void updateStatusIconAlphaAnimator() {
@@ -421,21 +430,36 @@ public class QuickStatusBarHeader extends RelativeLayout implements
         mBatteryRemainingIcon.setVisibility(showBatteryInQs ? View.GONE : View.VISIBLE);
     }
 
-    private void updateDataUsageView() {
+    private void updateDataUsageDialy() {
+        mDataUsageLocation = Settings.System.getIntForUser(mContext.getContentResolver(),
+                Settings.System.QS_DATAUSAGE_LOCATION, 1,
+                UserHandle.USER_CURRENT) == 1;
+
         if (mDataUsageView.isDataUsageEnabled() != 0) {
             if (NadUtils.isConnected(mContext)) {
-                mDataUsageLayout.setVisibility(View.VISIBLE);
-                mDataUsageImage.setVisibility(View.VISIBLE);
-                mDataUsageView.setVisibility(View.VISIBLE);
+                if (mDataUsageLocation) {
+                    mDataUsageLayout.setVisibility(View.VISIBLE);
+                    mDataUsageImage.setVisibility(View.VISIBLE);
+                    mDataUsageView.setVisibility(View.VISIBLE);
+                    mQsbDataUsageLayout.setVisibility(View.GONE);
+                    mQsbDataUsageImage.setVisibility(View.GONE);
+                    mQsbDataUsageView.setVisibility(View.GONE);
+                } else {
+                    mQsbDataUsageLayout.setVisibility(View.VISIBLE);
+                    mQsbDataUsageImage.setVisibility(View.VISIBLE);
+                    mQsbDataUsageView.setVisibility(View.VISIBLE);
+                    mDataUsageLayout.setVisibility(View.GONE);
+                    mDataUsageImage.setVisibility(View.GONE);
+                    mDataUsageView.setVisibility(View.GONE);
+                }
             } else {
-                mDataUsageView.setVisibility(View.GONE);
-                mDataUsageImage.setVisibility(View.GONE);
+                mQsbDataUsageLayout.setVisibility(View.GONE);
+                mQsbDataUsageImage.setVisibility(View.GONE);
+                mQsbDataUsageView.setVisibility(View.GONE);
                 mDataUsageLayout.setVisibility(View.GONE);
+                mDataUsageImage.setVisibility(View.GONE);
+                mDataUsageView.setVisibility(View.GONE);
             }
-        } else {
-            mDataUsageView.setVisibility(View.GONE);
-            mDataUsageImage.setVisibility(View.GONE);
-            mDataUsageLayout.setVisibility(View.GONE);
         }
     }
 
@@ -449,7 +473,7 @@ public class QuickStatusBarHeader extends RelativeLayout implements
         mExpanded = expanded;
         mHeaderQsPanel.setExpanded(expanded);
         updateEverything();
-        updateDataUsageView();
+        updateDataUsageDialy();
     }
 
     /**
@@ -727,6 +751,9 @@ public class QuickStatusBarHeader extends RelativeLayout implements
                     this, UserHandle.USER_ALL);
             resolver.registerContentObserver(Settings.System
                     .getUriFor(Settings.System.QS_DATAUSAGE), false,
+                    this, UserHandle.USER_ALL);
+            resolver.registerContentObserver(Settings.System
+                    .getUriFor(Settings.System.QS_DATAUSAGE_LOCATION), false,
                     this, UserHandle.USER_ALL);
         }
 

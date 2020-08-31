@@ -5213,6 +5213,12 @@ public final class Settings {
          */
         public static final String QS_DATAUSAGE = "qs_datausage";
 
+       /**
+         * toggle QS data usage location
+         * @hide
+         */
+        public static final String QS_DATAUSAGE_LOCATION = "qs_datausage_location";
+
         /**
          * IMPORTANT: If you add a new public settings you also have to add it to
          * PUBLIC_SETTINGS below. If the new setting is hidden you have to add
