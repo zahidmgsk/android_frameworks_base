@@ -126,7 +126,7 @@ public class QSPanel extends LinearLayout implements Tunable, Callback, Brightne
 
     private ImageView mMinBrightness;
     private ImageView mMaxBrightness;
-    private int mBrightnessSlider = 1;
+    private int mBrightnessSlider;
 
     private final Vibrator mVibrator;
     private boolean mQSBrightnessSlider;
@@ -517,7 +517,9 @@ public class QSPanel extends LinearLayout implements Tunable, Callback, Brightne
 
             if (mQSBrightnessSlider) {
                 removeView(mBrightnessView);
+                mBrightnessSlider = 1;
             }
+         addQSPanel();
         }
     }
 
