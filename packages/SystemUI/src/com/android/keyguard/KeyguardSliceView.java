@@ -223,10 +223,8 @@ public class KeyguardSliceView extends LinearLayout implements View.OnClickListe
         mClickActions.clear();
 
         final ContentResolver resolver = mContext.getContentResolver();
-        boolean mClockSelection = Settings.Secure.getIntForUser(resolver,
-                Settings.Secure.LOCKSCREEN_CLOCK_SELECTION, 0, UserHandle.USER_CURRENT) == 8;
-        int mTextClockAlignment = Settings.System.getIntForUser(resolver,
-                Settings.System.TEXT_CLOCK_ALIGNMENT, 0, UserHandle.USER_CURRENT);
+        int mLockDateAlignment = Settings.Secure.getIntForUser(resolver,
+                Settings.Secure.LOCK_DATE_ALIGNMENT, 1, UserHandle.USER_CURRENT);
 
         ListContent lc = new ListContent(getContext(), mSlice);
         SliceContent headerContent = lc.getHeader();
@@ -258,18 +256,17 @@ public class KeyguardSliceView extends LinearLayout implements View.OnClickListe
         final int subItemsCount = subItems.size();
         final int blendedColor = getTextColor();
         final int startIndex = mHasHeader ? 1 : 0; // First item is header; skip it
-        if (mClockSelection) {
-            switch (mTextClockAlignment) {
-                case 0:
-                default:
-                    mRowContainer.setGravity(Gravity.START);
-                    break;
-                case 1:
-                    mRowContainer.setGravity(Gravity.CENTER);
-                    break;
-            }
-        } else {
-            mRowContainer.setGravity(Gravity.CENTER);
+        switch (mLockDateAlignment) {
+            case 0:
+                mRowContainer.setGravity(Gravity.START);
+                break;
+            case 1:
+            default:
+                mRowContainer.setGravity(Gravity.CENTER);
+                break;
+            case 2:
+                mRowContainer.setGravity(Gravity.END);
+                break;
         }
         mRow.setVisibility(subItemsCount > 0 ? VISIBLE : GONE);
 

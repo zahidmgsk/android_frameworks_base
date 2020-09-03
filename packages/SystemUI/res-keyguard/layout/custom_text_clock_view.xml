@@ -22,6 +22,7 @@
     android:id="@+id/custom_text_clock_view"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    android:layout_alignParentTop="true"
     android:letterSpacing="0.03"
     android:orientation="vertical"
     android:textColor="?attr/wallpaperTextColor"

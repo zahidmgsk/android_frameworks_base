@@ -5722,15 +5722,6 @@ public final class Settings {
         private static final Validator QS_BLUR_INTENSITY_VALIDATOR = ANY_INTEGER_VALIDATOR;
 
         /**
-         * Text clock alignment
-         * @hide
-         */
-        public static final String TEXT_CLOCK_ALIGNMENT = "text_clock_alignment";
-
-        /** @hide */
-        private static final Validator TEXT_CLOCK_ALIGNMENT_VALIDATOR = ANY_INTEGER_VALIDATOR;
-
-        /**
          * FOD recognizing animation picker
          * @hide
          */
@@ -6674,7 +6665,6 @@ public final class Settings {
             DOZE_BRIGHTNESS,
             LOCK_SHOW_STATUS_BAR,
             QS_BLUR_INTENSITY,
-            TEXT_CLOCK_ALIGNMENT,
             DOUBLE_TAP_SLEEP_GESTURE,
             NAVIGATION_BAR_ARROW_KEYS,
             CUSTOM_BUTTON_BRIGHTNESS,
@@ -6877,7 +6867,6 @@ public final class Settings {
             PRIVATE_SETTINGS.add(PULSE_BRIGHTNESS);
             PRIVATE_SETTINGS.add(DOZE_BRIGHTNESS);
             PRIVATE_SETTINGS.add(LOCK_SHOW_STATUS_BAR);
-            PRIVATE_SETTINGS.add(TEXT_CLOCK_ALIGNMENT);
             PRIVATE_SETTINGS.add(INCALL_FEEDBACK_VIBRATE);
             PRIVATE_SETTINGS.add(AMBIENT_LIGHT_REPEAT_DIRECTION);
             PRIVATE_SETTINGS.add(NAVIGATION_BAR_ARROW_KEYS);
@@ -7077,7 +7066,6 @@ public final class Settings {
             VALIDATORS.put(DOZE_BRIGHTNESS, DOZE_BRIGHTNESS_VALIDATOR);
             VALIDATORS.put(LOCK_SHOW_STATUS_BAR,LOCK_SHOW_STATUS_BAR_VALIDATOR);
             VALIDATORS.put(QS_BLUR_INTENSITY, QS_BLUR_INTENSITY_VALIDATOR);
-            VALIDATORS.put(TEXT_CLOCK_ALIGNMENT, TEXT_CLOCK_ALIGNMENT_VALIDATOR);
             VALIDATORS.put(INCALL_FEEDBACK_VIBRATE, INCALL_FEEDBACK_VIBRATE_VALIDATOR);
             VALIDATORS.put(NAVIGATION_BAR_ARROW_KEYS,
                     NAVIGATION_BAR_ARROW_KEYS_VALIDATOR);
@@ -11189,6 +11177,30 @@ public final class Settings {
          * @hide
          */
         public static final String LOCKSCREEN_DATE_SELECTION = "lockscreen_date_selection";
+
+        /**
+         * Text clock alignment
+         * @hide
+         */
+        public static final String TEXT_CLOCK_ALIGNMENT = "text_clock_alignment";
+
+        /**
+         * Lockscreen Date Alignment
+         * @hide
+         */
+        public static final String LOCK_DATE_ALIGNMENT = "lock_date_alignment";
+
+        /**
+         * Lockscreen OwnerInfo Alignment
+         * @hide
+         */
+        public static final String LOCK_OWNERINFO_ALIGNMENT = "lock_ownerinfo_alignment";
+
+        /**
+         * Lockscreen Items padding
+         * @hide
+         */
+        public static final String LOCKSCREEN_ITEM_PADDING = "lockscreen_item_padding";
 
         /**
          * Whether the Lockdown button should be shown in the power menu.
