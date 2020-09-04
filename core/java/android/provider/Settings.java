@@ -6529,12 +6529,6 @@ public final class Settings {
                 SettingsValidators.InclusiveIntegerRangeValidator(0, 1);
 
         /**
-        * Music Card in VolumePanel
-        * @hide
-        */
-        public static final String MUSIC_VOLUME_PANEL_DIALOG = "music_volume_panel_dialog";
-
-       /**
          * toggle QS data usage location
          * @hide
          */
