@@ -197,6 +197,7 @@ public class VolumeDialogImpl implements VolumeDialog,
     private Animator mCurrAnimator;
 
     private boolean mLeftVolumeRocker;
+    private boolean mAppVolume;
     private boolean mHasAlertSlider;
 
     private int mTimeOut = 3;
@@ -221,6 +222,7 @@ public class VolumeDialogImpl implements VolumeDialog,
 
         void observe() {
             mContext.getContentResolver().registerContentObserver(Settings.System.getUriFor(Settings.System.AUDIO_PANEL_VIEW_POSITION), false, this, UserHandle.USER_ALL);
+            mContext.getContentResolver().registerContentObserver(Settings.System.getUriFor(Settings.System.SHOW_APP_VOLUME), false, this, UserHandle.USER_ALL);
             update();
         }
 
@@ -235,6 +237,8 @@ public class VolumeDialogImpl implements VolumeDialog,
              mTimeOut = Settings.System.getIntForUser(mContext.getContentResolver(), Settings.System.VOLUME_DIALOG_TIMEOUT, 3, UserHandle.USER_CURRENT);
              mLeftVolumeRocker = Settings.System.getIntForUser(mContext.getContentResolver(),
                 Settings.System.AUDIO_PANEL_VIEW_POSITION, 0,UserHandle.USER_CURRENT) == 1;
+             mAppVolume = Settings.System.getIntForUser(mContext.getContentResolver(),
+                Settings.System.SHOW_APP_VOLUME, 0,UserHandle.USER_CURRENT) == 1;
         }
     }
 
@@ -815,7 +819,9 @@ public class VolumeDialogImpl implements VolumeDialog,
                 mExpandRows.setExpanded(mExpanded);
             });
         }
-        updateAppRows();
+        if (mAppVolume) {
+            updateAppRows();
+        }
     }
 
     private void updateAppRows() {
