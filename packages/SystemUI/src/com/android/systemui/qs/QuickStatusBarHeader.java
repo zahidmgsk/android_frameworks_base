@@ -573,10 +573,8 @@ public class QuickStatusBarHeader extends RelativeLayout implements
     }
 
     private void updateDataUsageView() {
-        if (mDataUsageView.isDataUsageEnabled() != 0) {
-            if (ActionUtils.isConnected(mContext)) {
-                updateDataUsageDialy();
-            }
+        if (ActionUtils.isConnected(mContext)) {
+            updateDataUsageDialy();
         }
     }
 
@@ -584,20 +582,29 @@ public class QuickStatusBarHeader extends RelativeLayout implements
         mDataUsageLocation = Settings.System.getIntForUser(mContext.getContentResolver(),
                 Settings.System.QS_DATAUSAGE_LOCATION, 0,
                 UserHandle.USER_CURRENT) == 1;
-         if (mDataUsageLocation) {
-             mDataUsageLayout.setVisibility(View.VISIBLE);
-             mDataUsageImage.setVisibility(View.VISIBLE);
-             mDataUsageView.setVisibility(View.VISIBLE);
-             mQsbDataUsageLayout.setVisibility(View.GONE);
-             mQsbDataUsageImage.setVisibility(View.GONE);
-             mQsbDataUsageView.setVisibility(View.GONE);
-         } else {
-             mQsbDataUsageLayout.setVisibility(View.VISIBLE);
-             mQsbDataUsageImage.setVisibility(View.VISIBLE);
-             mQsbDataUsageView.setVisibility(View.VISIBLE);
-             mDataUsageLayout.setVisibility(View.GONE);
-             mDataUsageImage.setVisibility(View.GONE);
-             mDataUsageView.setVisibility(View.GONE);
+        if (mDataUsageView.isDataUsageEnabled() != 0) {
+            if (mDataUsageLocation) {
+                mDataUsageLayout.setVisibility(View.VISIBLE);
+                mDataUsageImage.setVisibility(View.VISIBLE);
+                mDataUsageView.setVisibility(View.VISIBLE);
+                mQsbDataUsageLayout.setVisibility(View.GONE);
+                mQsbDataUsageImage.setVisibility(View.GONE);
+                mQsbDataUsageView.setVisibility(View.GONE);
+            } else {
+                mQsbDataUsageLayout.setVisibility(View.VISIBLE);
+                mQsbDataUsageImage.setVisibility(View.VISIBLE);
+                mQsbDataUsageView.setVisibility(View.VISIBLE);
+                mDataUsageLayout.setVisibility(View.GONE);
+                mDataUsageImage.setVisibility(View.GONE);
+                mDataUsageView.setVisibility(View.GONE);
+            }
+        } else {
+            mQsbDataUsageLayout.setVisibility(View.GONE);
+            mQsbDataUsageImage.setVisibility(View.GONE);
+            mQsbDataUsageView.setVisibility(View.GONE);
+            mDataUsageLayout.setVisibility(View.GONE);
+            mDataUsageImage.setVisibility(View.GONE);
+            mDataUsageView.setVisibility(View.GONE);
         }
     }
 
