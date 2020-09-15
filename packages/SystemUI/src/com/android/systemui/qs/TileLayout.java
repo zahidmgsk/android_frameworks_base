@@ -73,7 +73,7 @@ public class TileLayout extends ViewGroup implements QSTileLayout {
         }
     }
 
-    @Override
+   /* @Override
     public boolean setMinRows(int minRows) {
         if (mMinRows != minRows) {
             mMinRows = minRows;
@@ -83,7 +83,7 @@ public class TileLayout extends ViewGroup implements QSTileLayout {
         return false;
     }
 
-    /*@Override
+    @Override
     public boolean setMaxColumns(int maxColumns) {
         mMaxColumns = maxColumns;
         return updateColumns();
@@ -155,23 +155,13 @@ public class TileLayout extends ViewGroup implements QSTileLayout {
         for (TileRecord record : mRecords) {
             record.tileView.textVisibility();
         }
-        if (updateColumns() && updateRows()) {
+        if (mColumns != mResourceColumns || mRows != mResourceRows) {
+            mColumns = mResourceColumns;
+            mRows = mResourceRows;
             return true;
         }
         requestLayout();
         return false;
-    }
-
-    private boolean updateColumns() {
-        int columns = mColumns;
-        mColumns = Math.min(mResourceColumns);
-        return columns != mColumns;
-    }
-
-    private boolean updateRows() {
-        int rows = mRows;
-        mColumns = Math.min(mResourceRows);
-        return rows != mRows;
     }
 
     @Override
