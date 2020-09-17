@@ -1,11 +1,13 @@
 package android.content.res;
 
+import android.annotation.SuppressLint;
 import android.os.SystemProperties;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Random;
 
+@SuppressLint("StaticUtils")
 public class ColorUtils {
     private static final String TAG = "ColorUtils";
     private static final float QS_MIN_LIGHTNESS = 0.0f;
