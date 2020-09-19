@@ -328,9 +328,9 @@ public class VolumeDialogImpl implements VolumeDialog,
         mWindow.setAttributes(lp);
 
         mDialog.setContentView(R.layout.volume_dialog);
+        mDialogView = mDialog.findViewById(R.id.volume_dialog);
         mDialogView.setLayoutDirection(
                 mLeftVolumeRocker ? View.LAYOUT_DIRECTION_LTR : View.LAYOUT_DIRECTION_RTL);
-        mDialogView = mDialog.findViewById(R.id.volume_dialog);
         mDialogView.setAlpha(0);
         mDialog.setCanceledOnTouchOutside(true);
         mDialog.setOnShowListener(dialog -> {
