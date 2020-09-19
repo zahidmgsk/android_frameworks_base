@@ -23,11 +23,13 @@ import static com.android.systemui.util.InjectionInflationController.VIEW_CONTEX
 import android.annotation.ColorInt;
 import android.app.ActivityManager;
 import android.app.AlarmManager;
+import android.content.ContentResolver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.res.ColorStateList;
 import android.content.res.Configuration;
 import android.content.res.Resources;
+import android.database.ContentObserver;
 import android.graphics.Color;
 import android.graphics.Rect;
 import android.media.AudioManager;
@@ -143,7 +145,10 @@ public class QuickStatusBarHeader extends RelativeLayout implements
     private Clock mClockView;
     private DateView mDateView;
     private BatteryMeterView mBatteryRemainingIcon;
+    private BatteryMeterView mBatteryMeterView;
     private RingerModeTracker mRingerModeTracker;
+
+    private boolean mLandscape;
 
     // Used for RingerModeTracker
     private final LifecycleRegistry mLifecycle = new LifecycleRegistry(this);
@@ -227,6 +232,11 @@ public class QuickStatusBarHeader extends RelativeLayout implements
         mBatteryRemainingIcon.setIsQsHeader(true);
         mBatteryRemainingIcon.setPercentShowMode(getBatteryPercentMode());
         mRingerModeTextView.setSelected(true);
+
+        mBatteryMeterView = findViewById(R.id.battery);
+        mBatteryMeterView.setIsQsHeader(true);
+        mBatteryMeterView.setPercentShowMode(getBatteryPercentMode());
+
         mNextAlarmTextView.setSelected(true);
     }
 
@@ -307,12 +317,9 @@ public class QuickStatusBarHeader extends RelativeLayout implements
     @Override
     protected void onConfigurationChanged(Configuration newConfig) {
         super.onConfigurationChanged(newConfig);
+        mLandscape = newConfig.orientation == Configuration.ORIENTATION_LANDSCAPE;
         updateResources();
-
-        // Update color schemes in landscape to use wallpaperTextColor
-        boolean shouldUseWallpaperTextColor =
-                newConfig.orientation == Configuration.ORIENTATION_LANDSCAPE;
-        mClockView.useWallpaperTextColor(shouldUseWallpaperTextColor);
+        updateStatusbarProperties();
     }
 
     @Override
@@ -364,6 +371,11 @@ public class QuickStatusBarHeader extends RelativeLayout implements
         updateHeaderTextContainerAlphaAnimator();
     }
 
+    private void updateSettings() {
+        updateBatteryInQs();
+        updateStatusbarProperties();
+    }
+
     private void updateStatusIconAlphaAnimator() {
         mStatusIconsAlphaAnimator = new TouchAnimator.Builder()
                 .addFloat(mQuickQsStatusIcons, "alpha", 1, 0, 0)
@@ -384,7 +396,16 @@ public class QuickStatusBarHeader extends RelativeLayout implements
                BatteryMeterView.MODE_ON : BatteryMeterView.MODE_ESTIMATE;
     }
 
+    private void updateBatteryInQs() {
+        boolean showBatteryInQs = Settings.System.getIntForUser(mContext.getContentResolver(),
+                Settings.System.QS_BATTERY_LOCATION_BAR, 0,
+                UserHandle.USER_CURRENT) == 1;
+        mBatteryMeterView.setVisibility(showBatteryInQs ? View.VISIBLE : View.GONE);
+        mBatteryRemainingIcon.setVisibility(showBatteryInQs ? View.GONE : View.VISIBLE);
+    }
+
     public void setBatteryPercentMode() {
+        mBatteryMeterView.setPercentShowMode(getBatteryPercentMode());
         mBatteryRemainingIcon.setPercentShowMode(getBatteryPercentMode());
     }
 
@@ -589,6 +610,9 @@ public class QuickStatusBarHeader extends RelativeLayout implements
         float intensity = getColorIntensity(colorForeground);
         int fillColor = mDualToneHandler.getSingleColor(intensity);
         mBatteryRemainingIcon.onDarkChanged(tintArea, intensity, fillColor);
+        // Use SystemUI context to get battery meter colors, and let it use the default tint (white)
+        mBatteryMeterView.setColorsFromContext(mHost.getContext());
+        mBatteryMeterView.onDarkChanged(new Rect(), 0, DarkIconDispatcher.DEFAULT_ICON_TINT);
     }
 
     public void setCallback(Callback qsPanelCallback) {
@@ -650,5 +674,30 @@ public class QuickStatusBarHeader extends RelativeLayout implements
                     mKeyguardExpansionFraction));
             updateHeaderTextContainerAlphaAnimator();
         }
+    }
+
+    private class SettingsObserver extends ContentObserver {
+        SettingsObserver(Handler handler) {
+            super(handler);
+        }
+
+        void observe() {
+            ContentResolver resolver = getContext().getContentResolver();
+            resolver.registerContentObserver(Settings.System.getUriFor(
+                    Settings.System.QS_BATTERY_LOCATION_BAR), false,
+                    this, UserHandle.USER_ALL);
+        }
+
+        @Override
+        public void onChange(boolean selfChange) {
+            updateSettings();
+        }
+    }
+
+    // Update color schemes in landscape to use wallpaperTextColor
+    private void updateStatusbarProperties() {
+        boolean shouldUseWallpaperTextColor = (mLandscape);
+        mBatteryMeterView.useWallpaperTextColor(shouldUseWallpaperTextColor);
+        mClockView.useWallpaperTextColor(shouldUseWallpaperTextColor);
     }
 }
