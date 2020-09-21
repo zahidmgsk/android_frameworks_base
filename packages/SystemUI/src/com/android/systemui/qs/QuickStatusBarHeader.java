@@ -163,6 +163,7 @@ public class QuickStatusBarHeader extends RelativeLayout implements
     private int mCutOutPaddingRight;
     private float mExpandedHeaderAlpha = 1.0f;
     private float mKeyguardExpansionFraction;
+    private SettingsObserver mSettingsObserver = new SettingsObserver(mHandler);
 
     @Inject
     public QuickStatusBarHeader(@Named(VIEW_CONTEXT) Context context, AttributeSet attrs,
@@ -179,6 +180,7 @@ public class QuickStatusBarHeader extends RelativeLayout implements
                 new ContextThemeWrapper(context, R.style.QSHeaderTheme));
         mCommandQueue = commandQueue;
         mRingerModeTracker = ringerModeTracker;
+        mSettingsObserver.observe();
     }
 
     @Override
@@ -235,11 +237,12 @@ public class QuickStatusBarHeader extends RelativeLayout implements
         mRingerModeTextView.setSelected(true);
 
         mBatteryMeterView = findViewById(R.id.battery);
-        mBatteryMeterView.setIsQsHeader(true);
+        mBatteryMeterView.setForceShowPercent(true);
         mBatteryMeterView.setOnClickListener(this);
         mBatteryMeterView.setPercentShowMode(getBatteryPercentMode());
 
         mNextAlarmTextView.setSelected(true);
+        updateSettings();
     }
 
     public QuickQSPanel getHeaderQsPanel() {
@@ -704,5 +707,6 @@ public class QuickStatusBarHeader extends RelativeLayout implements
         boolean shouldUseWallpaperTextColor = (mLandscape);
         mBatteryMeterView.useWallpaperTextColor(shouldUseWallpaperTextColor);
         mClockView.useWallpaperTextColor(shouldUseWallpaperTextColor);
+        updateBatteryInQs();
     }
 }
