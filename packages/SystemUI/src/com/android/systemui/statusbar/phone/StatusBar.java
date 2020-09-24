@@ -384,6 +384,7 @@ public class StatusBar extends SystemUI implements DemoMode,
     private final SuperStatusBarViewFactory mSuperStatusBarViewFactory;
     private final LightsOutNotifController mLightsOutNotifController;
     private final InitController mInitController;
+    private final FlashlightController mFlashlightController;
     private final DarkIconDispatcher mDarkIconDispatcher;
     private final PluginDependencyProvider mPluginDependencyProvider;
     private final KeyguardDismissUtil mKeyguardDismissUtil;
@@ -588,7 +589,6 @@ public class StatusBar extends SystemUI implements DemoMode,
         }
     };
 
-    private FlashlightController mFlashlightController;
     private KeyguardUserSwitcher mKeyguardUserSwitcher;
     private final UserSwitcherController mUserSwitcherController;
     private final NetworkController mNetworkController;
@@ -718,6 +718,7 @@ public class StatusBar extends SystemUI implements DemoMode,
             StatusBarKeyguardViewManager statusBarKeyguardViewManager,
             ViewMediatorCallback viewMediatorCallback,
             InitController initController,
+            FlashlightController flashlightController,
             DarkIconDispatcher darkIconDispatcher,
             @Named(TIME_TICK_HANDLER_NAME) Handler timeTickHandler,
             PluginDependencyProvider pluginDependencyProvider,
@@ -798,6 +799,7 @@ public class StatusBar extends SystemUI implements DemoMode,
         mStatusBarKeyguardViewManager = statusBarKeyguardViewManager;
         mKeyguardViewMediatorCallback = viewMediatorCallback;
         mInitController = initController;
+        mFlashlightController = flashlightController;
         mDarkIconDispatcher = darkIconDispatcher;
         mPluginDependencyProvider = pluginDependencyProvider;
         mKeyguardDismissUtil = keyguardDismissUtil;
@@ -1275,8 +1277,6 @@ public class StatusBar extends SystemUI implements DemoMode,
 
         // Private API call to make the shadows look better for Recents
         ThreadedRenderer.overrideProperty("ambientRatio", String.valueOf(1.5f));
-
-        mFlashlightController = Dependency.get(FlashlightController.class);
     }
 
     @VisibleForTesting
