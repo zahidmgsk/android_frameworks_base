@@ -3275,19 +3275,20 @@ public class PhoneWindowManager implements WindowManagerPolicy {
             }
 
             if (homeKey) {
+            final KeyInterceptionInfo info =
+                    mWindowManagerInternal.getKeyInterceptionInfoFromToken(focusedToken);
+            if (info != null) {
                 // If a system window has focus, then it doesn't make sense
                 // right now to interact with applications.
-                WindowManager.LayoutParams attrs = win != null ? win.getAttrs() : null;
-                if (attrs != null) {
-                    final int type = attrs.type;
-                    if (type == WindowManager.LayoutParams.TYPE_KEYGUARD_DIALOG
-                            || (attrs.privateFlags & PRIVATE_FLAG_KEYGUARD) != 0) {
+                if (info.layoutParamsType == TYPE_KEYGUARD_DIALOG
+                        || (info.layoutParamsType == TYPE_NOTIFICATION_SHADE
+                        && isKeyguardShowing())) {
                         // the "app" is keyguard, so give it the key
                         return 0;
                     }
                     final int typeCount = WINDOW_TYPES_WHERE_HOME_DOESNT_WORK.length;
                     for (int i = 0; i < typeCount; i++) {
-                        if (type == WINDOW_TYPES_WHERE_HOME_DOESNT_WORK[i]) {
+                        if (info.layoutParamsType == WINDOW_TYPES_WHERE_HOME_DOESNT_WORK[i]) {
                             // don't do anything, but also don't pass it to the app
                             return -1;
                         }
