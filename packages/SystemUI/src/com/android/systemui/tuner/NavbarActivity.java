@@ -20,15 +20,18 @@ import androidx.preference.PreferenceFragment;
 
 import com.android.systemui.Dependency;
 import com.android.systemui.R;
-import com.android.systemui.SystemUIFactory;
 import com.android.systemui.tuner.TunerActivity;
+import com.android.systemui.dagger.SystemUIRootComponent;
+import com.android.systemui.SystemUIFactory;
 
 public class NavbarActivity extends TunerActivity {
 
     private static final String TAG_TUNER = "tuner";
 
+    private SystemUIRootComponent mRootComponent;
+
     protected void onCreate(Bundle savedInstanceState) {
-        Dependency.initDependencies(SystemUIFactory.getInstance().getRootComponent());
+        mRootComponent = SystemUIFactory.getInstance().getRootComponent();
         super.onCreate(savedInstanceState);
 
         if (getFragmentManager().findFragmentByTag(TAG_TUNER) == null) {
