@@ -32,12 +32,14 @@ import android.util.ArrayMap;
 import android.util.ArraySet;
 
 import com.android.internal.util.ArrayUtils;
-import com.android.systemui.dagger.qualifiers.BgHandler
+import com.android.systemui.dagger.qualifiers.Background;
 import com.android.systemui.DemoMode;
 import com.android.systemui.qs.QSTileHost;
 import com.android.systemui.settings.CurrentUserTracker;
 import com.android.systemui.statusbar.phone.StatusBarIconController;
 import com.android.systemui.util.leak.LeakDetector;
+
+import com.android.systemui.broadcast.BroadcastDispatcher;
 
 import java.util.HashMap;
 import java.util.HashSet;
@@ -67,12 +69,13 @@ public class CustomSettingsServiceImpl extends CustomSettingsService {
     /**
      */
     @Inject
-    public CustomSettingsServiceImpl(Context context, @BgHandler Handler bgHandler) {
+    public CustomSettingsServiceImpl(Context context, @Background Handler bgHandler) {
         mContext = context;
         mContentResolver = mContext.getContentResolver();
+        BroadcastDispatcher broadcastDispatcher = Dependency.get(BroadcastDispatcher.class);
 
         mCurrentUser = ActivityManager.getCurrentUser();
-        mUserTracker = new CurrentUserTracker(mContext) {
+        mUserTracker = new CurrentUserTracker(broadcastDispatcher) {
             @Override
             public void onUserSwitched(int newUserId) {
                 mCurrentUser = newUserId;
