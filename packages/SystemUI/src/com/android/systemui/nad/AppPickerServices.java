@@ -21,6 +21,10 @@ public class AppPickerServices extends VendorServices {
         }
     }
 
+    public AppPickerServices(Context context) {
+        super(context);
+    }
+
     private final BroadcastReceiver mBroadcastReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
