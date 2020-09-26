@@ -1,5 +1,6 @@
 package android.content.res;
 
+import android.annotation.SuppressLint;
 import android.graphics.Color;
 import android.os.SystemProperties;
 import android.util.Log;
@@ -7,9 +8,9 @@ import android.util.Log;
 import java.util.ArrayList;
 import java.util.Arrays;
 
+@SuppressLint("StaticUtils")
 public class AccentUtils {
     private static final String TAG = "AccentUtils";
-
 
     private static final String ACCENT_COLOR_PROP = "persist.sys.nad.accent_color";
 
