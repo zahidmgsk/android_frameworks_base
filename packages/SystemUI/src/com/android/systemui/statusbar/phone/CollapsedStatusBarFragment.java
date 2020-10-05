@@ -173,6 +173,7 @@ public class CollapsedStatusBarFragment extends Fragment implements CommandQueue
         mBatteryMeterView.addCallback(mBatteryMeterViewCallback);
         mClockView = mStatusBar.findViewById(R.id.clock);
         mNadLogo = (ImageView) mStatusBar.findViewById(R.id.status_bar_logo);
+        Dependency.get(DarkIconDispatcher.class).addDarkReceiver(mNadLogo);
         mCustomCarrierLabel = mStatusBar.findViewById(R.id.statusbar_carrier_text);
         updateSettings(false);
         showSystemIconArea(false);
