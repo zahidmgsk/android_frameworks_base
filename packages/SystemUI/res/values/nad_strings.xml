@@ -86,9 +86,6 @@
 
     <string name="status_bar_vpn">VPN</string>
 
-    <!-- Advanced Reboot -->
-    <string name="global_action_restart_advanced">Advanced reboot</string>
-
     <!-- Heads Up QS Tile -->
     <string name="quick_settings_heads_up_label">Heads up</string>
     <string name="accessibility_quick_settings_heads_up_off">Heads up off.</string>
