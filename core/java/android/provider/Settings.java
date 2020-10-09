@@ -5426,6 +5426,12 @@ public final class Settings {
         public static final String STATUS_BAR_CUSTOM_HEADER_IMAGE = "status_bar_custom_header_image";
 
         /**
+         * Controls whether to show notification headers
+         * @hide
+         */
+        public static final String NOTIFICATION_HEADERS = "notification_headers";
+
+        /**
          * @hide
          */
         public static final String STATUS_BAR_FILE_HEADER_IMAGE = "status_bar_file_header_image";
