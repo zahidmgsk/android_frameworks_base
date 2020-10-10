@@ -183,7 +183,7 @@ public class GamingModeTile extends QSTileImpl<BooleanState> {
 
             if (hwKeysEnabled && mHasHWKeys) {
                 Settings.Secure.putInt(mResolver,
-                        Settings.Secure.HARDWARE_KEYS_DISABLE, 1);
+                        Settings.Secure.HARDWARE_KEYS_ENABLE, 1);
             }
 
             if (brightnessEnabled) {
@@ -266,7 +266,7 @@ public class GamingModeTile extends QSTileImpl<BooleanState> {
         Prefs.putInt(mContext, KEY_NAVBAR_STATE, Settings.System.getInt(mResolver,
                 Settings.System.FORCE_SHOW_NAVBAR, 1));
         Prefs.putInt(mContext, KEY_HW_KEYS_STATE, Settings.Secure.getInt(mResolver,
-                Settings.Secure.HARDWARE_KEYS_DISABLE, 0));
+                Settings.Secure.HARDWARE_KEYS_ENABLE, 0));
         Prefs.putInt(mContext, KEY_BRIGHTNESS_STATE, Settings.System.getInt(mResolver,
                 Settings.System.SCREEN_BRIGHTNESS_MODE,
                 Settings.System.SCREEN_BRIGHTNESS_MODE_AUTOMATIC));
@@ -284,7 +284,7 @@ public class GamingModeTile extends QSTileImpl<BooleanState> {
                 Settings.System.FORCE_SHOW_NAVBAR,
                 Prefs.getInt(mContext, KEY_NAVBAR_STATE, 1));
         Settings.Secure.putInt(mResolver,
-                Settings.Secure.HARDWARE_KEYS_DISABLE,
+                Settings.Secure.HARDWARE_KEYS_ENABLE,
                 Prefs.getInt(mContext, KEY_HW_KEYS_STATE, 0));
         Settings.System.putInt(mResolver,
                 Settings.System.SCREEN_BRIGHTNESS_MODE,
