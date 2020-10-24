@@ -5417,6 +5417,12 @@ public final class Settings {
         public static final String NOTIFICATION_HEADERS = "notification_headers";
 
         /**
+         * whether to show center notification headers
+         * @hide
+         */
+        public static final String CENTER_NOTIFICATION_HEADERS = "center_notification_headers";
+
+        /**
          * @hide
          */
         public static final String STATUS_BAR_FILE_HEADER_IMAGE = "status_bar_file_header_image";
@@ -5741,6 +5747,7 @@ public final class Settings {
             PRIVATE_SETTINGS.add(STATUSBAR_CLOCK_DATE_STYLE);
             PRIVATE_SETTINGS.add(STATUSBAR_CLOCK_DATE_FORMAT);
             PRIVATE_SETTINGS.add(STATUSBAR_CLOCK_DATE_POSITION);
+            PRIVATE_SETTINGS.add(CENTER_NOTIFICATION_HEADERS);
         }
 
         /**

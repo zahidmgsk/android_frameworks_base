@@ -105,6 +105,7 @@ public class SystemSettings {
         Settings.System.GAMING_MODE_MEDIA_ENABLED,
         Settings.System.GAMING_MODE_MEDIA,
         Settings.System.NOTIFICATION_HEADERS,
+        Settings.System.CENTER_NOTIFICATION_HEADERS,
         Settings.System.STATUS_BAR_CLOCK,
         Settings.System.STATUSBAR_CLOCK_STYLE,
         Settings.System.STATUS_BAR_CLOCK_SECONDS,
