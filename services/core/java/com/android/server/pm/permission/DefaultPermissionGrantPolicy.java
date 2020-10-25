@@ -216,6 +216,12 @@ public final class DefaultPermissionGrantPolicy {
 
     private static final int MSG_READ_DEFAULT_PERMISSION_EXCEPTIONS = 1;
 
+    private static final Set<String> PULSE_EQ_PERMISSIONS = new ArraySet<>();
+    static {
+        PULSE_EQ_PERMISSIONS.add(Manifest.permission.MODIFY_AUDIO_SETTINGS);
+        PULSE_EQ_PERMISSIONS.add(Manifest.permission.RECORD_AUDIO);
+    }
+
     private static final String ACTION_TRACK = "com.android.fitness.TRACK";
 
     private final Handler mHandler;
@@ -926,6 +932,9 @@ public final class DefaultPermissionGrantPolicy {
 
         // Google Markup
         grantSystemFixedPermissionsToSystemPackage(pm, "com.google.android.markup", userId, STORAGE_PERMISSIONS);
+
+        // Support Pulse on dirty flashes
+        grantSystemFixedPermissionsToSystemPackage(pm, "com.android.systemui", userId, PULSE_EQ_PERMISSIONS);
     }
 
     private String getDefaultSystemHandlerActivityPackageForCategory(PackageManagerWrapper pm,
