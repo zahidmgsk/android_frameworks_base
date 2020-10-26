@@ -51,6 +51,7 @@
             android:id="@+id/btn_clear_all"
             android:layout_width="48dp"
             android:layout_height="48dp"
+            android:layout_gravity="end|center_vertical"
             android:src="@drawable/status_bar_notification_section_header_clear_btn"
             android:contentDescription="@string/accessibility_notification_section_header_gentle_clear_all"
             android:scaleType="center"
