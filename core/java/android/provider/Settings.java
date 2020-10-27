@@ -4944,6 +4944,12 @@ public final class Settings {
         public static final String QS_BATTERY_LOCATION_BAR = "qs_battery_location_bar";
 
         /**
+         * toogle show battery percent & estimate together
+         * @hide
+         */
+        public static final String QS_SHOW_BATTERY_PERCENT_ESTIMATE = "qs_show_battery_percent_estimate";
+
+        /**
          * Volume rocker wake
          * @hide
          */

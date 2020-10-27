@@ -120,6 +120,7 @@ public class BatteryMeterView extends LinearLayout implements
 
     public int mBatteryStyle = BATTERY_STYLE_PORTRAIT;
     public int mShowBatteryPercent;
+    public boolean mShowQsPercentEstimate;
 
     private final ArrayList<BatteryMeterViewCallbacks> mCallbacks = new ArrayList<>();
 
@@ -263,6 +264,9 @@ public class BatteryMeterView extends LinearLayout implements
     }
 
     private void updateSettings() {
+        mShowQsPercentEstimate = Settings.System.getIntForUser(mContext.getContentResolver(),
+                Settings.System.QS_SHOW_BATTERY_PERCENT_ESTIMATE, 0,
+                UserHandle.USER_CURRENT) == 1;
         updateSbBatteryStyle();
         updateSbShowBatteryPercent();
     }
@@ -366,12 +370,21 @@ public class BatteryMeterView extends LinearLayout implements
             if (mShowPercentMode == MODE_ESTIMATE && !mCharging) {
                 mBatteryController.getEstimatedTimeRemainingString((String estimate) -> {
                     if (estimate != null) {
-                        if (mBatteryPercentView != null) {
-                            batteryPercentViewSetText(estimate);
+                        if (mShowQsPercentEstimate) {
+                            if (mBatteryPercentView != null) {
+                                batteryPercentViewSetText(NumberFormat.getPercentInstance().format(mLevel / 100f) + " | " + estimate);
+                            }
+                            setContentDescription(getContext().getString(
+                                    R.string.accessibility_battery_level_with_estimate,
+                                    mLevel, estimate));
+                        } else {
+                            if (mBatteryPercentView != null) {
+                                batteryPercentViewSetText(estimate);
+                            }
+                            setContentDescription(getContext().getString(
+                                    R.string.accessibility_battery_level_with_estimate,
+                                    mLevel, estimate));
                         }
-                        setContentDescription(getContext().getString(
-                                R.string.accessibility_battery_level_with_estimate,
-                                mLevel, estimate));
                     } else {
                         setPercentTextAtCurrentLevel();
                     }
@@ -570,6 +583,9 @@ public class BatteryMeterView extends LinearLayout implements
                     false, this, UserHandle.USER_ALL);
             resolver.registerContentObserver(Settings.System.getUriFor(
                     Settings.System.STATUS_BAR_SHOW_BATTERY_PERCENT),
+                    false, this, UserHandle.USER_ALL);
+            resolver.registerContentObserver(Settings.System.getUriFor(
+                    Settings.System.QS_SHOW_BATTERY_PERCENT_ESTIMATE),
                     false, this, UserHandle.USER_ALL);
         }
 
