@@ -42,6 +42,8 @@ import androidx.dynamicanimation.animation.FloatPropertyCompat;
 import androidx.dynamicanimation.animation.SpringForce;
 
 import com.android.systemui.R;
+import com.android.systemui.Dependency;
+import com.android.systemui.CustomSettingsService;
 import com.android.systemui.nad.header.StatusBarHeaderMachine;
 import com.android.systemui.qs.customize.QSCustomizer;
 import com.android.systemui.util.animation.PhysicsAnimator;
@@ -50,7 +52,10 @@ import com.android.systemui.util.animation.PhysicsAnimator;
  * Wrapper view with background which contains {@link QSPanel} and {@link BaseStatusBarHeader}
  */
 public class QSContainerImpl extends FrameLayout implements
-        StatusBarHeaderMachine.IStatusBarHeaderMachineObserver {
+        StatusBarHeaderMachine.IStatusBarHeaderMachineObserver,
+        CustomSettingsService.CustomSettingsObserver {
+
+    public static final String QS_SHOW_DRAG_HANDLE = "qs_show_drag_handle";
 
     private final Point mSizePoint = new Point();
     private static final FloatPropertyCompat<QSContainerImpl> BACKGROUND_BOTTOM =
@@ -142,12 +147,14 @@ public class QSContainerImpl extends FrameLayout implements
         super.onAttachedToWindow();
         mStatusBarHeaderMachine.addObserver(this);
         mStatusBarHeaderMachine.updateEnablement();
+        Dependency.get(CustomSettingsService.class).addIntObserver(this, QS_SHOW_DRAG_HANDLE);
     }
 
     @Override
     protected void onDetachedFromWindow() {
         super.onDetachedFromWindow();
         mStatusBarHeaderMachine.removeObserver(this);
+        Dependency.get(CustomSettingsService.class).removeObserver(this);
     }
 
     private void setBackgroundBottom(int value) {
@@ -497,5 +504,16 @@ public class QSContainerImpl extends FrameLayout implements
         mStatusBarBackground.setVisibility(hideStatusbar ? View.INVISIBLE : View.VISIBLE);
         mStatusBarBackground.setBackgroundColor(mHeaderImageEnabled ? Color.TRANSPARENT : getResources().getColor(R.color.quick_settings_status_bar_background_color));
         applyHeaderBackgroundShadow();
+    }
+
+    private void setHideDragHandle(boolean hide) {
+        mDragHandle.setVisibility(hide ? View.GONE : View.VISIBLE);
+    }
+
+    @Override
+    public void onIntSettingChanged(String key, Integer newValue) {
+        if (QS_SHOW_DRAG_HANDLE.equals(key)) {
+            setHideDragHandle(newValue != null && newValue == 0);
+        }
     }
 }
