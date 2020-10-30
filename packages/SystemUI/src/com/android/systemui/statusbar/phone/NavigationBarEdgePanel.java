@@ -27,6 +27,8 @@ import android.graphics.Point;
 import android.graphics.Rect;
 import android.os.SystemClock;
 import android.os.VibrationEffect;
+import android.os.UserHandle;
+import android.provider.Settings;
 import android.util.MathUtils;
 import android.view.ContextThemeWrapper;
 import android.view.Gravity;
@@ -188,6 +190,8 @@ public class NavigationBarEdgePanel extends View implements NavigationEdgeBackPl
      * The current translation of the arrow
      */
     private float mCurrentTranslation;
+    private boolean mBackArrowVisibility;
+
     /**
      * Where the arrow will be in the resting position.
      */
@@ -329,6 +333,7 @@ public class NavigationBarEdgePanel extends View implements NavigationEdgeBackPl
 
         loadColors(context);
         updateArrowDirection();
+        setBackArrowVisibility();
 
         mSwipeThreshold = context.getResources()
                 .getDimension(R.dimen.navigation_edge_action_drag_threshold);
@@ -383,6 +388,13 @@ public class NavigationBarEdgePanel extends View implements NavigationEdgeBackPl
     public void setInsets(int leftInset, int rightInset) {
         mLeftInset = leftInset;
         mRightInset = rightInset;
+    }
+
+    @Override
+    public void setBackArrowVisibility() {
+        mBackArrowVisibility = Settings.Secure.getIntForUser(mContext.getContentResolver(),
+                Settings.Secure.HIDE_BACK_ARROW_GESTURE, 0,
+                UserHandle.USER_CURRENT) == 1;
     }
 
     @Override
@@ -448,7 +460,7 @@ public class NavigationBarEdgePanel extends View implements NavigationEdgeBackPl
                 resetOnDown();
                 mStartX = event.getX();
                 mStartY = event.getY();
-                setVisibility(VISIBLE);
+                setVisibility(mBackArrowVisibility ? INVISIBLE : VISIBLE);
                 updatePosition(event.getY());
                 mRegionSamplingHelper.start(mSamplingRect);
                 mWindowManager.updateViewLayout(this, mLayoutParams);

@@ -252,5 +252,6 @@ public class SecureSettingsValidators {
         VALIDATORS.put(
                 Secure.ACCESSIBILITY_BUTTON_TARGETS,
                 ACCESSIBILITY_SHORTCUT_TARGET_LIST_VALIDATOR);
+        VALIDATORS.put(Secure.HIDE_BACK_ARROW_GESTURE, BOOLEAN_VALIDATOR);
     }
 }

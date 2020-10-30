@@ -9872,6 +9872,12 @@ public final class Settings {
         public static final String TAP_GESTURE = "tap_gesture";
 
         /**
+         * Whether to show or hide the arrow for back gesture
+         * @hide
+         */
+        public static final String HIDE_BACK_ARROW_GESTURE = "hide_back_arrow_gesture";
+
+        /**
          * Controls whether the people strip is enabled.
          * @hide
          */
