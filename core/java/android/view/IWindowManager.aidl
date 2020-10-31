@@ -778,4 +778,9 @@ interface IWindowManager
      * Send some ActionHandler commands to WindowManager.
      */
     void sendCustomAction(in Intent intent);
+
+    /**
+     * Notifies DisplayPolicy that overlays changed.
+     */
+    void onOverlayChanged();
 }
