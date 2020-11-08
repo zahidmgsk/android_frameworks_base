@@ -79,6 +79,10 @@
     <integer name="config_longPressOnCameraKeyBehavior">0</integer>
     <integer name="config_doubleTapOnCameraKeyBehavior">0</integer>
 
+    <!-- Button brightness -->
+    <bool name="config_button_brightness_support">false</bool>
+    <integer name="config_button_brightness_default">128</integer>
+
     <!-- Older rotation sensors are not setting event.timestamp correctly. Setting to
          true will use SystemClock.elapsedRealtimeNanos() to set timestamp. -->
     <bool name="config_useSystemClockforRotationSensor">false</bool>
