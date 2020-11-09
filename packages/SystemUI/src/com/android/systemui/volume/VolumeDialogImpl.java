@@ -510,7 +510,8 @@ public class VolumeDialogImpl implements VolumeDialog,
 
     @SuppressLint("InflateParams")
     private void initAppRow(final VolumeRow row, final AppTrackData data) {
-        row.view = LayoutInflater.from(mContext).inflate(R.layout.volume_dialog_row, null);
+        row.view = mDialog.getLayoutInflater().inflate(R.layout.volume_dialog_row,
+                mDialogRowsView, false);
 
         row.packageName = data.getPackageName();
         row.isAppVolumeRow = true;
@@ -814,9 +815,7 @@ public class VolumeDialogImpl implements VolumeDialog,
                 mExpandRows.setExpanded(mExpanded);
             });
         }
-        if (expand) {
-            updateAppRows();
-        }
+        updateAppRows();
     }
 
     private void updateAppRows() {
@@ -2061,21 +2060,20 @@ public class VolumeDialogImpl implements VolumeDialog,
 
         @Override
         public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
-            if (mRow.ss == null) return;
             if (D.BUG) Log.d(TAG, AudioSystem.streamToString(mRow.stream)
                     + " onProgressChanged " + progress + " fromUser=" + fromUser);
-            if ((mRow.stream == STREAM_RING && mHasAlertSlider || mRow.stream == STREAM_NOTIFICATION)) {
-                if (mRow.ss.muted) {
-                    seekBar.setProgress(0);
-                    return;
-                }
-            }
             if (!fromUser) return;
             if (mRow.isAppVolumeRow) {
                 mController.getAudioManager().setAppVolume(mRow.packageName, progress * 0.01f);
                 return;
             }
             if (mRow.ss == null) return;
+            if ((mRow.stream == STREAM_RING && mHasAlertSlider || mRow.stream == STREAM_NOTIFICATION)) {
+                if (mRow.ss.muted) {
+                    seekBar.setProgress(0);
+                    return;
+                }
+            }
             if (mRow.ss.levelMin > 0) {
                 final int minProgress = mRow.ss.levelMin * 100;
                 if (progress < minProgress) {
