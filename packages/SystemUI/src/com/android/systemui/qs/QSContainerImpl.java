@@ -287,7 +287,6 @@ public class QSContainerImpl extends FrameLayout implements
         if (disabled == mQsDisabled) return;
         mQsDisabled = disabled;
         mBackground.setVisibility(mQsDisabled ? View.GONE : View.VISIBLE);
-        updateStatusbarVisibility();
     }
 
     private void updateResources() {
@@ -492,13 +491,11 @@ public class QSContainerImpl extends FrameLayout implements
 
     private void updateStatusbarVisibility() {
         boolean hideGradient = mLandscape || mHeaderImageEnabled;
-        boolean hideStatusbar = mLandscape && !mHeaderImageEnabled;
+        boolean hideStatusbar = (mLandscape || mForceHideQsStatusBar) && !mHeaderImageEnabled;
 
         mBackgroundGradient.setVisibility(hideGradient ? View.INVISIBLE : View.VISIBLE);
         mStatusBarBackground.setVisibility(hideStatusbar ? View.INVISIBLE : View.VISIBLE);
-        if (hideGradient) {
-            mStatusBarBackground.setBackgroundColor(Color.TRANSPARENT);
-        }
+        mStatusBarBackground.setBackgroundColor(mHeaderImageEnabled ? Color.TRANSPARENT : getResources().getColor(R.color.quick_settings_status_bar_background_color));
         applyHeaderBackgroundShadow();
     }
 }
