@@ -37,9 +37,6 @@
     <dimen name="qs_header_image_top_margin">4dp</dimen>
     <dimen name="qs_header_image_bottom_margin">4dp</dimen>
 
-    <!-- Largest size an avatar might need to be drawn in the power menu user picker -->
-    <dimen name="global_actions_avatar_size">24dp</dimen>
-
     <!-- The starting padding for the clock in the status bar. -->
     <dimen name="status_bar_right_clock_starting_padding">2dp</dimen>
 

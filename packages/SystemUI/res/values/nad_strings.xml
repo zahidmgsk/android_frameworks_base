@@ -93,25 +93,6 @@
     <string name="accessibility_quick_settings_heads_up_changed_off">Heads up turned off.</string>
     <string name="accessibility_quick_settings_heads_up_changed_on">Heads up turned on.</string>
 
-    <!-- Advanced restart -->
-    <string name="global_action_reboot">Restart</string>
-    <string name="global_action_reboot_system">System</string>
-    <string name="global_action_reboot_progress">Restarting\u2026</string>
-    <string name="global_action_reboot_recovery">Recovery</string>
-    <string name="global_action_reboot_ui">SystemUI</string>
-    <string name="global_action_reboot_recovery_progress">Restarting to recovery mode\u2026</string>
-    <string name="global_action_reboot_bootloader">Bootloader</string>
-    <string name="global_action_reboot_bootloader_progress">Restarting to bootloader mode\u2026</string>
-    <string name="global_action_reboot_fastboot">Fastbootd</string>
-    <string name="global_action_reboot_fastboot_progress">Restarting to fastbootd mode\u2026</string>
-    <string name="global_action_settings">Settings</string>
-    <string name="global_action_screenshot">Screenshot</string>
-    <string name="global_action_screenrecord">Screenrecord</string>
-    <string name="global_action_flashlight">Flashlight</string>
-
-    <!-- Label for current user in power menu options dialog -->
-    <string name="global_action_current_user">Current</string>
-
     <!-- Heads up snooze toast -->
     <string name="heads_up_snooze_message_one_minute"><xliff:g id="string">%s</xliff:g> - Peeking notification are snoozing for 1 minute.</string>
     <string name="heads_up_snooze_message"><xliff:g id="string">%1$s</xliff:g> - Peeking notifications are snoozing for <xliff:g id="number">%1$d</xliff:g> minutes.</string>
