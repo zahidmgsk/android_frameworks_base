@@ -25,6 +25,7 @@
         android:layout_width="0dp"
         android:layout_weight="1"
         android:layout_height="match_parent"
+        android:paddingStart="@dimen/signal_cluster_battery_padding"
         android:paddingEnd="@dimen/signal_cluster_battery_padding"
         android:gravity="center_vertical"
         android:orientation="horizontal"/>
