@@ -33,6 +33,8 @@ import android.provider.Settings;
 import android.view.KeyEvent;
 import android.view.ViewConfiguration;
 
+import com.android.internal.util.nad.ActionUtils;
+
 import java.util.List;
 
 public final class LineageButtons {
@@ -199,6 +201,53 @@ public final class LineageButtons {
             mVolBtnMusicControls = Settings.System.getIntForUser(
                     resolver, Settings.System.VOLUME_BUTTON_MUSIC_CONTROL, 1,
                     UserHandle.USER_CURRENT) == 1;
+        }
+    }
+
+    public void triggerAction(int action, boolean leftEdge, boolean isVerticalSwipe, Context context) {
+        switch (action) {
+            case 0: // No action
+            default:
+                break;
+            case 1: // Flashlight
+                ActionUtils.toggleCameraFlash();
+                break;
+            case 2: // Application
+                ActionUtils.launchApp(context, leftEdge, isVerticalSwipe);
+                break;
+            case 3: // Volume panel
+                ActionUtils.toggleVolumePanel(context);
+                break;
+            case 4: // Screen off
+                ActionUtils.switchScreenOff(context);
+                break;
+            case 5: // Screenshot
+                ActionUtils.takeScreenshot(true);
+                break;
+            case 6: // Notification panel
+                ActionUtils.toggleNotifications();
+                break;
+            case 7: // QS panel
+                ActionUtils.toggleQsPanel();
+                break;
+            case 8: // Clear notifications
+                ActionUtils.clearAllNotifications();
+                break;
+            case 9: // Ringer modes
+                ActionUtils.toggleRingerModes(context);
+                break;
+            case 10: // Kill app
+                ActionUtils.killForegroundApp();
+                break;
+            case 11: // Skip song
+                skipTrack();
+                break;
+            case 12: // Previous song
+                previousTrack();
+                break;
+            case 13: // Partial screenshot
+                ActionUtils.takeScreenshot(false);
+                break;
         }
     }
 }
