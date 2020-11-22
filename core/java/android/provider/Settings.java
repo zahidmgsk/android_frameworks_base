@@ -10009,6 +10009,20 @@ public final class Settings {
          * @hide
          */
         public static final String GESTURE_NAVBAR_LENGTH = "gesture_navbar_length";
+        
+        /**
+         * Position of gesture bar length slider.
+         * @hide
+         */
+        public static final String GESTURE_NAVBAR_RADIUS = "gesture_navbar_radius";
+        
+        /**
+         * Position of gesture bar length slider.
+         * @hide
+         */
+        public static final String GESTURE_NAVBAR_MARGIN = "gesture_navbar_margin_bottom";
+
+
 
         /**
          * Current provider of proximity-based sharing services.
