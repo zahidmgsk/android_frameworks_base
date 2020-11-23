@@ -51,5 +51,9 @@
     
     <!-- Ringer Background Color-->
     <color name="ringer_background_color">#70000000</color>
+
+    <!-- Notification Header Color-->
+    <color name="notification_header_text">#ffffffff</color>
+
 </resources>
 

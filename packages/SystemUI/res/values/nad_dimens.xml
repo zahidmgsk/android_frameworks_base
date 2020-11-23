@@ -54,4 +54,8 @@
 
     <!-- Bottom margin size when fingerprint in display is active -->
     <dimen name="keyguard_indication_margin_bottom_fingerprint_in_display">@dimen/keyguard_indication_margin_bottom</dimen>
+    
+    <!-- Notification header R -->
+    <dimen name="notification_header_margin_top">0dp</dimen>
+    
 </resources>
