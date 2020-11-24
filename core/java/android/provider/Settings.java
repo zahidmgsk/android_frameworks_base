@@ -6043,6 +6043,9 @@ public final class Settings {
          */
         public static final String FP_UNLOCK_KEYSTORE = "fp_unlock_keystore";
 
+        /** @hide */
+        public static final String BACK_GESTURE_HEIGHT = "back_gesture_height";
+
         /**
          * Keys we no longer back up under the current schema, but want to continue to
          * process when restoring historical backup datasets.
