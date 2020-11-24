@@ -37,21 +37,32 @@
         android:clipChildren="false"
         android:gravity="start"
         android:orientation="horizontal">
-
+        	
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:gravity="start"
+        android:layout_marginEnd="@dimen/volume_dialog_spacer"
+        android:elevation="@dimen/volume_dialog_elevation"
+        android:background="@drawable/rounded_volume_background"
+        android:orientation="horizontal">
+        	
         <FrameLayout
             android:id="@+id/ringer"
-            android:layout_width="@dimen/volume_dialog_panel_width"
-            android:layout_height="@dimen/volume_dialog_panel_width"
-            android:layout_marginEnd="@dimen/volume_dialog_spacer"
-            android:background="@drawable/rounded_volume_background"
-            android:elevation="@dimen/volume_dialog_elevation">
+            android:layout_width="@dimen/volume_ringer_bg_size"
+            android:layout_height="@dimen/volume_ringer_bg_size"
+            android:background="@drawable/ringer_background"
+            android:layout_marginTop="4dp"
+            android:layout_marginBottom="4dp"
+            android:layout_marginLeft="4dp"
+            android:layout_marginRight="4dp">
 
             <com.android.keyguard.AlphaOptimizedImageButton
                 android:id="@+id/ringer_icon"
                 style="@style/VolumeButtons"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:padding="16dp"
+                android:padding="7dp"
                 android:tint="?android:attr/colorAccent" />
 
             <include
@@ -67,9 +78,6 @@
             android:id="@+id/expandable_indicator_container"
             android:layout_width="@dimen/volume_dialog_panel_width"
             android:layout_height="@dimen/volume_dialog_panel_width"
-            android:layout_marginEnd="@dimen/volume_dialog_row_spacer"
-            android:background="@drawable/rounded_volume_background"
-            android:elevation="@dimen/volume_dialog_elevation"
             android:gravity="center_vertical"
             android:orientation="horizontal">
 
@@ -78,8 +86,10 @@
                 style="@style/VolumeButtons"
                 android:layout_width="@dimen/volume_dialog_panel_width"
                 android:layout_height="match_parent"
+                android:tint="?android:attr/colorAccent" 
                 android:contentDescription="@string/accessibility_quick_settings_expand"
                 android:rotation="90" />
+        </LinearLayout>
         </LinearLayout>
 
         <LinearLayout

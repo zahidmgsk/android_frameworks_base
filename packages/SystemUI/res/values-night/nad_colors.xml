@@ -19,6 +19,10 @@
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
 
     <color name="qs_tile_background_color_disabled">#1f1f1f</color>
+    
+    <!-- Ringer Background Color-->
+    <color name="ringer_background_color">#50000000</color>
+    
 
 </resources>
 

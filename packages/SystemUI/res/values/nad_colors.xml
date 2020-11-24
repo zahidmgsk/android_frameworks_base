@@ -48,5 +48,8 @@
 
     <!-- Quicksettings main QS background-->
     <color name="quick_settings_status_bar_background_color">#ff000000</color>
+    
+    <!-- Ringer Background Color-->
+    <color name="ringer_background_color">#70000000</color>
 </resources>
 

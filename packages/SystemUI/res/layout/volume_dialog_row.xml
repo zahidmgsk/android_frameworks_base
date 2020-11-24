@@ -25,19 +25,20 @@
     <FrameLayout
         android:id="@+id/volume_row_slider_frame"
         android:layout_width="@dimen/volume_dialog_panel_width"
-        android:layout_height="@dimen/volume_dialog_slider_height">
+        android:layout_height="@dimen/volume_dialog_slider_height"
+        >
 
         <SeekBar
             android:id="@+id/volume_row_slider"
             android:layout_width="@dimen/volume_dialog_slider_height"
-            android:layout_height="@dimen/volume_dialog_panel_width"
+            android:layout_height="@dimen/volume_ringer_bg_size"
             android:layout_gravity="center"
             android:background="@null"
             android:clickable="true"
             android:layoutDirection="rtl"
             android:paddingBottom="0dp"
-            android:paddingEnd="0dp"
-            android:paddingStart="0dp"
+            android:paddingEnd="4dp"
+            android:paddingStart="4dp"
             android:paddingTop="0dp"
             android:progressDrawable="@drawable/volume_dialog_seekbar"
             android:rotation="90"
