@@ -191,7 +191,6 @@ public interface StatusBarGoogleModule {
             StatusBarKeyguardViewManager statusBarKeyguardViewManager,
             ViewMediatorCallback viewMediatorCallback,
             InitController initController,
-            FlashlightController flashlightController,
             DarkIconDispatcher darkIconDispatcher,
             @Named(TIME_TICK_HANDLER_NAME) Handler timeTickHandler,
             PluginDependencyProvider pluginDependencyProvider,
@@ -203,6 +202,7 @@ public interface StatusBarGoogleModule {
             Lazy<NotificationShadeDepthController> notificationShadeDepthController,
             DismissCallbackRegistry dismissCallbackRegistry,
             StatusBarTouchableRegionManager statusBarTouchableRegionManager,
+            FlashlightController flashlightController,
             TaskHelper taskHelper) {
         return new StatusBarGoogle(
                 context,
@@ -271,7 +271,6 @@ public interface StatusBarGoogleModule {
                 statusBarKeyguardViewManager,
                 viewMediatorCallback,
                 initController,
-                flashlightController,
                 darkIconDispatcher,
                 timeTickHandler,
                 pluginDependencyProvider,
@@ -283,6 +282,7 @@ public interface StatusBarGoogleModule {
                 dismissCallbackRegistry,
                 notificationShadeDepthController,
                 statusBarTouchableRegionManager,
+                flashlightController,
                 taskHelper);
     }
 }

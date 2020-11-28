@@ -388,7 +388,6 @@ public class StatusBar extends SystemUI implements DemoMode,
     private final SuperStatusBarViewFactory mSuperStatusBarViewFactory;
     private final LightsOutNotifController mLightsOutNotifController;
     private final InitController mInitController;
-    private final FlashlightController mFlashlightController;
     private final DarkIconDispatcher mDarkIconDispatcher;
     private final PluginDependencyProvider mPluginDependencyProvider;
     private final KeyguardDismissUtil mKeyguardDismissUtil;
@@ -396,7 +395,7 @@ public class StatusBar extends SystemUI implements DemoMode,
     private final UserInfoControllerImpl mUserInfoControllerImpl;
     private final DismissCallbackRegistry mDismissCallbackRegistry;
     private NotificationsController mNotificationsController;
-
+    private final FlashlightController mFlashlightController;
     protected TaskHelper mTaskHelper;
 
     // expanded notifications
@@ -730,7 +729,6 @@ public class StatusBar extends SystemUI implements DemoMode,
             StatusBarKeyguardViewManager statusBarKeyguardViewManager,
             ViewMediatorCallback viewMediatorCallback,
             InitController initController,
-            FlashlightController flashlightController,
             DarkIconDispatcher darkIconDispatcher,
             @Named(TIME_TICK_HANDLER_NAME) Handler timeTickHandler,
             PluginDependencyProvider pluginDependencyProvider,
@@ -742,6 +740,7 @@ public class StatusBar extends SystemUI implements DemoMode,
             DismissCallbackRegistry dismissCallbackRegistry,
             Lazy<NotificationShadeDepthController> notificationShadeDepthControllerLazy,
             StatusBarTouchableRegionManager statusBarTouchableRegionManager,
+            FlashlightController flashlightController,
             TaskHelper taskHelper) {
         super(context);
         mNotificationsController = notificationsController;
@@ -812,7 +811,6 @@ public class StatusBar extends SystemUI implements DemoMode,
         mStatusBarKeyguardViewManager = statusBarKeyguardViewManager;
         mKeyguardViewMediatorCallback = viewMediatorCallback;
         mInitController = initController;
-        mFlashlightController = flashlightController;
         mDarkIconDispatcher = darkIconDispatcher;
         mPluginDependencyProvider = pluginDependencyProvider;
         mKeyguardDismissUtil = keyguardDismissUtil;
@@ -820,6 +818,7 @@ public class StatusBar extends SystemUI implements DemoMode,
         mUserInfoControllerImpl = userInfoControllerImpl;
         mIconPolicy = phoneStatusBarPolicy;
         mDismissCallbackRegistry = dismissCallbackRegistry;
+        mFlashlightController = flashlightController;
         mTaskHelper = taskHelper;
 
         mBubbleExpandListener =
