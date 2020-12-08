@@ -78,6 +78,8 @@ public class QSFooterImpl extends FrameLayout implements QSFooter,
     private SettingsButton mSettingsButton;
     protected View mSettingsContainer;
     private PageIndicator mPageIndicator;
+    private TextView mBuildText;
+    private boolean mShouldShowBuildText;
 
     private View mRunningServicesButton;
 
@@ -153,6 +155,7 @@ public class QSFooterImpl extends FrameLayout implements QSFooter,
 
         mActionsContainer = findViewById(R.id.qs_footer_actions_container);
         mEditContainer = findViewById(R.id.qs_footer_actions_edit_container);
+        mBuildText = findViewById(R.id.build);
 
         // RenderThread is doing more harm than good when touching the header (to expand quick
         // settings), so disable it for this view
@@ -169,25 +172,23 @@ public class QSFooterImpl extends FrameLayout implements QSFooter,
     }
 
     private void setBuildText() {
-        TextView v = findViewById(R.id.build);
-        if (v == null) return;
-        boolean isShow = Settings.System.getIntForUser(mContext.getContentResolver(),
+        if (mBuildText == null) return;
+        mShouldShowBuildText = Settings.System.getIntForUser(mContext.getContentResolver(),
                         Settings.System.FOOTER_TEXT_SHOW, 0,
                         UserHandle.USER_CURRENT) == 1;
         String text = Settings.System.getStringForUser(mContext.getContentResolver(),
                         Settings.System.FOOTER_TEXT_STRING,
                         UserHandle.USER_CURRENT);
 
-        if (isShow) {
+        if (mShouldShowBuildText) {
             if (text == null || text == "") {
-                v.setText("#Nusantara Project");
-                v.setVisibility(View.VISIBLE);
+                mBuildText.setText("#Nusantara Project");
+                mBuildText.setVisibility(View.VISIBLE);
+
             } else {
-                v.setText(text);
-                v.setVisibility(View.VISIBLE);
+                mBuildText.setText(text);
+                mBuildText.setVisibility(View.VISIBLE);
             }
-        } else {
-            v.setVisibility(View.GONE);
         }
     }
 
