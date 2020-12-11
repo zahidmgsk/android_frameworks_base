@@ -100,7 +100,7 @@ import com.android.systemui.statusbar.phone.StatusBar;
 import com.android.systemui.util.DeviceConfigProxy;
 import com.android.systemui.util.InjectionInflationController;
 
-import com.android.internal.util.custom.fod.FodUtils;
+import com.android.internal.util.nad.fod.FodUtils;
 
 import java.io.FileDescriptor;
 import java.io.PrintWriter;
