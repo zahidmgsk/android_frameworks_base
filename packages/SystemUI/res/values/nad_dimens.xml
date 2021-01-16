@@ -57,6 +57,7 @@
     
     <!-- Notification header R -->
     <dimen name="notification_header_margin_top">0dp</dimen>
+    <dimen name="keyguard_security_fod_view_margin">140dp</dimen>
 
     <!-- Old style mobile data indicators -->
     <dimen name="status_bar_mobile_signal_with_type_width">18dp</dimen>
