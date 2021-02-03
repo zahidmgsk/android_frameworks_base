@@ -182,4 +182,7 @@
 
     <!-- Power menu item for taking a Screen record [CHAR LIMIT=20]-->
     <string name="global_action_screenrecord">Screen Record</string>
+
+    <!-- Scrolling Screenshot string -->
+    <string name="scrollss">Scroll</string>
 </resources>
