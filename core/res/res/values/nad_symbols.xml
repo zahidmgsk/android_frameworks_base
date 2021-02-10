@@ -115,7 +115,4 @@
 
   <!-- Whether to allow process with media UID to access CameraServiceProxy -->
   <java-symbol type="bool" name="config_allowMediaUidForCameraServiceProxy" />
-
-  <!-- Whether to use old mobile type icons as default -->
-  <java-symbol type="bool" name="config_useOldMobileIcons" />
 </resources>
